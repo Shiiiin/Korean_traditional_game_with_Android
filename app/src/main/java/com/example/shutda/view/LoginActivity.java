@@ -331,12 +331,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Map<String, Object> tokenMap = new HashMap<>();
                             tokenMap.put("token_id", token_id);
 
-                            mDB.collection("Users").document(current_id).set(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            mDB.collection("Users").document(current_id).update(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
 
                                     showProgress(true);
                                     sendToMain();
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
