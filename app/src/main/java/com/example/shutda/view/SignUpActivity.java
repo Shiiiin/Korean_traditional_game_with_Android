@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button mMoveToBackward;
     private String name,email,password;
     private FirebaseAuth mAuth;
-    private FirebaseDatabase mDB;
+    private FirebaseFirestore mDB;
     private ProgressBar mProgressBar;
     private Context mContext;
     private InputMethodManager hiddenkeybord;
@@ -61,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
         mContext = this;
 
         mAuth = FirebaseAuth.getInstance();
-        mDB=FirebaseDatabase.getInstance();
+        mDB=FirebaseFirestore.getInstance();
 
         mSignupLayout = (ConstraintLayout) findViewById(R.id.sign_up_layout);
         mEmailField = (EditText) findViewById(R.id.emailEditView);
@@ -129,7 +130,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 userMap.put("token_id",token_id);
 
 
-                                mDB.getReference("/Users").child(user_id).setValue(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                mDB.collection("Users").document(user_id).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
