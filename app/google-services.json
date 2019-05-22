@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "269684694001",
+    "firebase_url": "https://shutda.firebaseio.com",
+    "project_id": "shutda",
+    "storage_bucket": "shutda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269684694001:android:acf98cceb08d2d82",
+        "android_client_info": {
+          "package_name": "com.example.shutda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269684694001-9o9kialdmevrnhd5ft0gbj2t2qimttmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shutda",
+            "certificate_hash": "923fd957e51ef12e1bcec0dc94fc395a0229dd01"
+          }
+        },
+        {
+          "client_id": "269684694001-n728gmcla4ukmmran1fgg9s1tvp4ujjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUBFl_t_6Ek9KUVs9i2GVCXKuZbD-qUbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269684694001-n728gmcla4ukmmran1fgg9s1tvp4ujjs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
