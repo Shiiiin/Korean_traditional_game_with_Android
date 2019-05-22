@@ -4,10 +4,18 @@ import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
+import com.example.shutda.R;
+import com.example.shutda.view.MainActivity;
 import com.example.shutda.view.data.User;
+import com.example.shutda.view.test;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
@@ -20,8 +28,6 @@ import java.util.Queue;
 import static com.example.shutda.view.data.DummyCards.*;
 
 public class gameViewModel extends ViewModel implements Command {
-
-    private Handler handler = new Handler();
 
     //Game based
     private List<Integer> ShuffledCards = new ArrayList<>();
@@ -60,8 +66,6 @@ public class gameViewModel extends ViewModel implements Command {
 
     public void setTotalBettingMoney(int money){ TotalBettingMoney.setValue(money); }
 
-    GameThread gameThread = new GameThread();
-
     private User player1;
     private User player2;
     private User player3;
@@ -93,8 +97,10 @@ public class gameViewModel extends ViewModel implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
+        Intent test = new Intent(context, com.example.shutda.view.test.class);
+        context.startActivity(test);
             //While문 구현
 
     }
@@ -169,7 +175,7 @@ public class gameViewModel extends ViewModel implements Command {
 
         }
         if(a == false){
-            Toast.makeText(view,"올인! " ,Toast.LENGTH_LONG).show();
+            Toast.makeText(view,"올인!!! " ,Toast.LENGTH_LONG).show();
 
             int currentBetting = TotalBettingMoney.getValue();
 

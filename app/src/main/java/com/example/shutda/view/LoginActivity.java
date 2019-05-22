@@ -196,7 +196,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(!isNetworkConnected()){
+        if(isNetworkConnected() == false){
 
             mAuth.signOut();
 
@@ -211,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
 
-        if(currentUser != null && isNetworkConnected()){
+        if(currentUser != null && isNetworkConnected() == true){
 
             sendToMain();
         }

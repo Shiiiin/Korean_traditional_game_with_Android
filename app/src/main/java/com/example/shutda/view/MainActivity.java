@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.Ingame.GameView;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.background.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.zip.Inflater;
 
 import static com.example.shutda.view.data.constantsField.*;
 /**
@@ -196,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 //                inGame.CallButtonExecute(MainActivity.this, );
-
             }
         });
 
@@ -313,7 +314,9 @@ public class MainActivity extends AppCompatActivity {
 
                             inGame.initiate();
 
-                            inGame.execute();
+                            inGame.execute(MainActivity.this);
+                            //지금 execute 이걸로 대체
+
 
                             LeaveButton.setEnabled(true);
 
