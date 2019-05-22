@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Shutda</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="action_sign_up">Sign Up</string>
+    <string name="error_invalid_email">등록되지 않은 이메일입니다.</string>
+    <string name="error_format_email">이메일 형식이 올바르지 않습니다.</string>
+    <string name="error_empty_password">패스워드를 입력하세요.</string>
+    <string name="error_empty_email">이메일을 입력하세요.</string>
+    <string name="error_incorrect_password">비밀번호가 틀렸습니다.</string>
+    <string name="error_field_required">필요한 정보입니다.</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+    completions. 이메일 자동 완성을 위해서는 연락처 제공이 필요합니다."</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="dummy_button">Back to SignIn</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
