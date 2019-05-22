@@ -94,10 +94,6 @@ public class MainActivity extends AppCompatActivity {
     private CardView jokbo;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,19 +139,19 @@ public class MainActivity extends AppCompatActivity {
 
         final View decorView = getWindow().getDecorView();
         final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
 
         decorView.setSystemUiVisibility(uiOptions);
 
         backPressCloseHandler = new BackPressCloseHandler(this, mAuth);
 
 
-        if(mAuth.getCurrentUser() == null){
+        if (mAuth.getCurrentUser() == null) {
 
             sendBack();
 
-        }else{
+        } else {
 
             mUserId = mAuth.getCurrentUser().getUid();
         }
@@ -163,14 +159,13 @@ public class MainActivity extends AppCompatActivity {
         mainLoop();
 
 
-
         //TODO START 부분 구현 // 우선 click해야 시작으로 해놨음 -> bool로 바꾸기
-        cardDummy.setOnClickListener(new View.OnClickListener(){
+        cardDummy.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                if(inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)){
+                if (inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)) {
 
                     inGame.setStatus(Boolean.TRUE);
 
@@ -185,11 +180,11 @@ public class MainActivity extends AppCompatActivity {
 
                 int bettingMoney = inGame.getTotalBettingMoney().getValue();
 
-                int halfBetting = (int) Math.floor(bettingMoney/2);
+                int halfBetting = (int) Math.floor(bettingMoney / 2);
 
                 inGame.HalfButtonExecute(MainActivity.this, halfBetting, "player1");
 
-                boolean buttonAttr [] = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
+                boolean buttonAttr[] = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
 
 
             }
@@ -224,148 +219,146 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
 
     @Override
-        protected void onStart() {
-            super.onStart();
+    protected void onStart() {
+        super.onStart();
 
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-            if(currentUser == null){
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_LONG).show();
-                sendBack();
+        if (currentUser == null) {
+            Toast.makeText(this, "로그인 실패", Toast.LENGTH_LONG).show();
+            sendBack();
 
-            }
         }
+    }
 
-        @Override
-        public void onBackPressed() {
-    //        super.onBackPressed();
-            backPressCloseHandler.onBackPressed();
-        }
+    @Override
+    public void onBackPressed() {
+        //        super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
+    }
 
-        private void sendBack() {
-            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-        }
-
-
+    private void sendBack() {
+        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+    }
 
 
-        public void mainLoop() {
+    public void mainLoop() {
 
-            currentUser = mDB.collection("Users").document(mUserId);
+        currentUser = mDB.collection("Users").document(mUserId);
 
-            currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
+        currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                    //Player initialized
+                //Player initialized
 
-                    if (!userMap.isEmpty()) {
-                        userMap.clear();
+                if (!userMap.isEmpty()) {
+                    userMap.clear();
+                }
+
+                String name = (String) documentSnapshot.get("name");
+                long score = (Long) documentSnapshot.get("score");
+                String token_id = (String) documentSnapshot.get("token_id");
+
+                //Edit Players
+                Me = new User(name, score, token_id, isTurn, false);
+                Ai = new User("AI", 100000, "ALPHAGO", isTurn, false);
+                Ai2 = new User("AI2", 100000, "ALPHAGO2", isTurn, false);
+                userMap.put("player1", Me);
+                userMap.put("player2", Ai);
+                userMap.put("player3", Ai2);
+                inGame.setUsers(userMap);
+
+
+                userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
+                    @Override
+                    public void onChanged(@Nullable HashMap<String, User> users) {
+
+                        if (users.containsKey("player2")) {
+                            player2NameTextView.setText(users.get("player2").getName());
+                        }
+                        if (users.containsKey("player3")) {
+                            player3NameTextView.setText(users.get("player3").getName());
+                        }
                     }
 
-                    String name = (String) documentSnapshot.get("name");
-                    long score = (Long) documentSnapshot.get("score");
-                    String token_id = (String) documentSnapshot.get("token_id");
+                });
 
-                    //Edit Players
-                    Me = new User(name, score, token_id, isTurn , false);
-                    Ai = new User("AI", 100000, "ALPHAGO", isTurn, false);
-                    Ai2 = new User("AI2", 100000, "ALPHAGO2", isTurn, false);
-                    userMap.put("player1", Me);
-                    userMap.put("player2", Ai);
-                    userMap.put("player3", Ai2);
-                    inGame.setUsers(userMap);
+                TotalBettingMoney.observe(MainActivity.this, new Observer<Integer>() {
+                    @Override
+                    public void onChanged(@Nullable Integer money) {
+
+                        currentBettingMoney.setText(String.valueOf(money));
+
+                    }
+                });
 
 
-                    userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
-                        @Override
-                        public void onChanged(@Nullable HashMap<String, User> users) {
+                //StartGame
+                gameStatus.observe(MainActivity.this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean aBoolean) {
 
-                            if (users.containsKey("player2")) {
-                                player2NameTextView.setText(users.get("player2").getName());
-                            }
-                            if (users.containsKey("player3")) {
-                                player3NameTextView.setText(users.get("player3").getName());
-                            }
-                        }
+                        if (aBoolean) {
 
-                    });
-
-                    TotalBettingMoney.observe(MainActivity.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(@Nullable Integer money) {
-
-                            currentBettingMoney.setText(String.valueOf(money));
-
-                        }
-                    });
-
-
-                    //StartGame
-                    gameStatus.observe(MainActivity.this, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(@Nullable Boolean aBoolean) {
-
-                            if (aBoolean) {
-
-                                cardDummy.setEnabled(false);
-                                LeaveButton.setEnabled(false);
+                            cardDummy.setEnabled(false);
+                            LeaveButton.setEnabled(false);
 //                                isturnOnView(false);
 
-                                inGame.initiate();
+                            inGame.initiate();
 
-                                inGame.execute();
+                            inGame.execute();
 
-                                LeaveButton.setEnabled(true);
+                            LeaveButton.setEnabled(true);
 
-                            }
-                            if (!aBoolean) {
-                                //Update player score on Firestore
-                                inGame.uploadScoreToFirestore(currentUser, Me, Ai, Ai2);
-
-                                //지금은 이렇게 되어있는데 인게임 밖으로 나가게 만들어야함
-
-                                inGame.finish();
-
-                                cardDummy.setEnabled(true);
-                                //
-                            }
                         }
-                    });
+                        if (!aBoolean) {
+                            //Update player score on Firestore
+                            inGame.uploadScoreToFirestore(currentUser, Me, Ai, Ai2);
+
+                            //지금은 이렇게 되어있는데 인게임 밖으로 나가게 만들어야함
+
+                            inGame.finish();
+
+                            cardDummy.setEnabled(true);
+                            //
+                        }
+                    }
+                });
 
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Snackbar.make(mainframe,"사용자 정보를 불러올수 없습니다.", BaseTransientBottomBar.LENGTH_INDEFINITE);
-                }
-            });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Snackbar.make(mainframe, "사용자 정보를 불러올수 없습니다.", BaseTransientBottomBar.LENGTH_INDEFINITE);
+            }
+        });
 
 
-        }
+    }
 
 
-        //TESTSETESTSET
-        public void HalfButtonClicked(boolean [] enable){
+    //TESTSETESTSET
+    public void HalfButtonClicked(boolean[] enable) {
 
         boolean halfbutton = enable[0];
         boolean callbutton = enable[1];
-                boolean diebutton = enable[2];
-                boolean leavebutton = enable[3];
+        boolean diebutton = enable[2];
+        boolean leavebutton = enable[3];
 
-                HalfButton.setEnabled(halfbutton);
-                CallButton.setEnabled(callbutton);
-                DieButton.setEnabled(diebutton);
-                button4.setEnabled(false);
-                button5.setEnabled(false);
-                LeaveButton.setEnabled(enable[3]);
+        HalfButton.setEnabled(halfbutton);
+        CallButton.setEnabled(callbutton);
+        DieButton.setEnabled(diebutton);
+        button4.setEnabled(false);
+        button5.setEnabled(false);
+        LeaveButton.setEnabled(leavebutton);
     }
+}
 
