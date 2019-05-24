@@ -108,7 +108,7 @@ public class gameViewModel extends ViewModel{
 
     }
 
-     boolean finish() {
+     public boolean finish() {
 
         //TODO 이게 문제일수도 있음
         UserTurn.postValue(false);

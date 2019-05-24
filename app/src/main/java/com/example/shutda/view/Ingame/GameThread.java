@@ -18,6 +18,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.example.shutda.view.data.constantsField.AITurnPeriod;
+
 public class GameThread extends Thread {
 
     private static final String TAG = "GameThread";
@@ -103,7 +105,7 @@ public class GameThread extends Thread {
                                         public void run() {
                                             inGame.AiDecisionMakingExecute("player2");
                                         }
-                                    },3000);
+                                    },AITurnPeriod);
                                 }else{
                                     inGame.getUsers().getValue().get("player3").setTurn(true);
                                     inGame.getPlayer3Turn().postValue(true);
@@ -129,7 +131,7 @@ public class GameThread extends Thread {
                                         public void run() {
                                             inGame.AiDecisionMakingExecute("player3");
                                         }
-                                    },3000);
+                                    },AITurnPeriod);
                                 }else {
                                     inGame.getUsers().getValue().get("player1").setTurn(true);
                                     inGame.getUserTurn().postValue(true);
