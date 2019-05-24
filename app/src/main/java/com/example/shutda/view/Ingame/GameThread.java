@@ -86,6 +86,8 @@ public class GameThread extends Thread {
 
             System.out.println("@@@@ Thread Run 실행 @@@@");
 
+            //TODO 한바퀴 돌리는데는 성공 이제 모두콜 모두 죽었을때 구현해야함
+
             player2Turn.observe(mainActivity, new Observer<Boolean>() {
                         @Override
                         public void onChanged(@Nullable Boolean aBoolean) {
