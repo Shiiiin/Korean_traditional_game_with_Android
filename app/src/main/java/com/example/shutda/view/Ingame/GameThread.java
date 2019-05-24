@@ -1,11 +1,20 @@
 package com.example.shutda.view.Ingame;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.support.annotation.Nullable;
 
+import com.example.shutda.view.MainActivity;
 import com.example.shutda.view.data.User;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,18 +24,24 @@ public class GameThread extends Thread {
 
     private gameViewModel inGame;
     private LiveData<Boolean> gameStatus;
+    private LiveData<Boolean> player2Turn;
+    private LiveData<Boolean> player3Turn;
+    private MainActivity mainActivity;
 
     private User player1;
     private User player2;
     private User player3;
 
-    public GameThread(gameViewModel viewModel) {
+    public GameThread(gameViewModel viewModel, MainActivity mainActivity) {
 
         super();
 
         this.inGame = viewModel;
+        this.mainActivity = mainActivity;
 
         gameStatus = inGame.getIngameStatus();
+        player2Turn = inGame.getPlayer2Turn();
+        player3Turn = inGame.getPlayer3Turn();
 
 
     }
@@ -66,66 +81,65 @@ public class GameThread extends Thread {
     }
 
     @Override
-    public void run() {
-        System.out.println("@@@@ Thread AI 등록 실행 @@@@");
-        player1 = inGame.getUsers().getValue().get("player1");
-        player2 = inGame.getUsers().getValue().get("player2");
-        player3 = inGame.getUsers().getValue().get("player3");
+     public synchronized void run() {
+            System.out.println("@@@@ Thread AI 등록 실행 @@@@");
 
-        System.out.println("@@@@ Thread Run 실행 @@@@");
+            System.out.println("@@@@ Thread Run 실행 @@@@");
 
-        Timer timer = new Timer();
-
-
-                //우선, 다 죽어있는지 확인
-                if(!player1.isAlive() & !player2.isAlive() & !player3.isAlive()){
-
-                    System.out.println("&&&&&&& Thread에서 게임끝!~! &&&&&&&&&&&&");
-                    inGame.checkWinner();
-                    inGame.setStatus(false);
-
-                }//////////////죽은거 확인끝
-
-        ExecutorService es = Executors.newSingleThreadExecutor();
-
-                if(player2.isTurn() & player2.isAlive()){
-
-                    System.out.println("@@@@ Thread player2 실행 @@@@");
-
-                    timer.schedule(new TimerTask() {
+            player2Turn.observe(mainActivity, new Observer<Boolean>() {
                         @Override
-                        public void run() {
-                            inGame.AiDecisionMakingExecute("player2");
+                        public void onChanged(@Nullable Boolean aBoolean) {
+                            if(aBoolean){
+                                Timer timer = new Timer();
+
+                                if(inGame.getUsers().getValue().get("player2").isAlive()){
+
+                                    System.out.println("@@@@ Thread player2 실행 @@@@");
+
+                                    timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            inGame.AiDecisionMakingExecute("player2");
+                                        }
+                                    },3000);
+                                }else{
+                                    inGame.getUsers().getValue().get("player3").setTurn(true);
+                                    inGame.getPlayer3Turn().postValue(true);
+                                }
+                            }
                         }
-                    },3000);
-                }else{
-                    inGame.getUsers().getValue().get("player3").setTurn(true);
-                }
+                    });
 
-                if(player3.isTurn() & player3.isAlive()){
-
-                    System.out.println("@@@@ Thread player3 실행 @@@@");
-
-                    timer.schedule(new TimerTask() {
+            player3Turn.observe(mainActivity, new Observer<Boolean>() {
                         @Override
-                        public void run() {
-                            inGame.AiDecisionMakingExecute("player3");
+                        public void onChanged(@Nullable Boolean aBoolean) {
+
+                            Timer timer = new Timer();
+
+                            if(aBoolean){
+
+                                if(inGame.getUsers().getValue().get("player3").isAlive()){
+
+                                    System.out.println("@@@@ Thread player3 실행 @@@@");
+
+                                    timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            inGame.AiDecisionMakingExecute("player3");
+                                        }
+                                    },3000);
+                                }else {
+                                    inGame.getUsers().getValue().get("player1").setTurn(true);
+                                    inGame.getUserTurn().postValue(true);
+                                }
+                            }
+
                         }
-                    },3000);
-                }
-
-                //유저만 죽어있고 AI들만 살아있을 경우 둘이 게임함
-                if(!player1.isAlive() & (player2.isAlive() & player3.isAlive())){
-
-                    inGame.getUsers().getValue().get("player2").setTurn(true);
-
-                    run();
-
-                }
+                    });
 
 
-    }// run End
 
+        }// run End
 
 
 }

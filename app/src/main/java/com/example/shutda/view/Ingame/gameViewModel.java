@@ -36,6 +36,8 @@ public class gameViewModel extends ViewModel implements Command {
     private MutableLiveData<Long> player2Score = new MutableLiveData<>();
     private MutableLiveData<Long> player3Score = new MutableLiveData<>();
     private MutableLiveData<Boolean> UserTurn = new MutableLiveData<>();
+    private MutableLiveData<Boolean> player2Turn = new MutableLiveData<>();
+    private MutableLiveData<Boolean> player3Turn = new MutableLiveData<>();
 
     public LiveData<HashMap<String, User>> getUsers(){ return users;}
     public LiveData<Boolean> getIngameStatus(){ return statement; }
@@ -45,6 +47,9 @@ public class gameViewModel extends ViewModel implements Command {
     public MutableLiveData<Long> getPlayer2Score() { return player2Score;    }
     public MutableLiveData<Long> getPlayer3Score() { return player3Score;    }
     public MutableLiveData<Boolean> getUserTurn() { return UserTurn; }
+    public MutableLiveData<Boolean> getPlayer2Turn() { return player2Turn;  }
+    public MutableLiveData<Boolean> getPlayer3Turn() { return player3Turn;  }
+
     private User player1;
     private User player2;
     private User player3;
@@ -111,6 +116,11 @@ public class gameViewModel extends ViewModel implements Command {
 
     @Override
     public boolean finish() {
+
+        //TODO 이게 문제일수도 있음
+        UserTurn.postValue(false);
+        player2Turn.postValue(false);
+        player3Turn.postValue(false);
 
         //Reset All Data apart from Name & Score
         for(int i=1 ; i <= users.getValue().size(); i++){
@@ -291,6 +301,8 @@ public class gameViewModel extends ViewModel implements Command {
 
         User currentplayer = users.getValue().get(player);
 
+        System.out.println(currentplayer.getName() + "DecisionMaking 진입!!");
+
         int judge = currentplayer.getCardRanking();
 
         if( judge > 80){
@@ -307,16 +319,20 @@ public class gameViewModel extends ViewModel implements Command {
 
         if(player == "player2"){
             users.getValue().get(player).setTurn(false);
+            player2Turn.postValue(false);
 
             //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
             users.getValue().get("player3").setTurn(true);
+            player3Turn.postValue(true);
         }
 
         if(player == "player3"){
             users.getValue().get(player).setTurn(false);
+            player3Turn.postValue(false);
 
             //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
             users.getValue().get("player1").setTurn(true);
+            UserTurn.postValue(true);
         }
 
     }
@@ -363,12 +379,6 @@ public class gameViewModel extends ViewModel implements Command {
 
         }
 
-        currentplayer.setTurn(false);
-
-        //TODO TESTSET   player1 - player2만 가능
-        player1.setTurn(true);
-        setButtonSet(player1.getButtonClickEnable());
-
         //TEST 끝
     }
 
@@ -382,11 +392,8 @@ public class gameViewModel extends ViewModel implements Command {
 
         currentplayer.setAlive(false);
 
-        currentplayer.setTurn(false);
-
     }
 
-    //TODO 책꽂이이
     public void AiCallExecute(String player) {
 
         System.out.println("@@@@ Thread    " + player + "    Call 실행 @@@@");
@@ -432,7 +439,6 @@ public class gameViewModel extends ViewModel implements Command {
 
         //일단 콜하면 죽여
         currentplayer.setAlive(false);
-        currentplayer.setTurn(false);
     }
 
     public void checkWinner(){
@@ -466,119 +472,5 @@ public class gameViewModel extends ViewModel implements Command {
         database.update("score", player1.getScore());
 
     }
-
-
-
-
-
-
-
-
-
-
-    private void gameEngine() {
-
-        Handler handler = new Handler();
-
-
-        //Turn은 player중 한명만 true가 될수 있다.
-        ////isAlive -> isAlive 로 바꿔야함 헷갈려....
-
-
-//            System.out.println( "game Engin statement = TRUE");
-//
-//            if(player1.isTurn() && player1.isAlive()){
-//
-//                System.out.println( "game Engin  >> player1 Turn");
-//                buttonSet.setValue(player1.getButtonClickEnable());
-//
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        System.out.println( "game Engin  >> player1 playing......");
-//                    }
-//                }, 5000);
-//
-//
-//                    //TODO player1 턴 창에 띄우기
-//
-//
-//                //다음 턴 넘기기
-//
-//                player2.setTurn(true);
-//
-//            }
-//            else if(player2.isTurn() && player2.isAlive()){
-//
-//                System.out.println( "game Engin  >> player2 Turn");
-//
-//                buttonSet.setValue(AllbuttonOFF);
-//
-//                Timer timer = new Timer();
-//
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//
-//                        System.out.println( "game Engin  >> player2 playing......");
-//
-//                        //TEST Ai decision making
-//                        int bettingMoney = getTotalBettingMoney().getValue();
-//
-//                        int halfBetting = (int) Math.floor(bettingMoney / 2);
-//
-//                        AiHalfExecute( halfBetting, "player2");
-//                    }
-//                },5000);
-//
-//
-//                //다음 턴 넘기기
-//                player3.setTurn(true);
-//
-//            }
-//            if(player3.isTurn() && player3.isAlive()){
-//
-//                System.out.println( "game Engin  >> player2 Turn");
-//
-//                buttonSet.setValue(AllbuttonOFF);
-//
-//                while(player3.isTurn()){
-//
-//                    System.out.println( "game Engin  >> player1 playing......");
-//
-//                    //TODO player3 턴 창에 띄우기
-//
-//                    Timer timer = new Timer();
-//
-//                    timer.schedule(new TimerTask() {
-//                        @Override
-//                        public void run() {
-//                            //TEST Ai decision making
-//                            int bettingMoney = getTotalBettingMoney().getValue();
-//
-//                            int halfBetting = (int) Math.floor(bettingMoney / 2);
-//
-//                            AiHalfExecute( halfBetting, "player3");
-//                        }
-//                    },5000);
-//
-//                }
-//
-//                //다음 턴 넘기기
-//                player1.setTurn(true);
-//
-//
-//            }
-
-
-
-
-        //메세지 큐잉 쓰레드 끄기
-
-        System.out.println( "Game Engin 끝");
-
-    }
-
-
 
 }

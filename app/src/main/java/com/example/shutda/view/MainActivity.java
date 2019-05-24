@@ -179,23 +179,9 @@ public class MainActivity extends AppCompatActivity {
 
         mainLoop();
 
-        gameThread = new GameThread(inGame);
+        gameThread = new GameThread(inGame , MainActivity.this);
         gameThread.setDaemon(true);
-        mhandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                if(msg.what == 0){
-
-                }
-
-                if(msg.what == 1){
-
-                }
-
-            }
-        };
+        gameThread.start();
 
 
 
@@ -230,8 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
                 inGame.getUsers().getValue().get("player2").setTurn(true);
-
-                gameThread.run();
+                inGame.getPlayer2Turn().postValue(true);
+//
+//                gameThread.run();
 
                 inGame.setButtonSet(onlyLeaveEnable);
 
@@ -254,8 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //TODO TESTSET Player2로 턴 주기
                 inGame.getUsers().getValue().get("player2").setTurn(true);
-
-                gameThread.run();
+                inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(onlyLeaveEnable);
 
@@ -280,8 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //TODO TESTSET Player2로 턴 주기
                 inGame.getUsers().getValue().get("player2").setTurn(true);
-
-                gameThread.run();
+                inGame.getPlayer2Turn().postValue(true);
 
                 inGame.setButtonSet(onlyLeaveEnable);
 
@@ -421,12 +406,18 @@ public class MainActivity extends AppCompatActivity {
                     public void onChanged(@Nullable Boolean aBoolean) {
 
                         if(aBoolean){
-                            Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
-                            inGame.setButtonSet(buttons);
+
+                            if(inGame.getUsers().getValue().get("player1").isAlive()){
+                                Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
+                                inGame.setButtonSet(buttons);
+                            }
+                            else{
+                                inGame.getUsers().getValue().get("player2").setTurn(true);
+                                inGame.getPlayer2Turn().postValue(true);
+                            }
+
                         }
-                        if(!aBoolean){
-                            inGame.setButtonSet(AllbuttonOFF);
-                        }
+
                     }
                 });
 
@@ -508,6 +499,8 @@ public class MainActivity extends AppCompatActivity {
         button4.setEnabled(false);
         button5.setEnabled(false);
         LeaveButton.setEnabled(leavebutton);
+
+        System.out.println("HALF "+ halfbutton +" , CALL "+callbutton + " , DIE "+diebutton+ ", LEAVE "+leavebutton);
     }
 
 
