@@ -4,15 +4,15 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
-import com.example.shutda.view.Ingame.GameView;
+import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.background.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
@@ -34,7 +34,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.zip.Inflater;
 
 import static com.example.shutda.view.data.constantsField.*;
 /**
@@ -43,10 +42,10 @@ import static com.example.shutda.view.data.constantsField.*;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public static boolean isTurn = false;
-
     private View mainframe;
 
+    private GameThread gameThread;
+    public Handler mhandler;
 
     private BackPressCloseHandler backPressCloseHandler;
 
@@ -62,9 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private gameViewModel inGame;
-    private LiveData<Boolean> gameStatus;
+    protected LiveData<Boolean> gameStatus;
     private LiveData<HashMap<String, User>> userlist;
     private LiveData<Integer> TotalBettingMoney;
+    private LiveData<Long> player1Score;
+    private LiveData<Long> player2Score;
+    private LiveData<Long> player3Score;
+    private LiveData<Boolean []> buttonSet;
+    private LiveData<Boolean> userTurn;
 
     //View
     private ImageView cardDummy;
@@ -89,8 +93,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton button5;
     private ImageButton LeaveButton;
 
+    private TextView player1NameTextView;
+    private TextView player1ScoreTextView;
     private TextView player2NameTextView;
     private TextView player3NameTextView;
+    private TextView player2ScoreTextView;
+    private TextView player3ScoreTextView;
 
     private TextView currentBettingMoney;
     private CardView jokbo;
@@ -100,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        inGame = ViewModelProviders.of(this).get(gameViewModel.class);
 
         mainframe = findViewById(R.id.main_frame);
 
@@ -125,8 +135,12 @@ public class MainActivity extends AppCompatActivity {
         button5 = findViewById(R.id.button5);
         LeaveButton = findViewById(R.id.leavebutton);
 
+        player1NameTextView = findViewById(R.id.player1Name);
+        player1ScoreTextView = findViewById(R.id.player1Score);
         player2NameTextView = findViewById(R.id.player2Name);
         player3NameTextView = findViewById(R.id.player3Name);
+        player2ScoreTextView = findViewById(R.id.player2Score);
+        player3ScoreTextView = findViewById(R.id.player3Score);
 
         currentBettingMoney = findViewById(R.id.currentBettingMoneyText);
         jokbo = findViewById(R.id.jokbo);
@@ -134,10 +148,15 @@ public class MainActivity extends AppCompatActivity {
         mDB = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        inGame = ViewModelProviders.of(this).get(gameViewModel.class);
+
         gameStatus = inGame.getIngameStatus();
         userlist = inGame.getUsers();
         TotalBettingMoney = inGame.getTotalBettingMoney();
+        player1Score = inGame.getPlayer1Score();
+        player2Score = inGame.getPlayer2Score();
+        player3Score = inGame.getPlayer3Score();
+        userTurn = inGame.getUserTurn();
+        buttonSet = inGame.getButtonSet();
 
         final View decorView = getWindow().getDecorView();
         final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -160,6 +179,28 @@ public class MainActivity extends AppCompatActivity {
 
         mainLoop();
 
+        gameThread = new GameThread(inGame);
+        gameThread.setDaemon(true);
+        mhandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                if(msg.what == 0){
+
+                }
+
+                if(msg.what == 1){
+
+                }
+
+            }
+        };
+
+
+
+
+
 
         //TODO START 부분 구현 // 우선 click해야 시작으로 해놨음 -> bool로 바꾸기
         cardDummy.setOnClickListener(new View.OnClickListener() {
@@ -169,8 +210,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if (inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)) {
 
+                    System.out.println("Dummy Button Click");
+
                     inGame.setStatus(Boolean.TRUE);
 
+//                    gameThread.RegistPlayers();
                 }
 
             }
@@ -180,14 +224,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                int bettingMoney = inGame.getTotalBettingMoney().getValue();
+                System.out.println("Half Button Click");
 
-                int halfBetting = (int) Math.floor(bettingMoney / 2);
+                inGame.HalfButtonExecute(MainActivity.this, "player1");
 
-                inGame.HalfButtonExecute(MainActivity.this, halfBetting, "player1");
+                //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
+                inGame.getUsers().getValue().get("player2").setTurn(true);
 
-                boolean buttonAttr[] = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
+                gameThread.run();
 
+                inGame.setButtonSet(onlyLeaveEnable);
+
+                try{
+                    gameThread.join();
+                }catch (Exception e){
+                    System.out.println("쓰레드 예외처리" + e);
+                }
+                ////////////////////////////////////////////////////////////////TEST 끝
 
             }
         });
@@ -196,10 +249,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+               inGame.CallButtonExecute(MainActivity.this, "player1");
+                System.out.println("Call Button Click");
 
-//                inGame.CallButtonExecute(MainActivity.this, );
+                //TODO TESTSET Player2로 턴 주기
+                inGame.getUsers().getValue().get("player2").setTurn(true);
+
+                gameThread.run();
+
+                buttonSetting(onlyLeaveEnable);
+
+                try{
+                    gameThread.join();
+                }catch (Exception e){
+                    System.out.println("쓰레드 예외처리" + e);
+                }
+                //TEST 끝
+
             }
         });
+
 
         DieButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,6 +276,21 @@ public class MainActivity extends AppCompatActivity {
 
                 inGame.DieButtonExecute(MainActivity.this, "player1");
 
+                System.out.println("Die Button Click");
+
+                //TODO TESTSET Player2로 턴 주기
+                inGame.getUsers().getValue().get("player2").setTurn(true);
+
+                gameThread.run();
+
+                inGame.setButtonSet(onlyLeaveEnable);
+
+                try{
+                    gameThread.join();
+                }catch (Exception e){
+                    System.out.println("쓰레드 예외처리" + e);
+                }
+                //TEST 끝
             }
         });
 
@@ -216,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
 
                 inGame.setStatus(Boolean.FALSE);
 
+                System.out.println("Leave Button Click");
             }
         });
 
@@ -267,25 +352,36 @@ public class MainActivity extends AppCompatActivity {
                 long score = (Long) documentSnapshot.get("score");
                 String token_id = (String) documentSnapshot.get("token_id");
 
+                System.out.println(name + "//"+ score + "///" +token_id );
+
                 //Edit Players
-                Me = new User(name, score, token_id, isTurn, false);
-                Ai = new User("AI", 100000, "ALPHAGO", isTurn, false);
-                Ai2 = new User("AI2", 100000, "ALPHAGO2", isTurn, false);
+                Me = new User(name, score, token_id, TurnInitializing, true);
+                Ai = new User("AI", 100000, "ALPHAGO", TurnInitializing, true);
+                Ai2 = new User("AI2", 100000, "ALPHAGO2", TurnInitializing, true);
                 userMap.put("player1", Me);
                 userMap.put("player2", Ai);
                 userMap.put("player3", Ai2);
+
                 inGame.setUsers(userMap);
+
+                inGame.setButtonSet(onlyLeaveEnable);
 
 
                 userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
                     @Override
                     public void onChanged(@Nullable HashMap<String, User> users) {
 
+                        if (users.containsKey("player1")) {
+                            player1NameTextView.setText(users.get("player1").getName());
+                            player1ScoreTextView.setText(String.valueOf(users.get("player1").getScore()));
+                        }
                         if (users.containsKey("player2")) {
                             player2NameTextView.setText(users.get("player2").getName());
+                            player2ScoreTextView.setText(String.valueOf(users.get("player2").getScore()));
                         }
                         if (users.containsKey("player3")) {
                             player3NameTextView.setText(users.get("player3").getName());
+                            player3ScoreTextView.setText(String.valueOf(users.get("player3").getScore()));
                         }
                     }
 
@@ -295,43 +391,92 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Integer money) {
 
+                        System.out.println("배팅액 텍스트 변경");
                         currentBettingMoney.setText(String.valueOf(money));
 
                     }
                 });
 
+                player1Score.observe(MainActivity.this, new Observer<Long>() {
+                    @Override
+                    public void onChanged(@Nullable Long score) {
+                        player1ScoreTextView.setText(String.valueOf(player1Score.getValue()));
+                    }
+                });
+                player2Score.observe(MainActivity.this, new Observer<Long>() {
+                    @Override
+                    public void onChanged(@Nullable Long score) {
+                        player2ScoreTextView.setText(String.valueOf(player2Score.getValue()));
+                    }
+                });
+                player3Score.observe(MainActivity.this, new Observer<Long>() {
+                    @Override
+                    public void onChanged(@Nullable Long score) {
+                        player3ScoreTextView.setText(String.valueOf(player3Score.getValue()));
+                    }
+                });
 
-                //StartGame
+                userTurn.observe(MainActivity.this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean aBoolean) {
+
+                        if(aBoolean){
+                            Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
+                            inGame.setButtonSet(buttons);
+                        }
+                        if(!aBoolean){
+                            inGame.setButtonSet(AllbuttonOFF);
+                        }
+                    }
+                });
+
+
+                //StartGame관련
                 gameStatus.observe(MainActivity.this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(@Nullable Boolean aBoolean) {
 
                         if (aBoolean) {
 
+                            //시작버튼 꺼주고
                             cardDummy.setEnabled(false);
-                            LeaveButton.setEnabled(false);
-//                                isturnOnView(false);
 
-                            inGame.initiate();
-
+                            //isturnOnView(false);
                             inGame.execute(MainActivity.this);
-                            //지금 execute 이걸로 대체
 
-
-                            LeaveButton.setEnabled(true);
 
                         }
+
                         if (!aBoolean) {
+
+                            System.out.println("Statement 종료");
+
                             //Update player score on Firestore
-                            inGame.uploadScoreToFirestore(currentUser, Me, Ai, Ai2);
+                            inGame.uploadScoreToFirestore(currentUser);
 
                             //지금은 이렇게 되어있는데 인게임 밖으로 나가게 만들어야함
+
+                            gameThread.interrupt();
 
                             inGame.finish();
 
                             cardDummy.setEnabled(true);
+
+                            LeaveButton.setEnabled(true);
                             //
                         }
+                    }
+                });
+
+                buttonSet.observe(MainActivity.this, new Observer<Boolean[]>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean[] booleans) {
+
+                        System.out.println("버튼 변경 요청 @_@");
+//                        if(inGame.getUsers().getValue().get("player1").isTurn()){
+                            buttonSetting(booleans);
+
+
                     }
                 });
 
@@ -344,17 +489,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
     //TESTSETESTSET
-    public void HalfButtonClicked(boolean[] enable) {
+    public void buttonSetting(Boolean [] buttonset) {
 
-        boolean halfbutton = enable[0];
-        boolean callbutton = enable[1];
-        boolean diebutton = enable[2];
-        boolean leavebutton = enable[3];
+        System.out.println("활성화 버튼 변경!");
+
+        boolean halfbutton = buttonset[0];
+        boolean callbutton = buttonset[1];
+        boolean diebutton = buttonset[2];
+        boolean leavebutton = buttonset[3];
 
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
@@ -363,5 +509,7 @@ public class MainActivity extends AppCompatActivity {
         button5.setEnabled(false);
         LeaveButton.setEnabled(leavebutton);
     }
+
+
 }
 

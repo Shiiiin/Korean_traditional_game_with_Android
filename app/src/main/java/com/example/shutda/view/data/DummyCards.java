@@ -2,7 +2,7 @@ package com.example.shutda.view.data;
 
 public class DummyCards {
 
-    public static final int TheNumberofCard = 20;
+    public final static int TheNumberofCard = 20;
     public final static int January1 = 10;
     public final static int January2 = 11;
     public final static int February1 = 20;
@@ -24,4 +24,14 @@ public class DummyCards {
     public final static int October1 = 100;
     public final static int October2 = 101;
 
+    public final static int Cards[] = { January1, January2,
+            February1, February2,
+            March1, March2,
+            April1, April2,
+            May1, May2,
+            June1, June2,
+            July1, July2,
+            August1,August2,
+            September1, September2,
+            October1, October2 };
 }

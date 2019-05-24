@@ -8,18 +8,18 @@ public class User {
     private int Card2 = 0;
     private int SumOfBetting =0;
     private boolean isTurn;
-    private boolean isTurnable;
+    private boolean isAlive;
     private boolean EnableClickHalfButton;
     private boolean EnableClickCallButton;
     private boolean EnableClickDieButton;
     private boolean EnableClickLeaveButton;
 
 
-    public User (String name, long score, String token_id , boolean isTurn, boolean Turnable){
+    public User (String name, long score, String token_id , boolean isTurn, boolean life){
         this.name = name;
         this.score = score;
         this.isTurn = isTurn;
-        this.isTurnable = Turnable;
+        this.isAlive = life;
         this.token_id = token_id;
     }
 
@@ -58,12 +58,12 @@ public class User {
         isTurn = turn;
     }
 
-    public boolean isTurnable() {
-        return isTurnable;
+    public boolean isAlive() {
+        return isAlive;
     }
 
-    public void setTurnable(boolean turnable) {
-        isTurnable = turnable;
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 
 
@@ -131,12 +131,16 @@ public class User {
         this.EnableClickLeaveButton = leavebutton;
     }
 
-    public boolean[] getButtonClickEnable(){
+    public Boolean[] getButtonClickEnable(){
 
-        boolean groupbutton[] = {EnableClickHalfButton, EnableClickCallButton,
+        Boolean groupbutton[] = {EnableClickHalfButton, EnableClickCallButton,
                                   EnableClickDieButton, EnableClickLeaveButton};
 
         return groupbutton;
+    }
+
+    public int getCardRanking() {
+        return Card1+ Card2;
     }
 
     public boolean Betting(int money){
@@ -159,6 +163,8 @@ public class User {
         SumOfBetting =  SumOfBetting + bettingMoney;
 
         this.score = 0;
+
+        this.isAlive = false;
 
         return bettingMoney;
     }
