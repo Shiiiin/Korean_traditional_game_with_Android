@@ -22,7 +22,7 @@ import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.AllbuttonOFF;
 import static com.example.shutda.view.data.constantsField.ButtonsWhenGameGetStarted;
 
-public class gameViewModel extends ViewModel implements Command {
+public class gameViewModel extends ViewModel{
 
     //Game based
     private List<Integer> ShuffledCards = new ArrayList<>();
@@ -77,12 +77,6 @@ public class gameViewModel extends ViewModel implements Command {
 
     public void setTotalBettingMoney(int money){ TotalBettingMoney.postValue(money); }
 
-    @Override
-    public void initiate() {
-
-    }
-
-    @Override
     public void execute(Context context) {
 
             //첫번째 턴 정하기 (나중에 메소드 만들어서 턴 정해야함)
@@ -114,8 +108,7 @@ public class gameViewModel extends ViewModel implements Command {
 
     }
 
-    @Override
-    public boolean finish() {
+     boolean finish() {
 
         //TODO 이게 문제일수도 있음
         UserTurn.postValue(false);
