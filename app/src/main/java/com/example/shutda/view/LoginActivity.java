@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         if(currentUser != null && isNetworkConnected() == true){
 
-            sendToMain();
+            sendToMenu();
         }
 
     }
@@ -237,6 +237,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void sendToMain() {
         Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(loginIntent);
+    }
+
+    private void sendToMenu() {
+        Intent loginIntent = new Intent(LoginActivity.this, MenuActivity.class);
         startActivity(loginIntent);
     }
 
@@ -336,7 +341,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 public void onSuccess(Void aVoid) {
 
                                     showProgress(true);
-                                    sendToMain();
+                                    sendToMenu();
 
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -635,7 +640,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             @Override
                                             public void onSuccess(Void aVoid) {
 
-                                                sendToMain();
+                                                sendToMenu();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
