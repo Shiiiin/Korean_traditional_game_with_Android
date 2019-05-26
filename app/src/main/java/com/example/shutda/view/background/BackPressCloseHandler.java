@@ -25,9 +25,9 @@ public class BackPressCloseHandler {
             return; }
         if (System.currentTimeMillis() <= backKeyClickTime + 2000) {
 
-            mDB.collection("Users").document(mAuth.getCurrentUser().getUid()).update("token_id", "");
+//            mDB.collection("Users").document(mAuth.getCurrentUser().getUid()).update("token_id", "");
 
-            mAuth.signOut();
+//            mAuth.signOut();
 
             activity.finish();
         }
