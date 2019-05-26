@@ -113,7 +113,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         decorView.setSystemUiVisibility(uiOptions);
 
-
         // Configure Google Sign In
 
         // Button listeners

@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:background="@color/cardview_shadow_start_color"
+        android:textSize="20sp"
         android:padding="10dp"
         android:textColor="@color/cardview_light_background"
         android:textAppearance="?attr/textAppearanceListItem" />
