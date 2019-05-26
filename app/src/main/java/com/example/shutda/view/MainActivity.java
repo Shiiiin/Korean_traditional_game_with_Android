@@ -184,10 +184,6 @@ public class MainActivity extends AppCompatActivity {
         gameThread.start();
 
 
-
-
-
-
         //TODO START 부분 구현 // 우선 click해야 시작으로 해놨음 -> bool로 바꾸기
         cardDummy.setOnClickListener(new View.OnClickListener() {
 
