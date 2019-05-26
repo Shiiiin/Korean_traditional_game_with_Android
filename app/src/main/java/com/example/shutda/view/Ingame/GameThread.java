@@ -141,8 +141,6 @@ public class GameThread extends Thread {
                         }
                     });
 
-
-
         }// run End
 
 

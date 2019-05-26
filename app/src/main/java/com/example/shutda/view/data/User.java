@@ -139,7 +139,7 @@ public class User {
         return groupbutton;
     }
 
-    public int getCardRanking() {
+    public int getCardValues() {
         return Card1+ Card2;
     }
 

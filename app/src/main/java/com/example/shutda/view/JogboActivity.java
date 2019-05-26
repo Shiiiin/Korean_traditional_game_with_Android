@@ -32,12 +32,13 @@ public class JogboActivity extends AppCompatActivity {
 
         decorView.setSystemUiVisibility(uiOptions);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
 
         jogboDataset = new ArrayList<>();
         mAdapter = new JogboAdapter(jogboDataset);

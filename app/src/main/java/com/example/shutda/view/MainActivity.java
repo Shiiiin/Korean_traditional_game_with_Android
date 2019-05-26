@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private gameViewModel inGame;
-    protected LiveData<Boolean> gameStatus;
+    private LiveData<Boolean> gameStatus;
     private LiveData<HashMap<String, User>> userlist;
     private LiveData<Integer> TotalBettingMoney;
     private LiveData<Long> player1Score;
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         gameThread.start();
 
 
-        //TODO START 부분 구현 // 우선 click해야 시작으로 해놨음 -> bool로 바꾸기
+        //TODO START 부분 구현 나중에 클릭위치 바꿔야함 (유아이도)
         cardDummy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,7 +341,6 @@ public class MainActivity extends AppCompatActivity {
 
                 inGame.setButtonSet(onlyLeaveEnable);
 
-
                 userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
                     @Override
                     public void onChanged(@Nullable HashMap<String, User> users) {
@@ -390,6 +389,7 @@ public class MainActivity extends AppCompatActivity {
                         player3ScoreTextView.setText(String.valueOf(player3Score.getValue()));
                     }
                 });
+
                 userTurn.observe(MainActivity.this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(@Nullable Boolean aBoolean) {
@@ -404,9 +404,7 @@ public class MainActivity extends AppCompatActivity {
                                 inGame.getUsers().getValue().get("player2").setTurn(true);
                                 inGame.getPlayer2Turn().postValue(true);
                             }
-
                         }
-
                     }
                 });
 
@@ -423,7 +421,6 @@ public class MainActivity extends AppCompatActivity {
 
                             //isturnOnView(false);
                             inGame.execute(MainActivity.this);
-
 
                         }
 

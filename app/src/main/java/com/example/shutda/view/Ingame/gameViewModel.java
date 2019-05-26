@@ -5,7 +5,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.shutda.view.data.User;
@@ -17,10 +16,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import static com.example.shutda.view.data.DummyCards.*;
-import static com.example.shutda.view.data.constantsField.AllbuttonOFF;
-import static com.example.shutda.view.data.constantsField.ButtonsWhenGameGetStarted;
 
 public class gameViewModel extends ViewModel{
 
@@ -86,9 +84,7 @@ public class gameViewModel extends ViewModel{
             UserTurn.postValue(player1.isTurn());
             ///////////////////////////////////////////////////////
 
-
             CardShuffling();
-
 
             //카드 나눠주기 (나중에 1장씩 나눠주는거 고려해봐야함
             System.out.println("카드시작");
@@ -112,9 +108,9 @@ public class gameViewModel extends ViewModel{
      public boolean finish() {
 
         //TODO 이게 문제일수도 있음
-        UserTurn.postValue(false);
-        player2Turn.postValue(false);
-        player3Turn.postValue(false);
+            //  UserTurn.postValue(false);
+            //  player2Turn.postValue(false);
+            //  player3Turn.postValue(false);
 
         //Reset All Data apart from Name & Score
         for(int i=1 ; i <= users.getValue().size(); i++){
@@ -283,7 +279,6 @@ public class gameViewModel extends ViewModel{
 
         }
 
-
         //일단 콜하면 죽여
         currentplayer.setAlive(false);
         currentplayer.setTurn(false);
@@ -297,7 +292,7 @@ public class gameViewModel extends ViewModel{
 
         System.out.println(currentplayer.getName() + "DecisionMaking 진입!!");
 
-        int judge = currentplayer.getCardRanking();
+        int judge = currentplayer.getCardValues();
 
         if( judge > 80){
             AiHalfExecute(player);
@@ -328,7 +323,6 @@ public class gameViewModel extends ViewModel{
             users.getValue().get("player1").setTurn(true);
             UserTurn.postValue(true);
         }
-
     }
 
     public void AiHalfExecute(String player) {
@@ -370,10 +364,7 @@ public class gameViewModel extends ViewModel{
             if(player == "player3"){
                 player3Score.postValue(player3.getScore());
             }
-
         }
-
-        //TEST 끝
     }
 
     public void AiDieExecute(String player) {
@@ -438,9 +429,9 @@ public class gameViewModel extends ViewModel{
     public void checkWinner(){
 
         //TODO 아직 패가 같을때 고려안함   (패가 같을경우 뒷턴 우선으로 승리)
-        int player1CardValue = player1.getCardRanking();
-        int player2CardValue = player2.getCardRanking();
-        int player3CardValue = player3.getCardRanking();
+        int player1CardValue = player1.getCardValues();
+        int player2CardValue = player2.getCardValues();
+        int player3CardValue = player3.getCardValues();
 
         int compare1n2 = (player1CardValue > player2CardValue)? player1CardValue : player2CardValue;
         int result = (compare1n2 > player3CardValue)? compare1n2 : player3CardValue;
@@ -459,7 +450,6 @@ public class gameViewModel extends ViewModel{
         }
 
     }
-
 
     public void uploadScoreToFirestore(DocumentReference database){
 
