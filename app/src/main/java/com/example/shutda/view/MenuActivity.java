@@ -61,7 +61,7 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                //TODO 스코어보드 intent
+
                 Intent go2Rankboard = new Intent(MenuActivity.this, RankActivity.class);
                 startActivity(go2Rankboard);
 
@@ -72,6 +72,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO rule intent
+
             }
         });
 
