@@ -83,7 +83,6 @@ public class MenuActivity extends AppCompatActivity {
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
 
                 Map<String, Object> tokenMap = new HashMap<>();
 
@@ -92,6 +91,8 @@ public class MenuActivity extends AppCompatActivity {
                 mFirestore.collection("Users").document(firebaseAuth.getUid()).update(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
+                        Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
                         firebaseAuth.signOut();
                         startActivity(quit);
                     }
