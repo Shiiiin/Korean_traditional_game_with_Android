@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.shutda.R;
@@ -12,52 +14,79 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuActivity extends AppCompatActivity {
+
+    Button gameStartButton;
+    Button scoreboardButton;
+    Button ruleButton;
+    Button leaveButton;
+    Button jogboButton;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore mFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        final Intent jogboIntent = new Intent(this, JogboActivity.class);
-        final Intent mainIntent = new Intent(this, MainActivity.class);
-        final Intent loginIntent = new Intent(this, LoginActivity.class);
-
-        SetOnClickListener(R.id.play_button, mainIntent);
-        SetOnClickListener(R.id.rank_button, jogboIntent);
-        SetOnClickListener(R.id.rule_button, jogboIntent);
-        SetOnClickListener(R.id.answer_button, jogboIntent);
-        SetLogoutListener(R.id.logout_button, loginIntent);
-
-    }
+        gameStartButton = findViewById(R.id.play_button);
+        scoreboardButton = findViewById(R.id.rank_button);
+        ruleButton = findViewById(R.id.rule_button);
+        jogboButton = findViewById(R.id.answer_button);
+        leaveButton = findViewById(R.id.logout_button);
+        firebaseAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
 
 
-    private void SetOnClickListener(int button_id, final Intent intent) {
-        findViewById(button_id).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(intent);
-                    }
-                }
-        );
-    }
-
-    private void SetLogoutListener(final int button_id, final Intent intent) {
-        final FirebaseDatabase mDB = FirebaseDatabase.getInstance();
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final String mUserId = mAuth.getCurrentUser().getUid();
-        mDB.getReference("/Users").child(mUserId).child("token_id").setValue("").addOnSuccessListener(new OnSuccessListener<Void>() {
+        gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mAuth.signOut();
-                SetOnClickListener(button_id, intent);
+            public void onClick(View v) {
+                Intent go2Game =  new Intent(MenuActivity.this, MainActivity.class);
+                startActivity(go2Game);
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        });
+        scoreboardButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MenuActivity.this, "로그아웃 실패", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                //TODO 스코어보드 intent
+            }
+        });
+
+        ruleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO rule intent
+            }
+        });
+
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
+
+                Map<String, Object> tokenMap = new HashMap<>();
+
+                tokenMap.put("token_id", "");
+
+                mFirestore.collection("Users").document(firebaseAuth.getUid()).update(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        firebaseAuth.signOut();
+                        startActivity(quit);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("로그아웃 실패", "오류 로그: "+e);
+                        Toast.makeText(MenuActivity.this, "로그아웃 실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

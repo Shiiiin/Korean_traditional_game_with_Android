@@ -65,7 +65,7 @@ public class GameThread extends Thread {
 
         super.start();
 
-        System.out.println("@@@@ Thread Start 실행 @@@@");
+        System.out.println("@@@@ Thread start 실행 @@@@");
 
 
     }
