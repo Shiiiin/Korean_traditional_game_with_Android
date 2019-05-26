@@ -45,10 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private View mainframe;
 
     private GameThread gameThread;
-    public Handler mhandler;
 
     private BackPressCloseHandler backPressCloseHandler;
-
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDB;

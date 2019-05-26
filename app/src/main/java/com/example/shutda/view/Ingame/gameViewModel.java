@@ -108,9 +108,9 @@ public class gameViewModel extends ViewModel{
      public boolean finish() {
 
         //TODO 이게 문제일수도 있음
-            //  UserTurn.postValue(false);
-            //  player2Turn.postValue(false);
-            //  player3Turn.postValue(false);
+//        UserTurn.postValue(false);
+//        player2Turn.postValue(false);
+//        player3Turn.postValue(false);
 
         //Reset All Data apart from Name & Score
         for(int i=1 ; i <= users.getValue().size(); i++){
