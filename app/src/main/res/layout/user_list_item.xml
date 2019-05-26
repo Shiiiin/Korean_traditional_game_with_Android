@@ -5,33 +5,43 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
-<android.support.v7.widget.CardView
-    android:id="@+id/userCardView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card:cardCornerRadius="15dp"
-    >
+
 <LinearLayout
     android:id="@+id/user_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@color/colorPrimaryBackground"
     >
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/userCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        card:cardBackgroundColor="@color/cardview_shadow_start_color"
+        card:cardCornerRadius="5dp"
+        >
+
     <TextView
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/user_rank"
         android:layout_margin="@dimen/text_margin"
         android:textSize="20sp"
+        android:textColor="@color/cardview_light_background"
         android:padding="10dp"
         android:textAppearance="?attr/textAppearanceListItem" />
+
+    </android.support.v7.widget.CardView>
+
     <TextView
         android:id="@+id/user_name"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        android:background="@color/cardview_shadow_start_color"
         android:padding="10dp"
+        android:textColor="@color/cardview_light_background"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -39,10 +49,12 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        android:background="@color/cardview_shadow_start_color"
         android:textSize="20sp"
         android:padding="10dp"
+        android:textColor="@color/cardview_light_background"
         android:textAppearance="?attr/textAppearanceListItem" />
 
 </LinearLayout>
-</android.support.v7.widget.CardView>
+
 </RelativeLayout>

@@ -40,6 +40,13 @@ public class RankActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank);
 
+        final View decorView = getWindow().getDecorView();
+        final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+        decorView.setSystemUiVisibility(uiOptions);
+
         mSwipeRefreshLayout = findViewById(R.id.rank_swipe_layout);
         backPressCloseHandler = new BackPressCloseHandler(RankActivity.this);
         userArrayList = new ArrayList<>();

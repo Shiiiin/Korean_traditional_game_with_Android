@@ -136,12 +136,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mAuth = FirebaseAuth.getInstance();
         mDB = FirebaseFirestore.getInstance();
 
-
-
-
-
-
-
         // Set up the login form.
 
         mLayoutView = (ConstraintLayout) findViewById(R.id.login_layout);
