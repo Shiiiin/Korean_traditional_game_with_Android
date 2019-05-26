@@ -446,7 +446,7 @@ public class gameViewModel extends ViewModel{
         int result = (compare1n2 > player3CardValue)? compare1n2 : player3CardValue;
 
         if(result == player1CardValue){
-            System.out.println("*******player1 이겼따*************");
+            System.out.println("*******player1 이겼따*****aaa*******");
             player1.setScore(TotalBettingMoney.getValue());
         }
         if(result == player2CardValue){
