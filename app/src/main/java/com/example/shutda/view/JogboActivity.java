@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.shutda.R;
+import com.example.shutda.view.background.BackPressCloseHandler;
 
 import java.util.ArrayList;
 
@@ -16,11 +17,13 @@ public class JogboActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Data> jogboDataset;
+    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jogbo);
+        backPressCloseHandler = new BackPressCloseHandler(JogboActivity.this);
 
         final View decorView = getWindow().getDecorView();
         final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -56,6 +59,6 @@ public class JogboActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
     }
 }

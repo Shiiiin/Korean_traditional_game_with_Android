@@ -62,6 +62,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO 스코어보드 intent
+
             }
         });
 
@@ -84,14 +85,9 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Map<String, Object> tokenMap = new HashMap<>();
-
-                tokenMap.put("token_id", "");
-
-                mFirestore.collection("Users").document(firebaseAuth.getUid()).update(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id,", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
                         Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
                         firebaseAuth.signOut();
                         startActivity(quit);

@@ -98,6 +98,7 @@ public class gameViewModel extends ViewModel{
                 String key = "player"+i;
                 users.getValue().get(key).setCard1(CardsMachine.poll());
                 users.getValue().get(key).setCard2(CardsMachine.poll());
+
                 System.out.println(key +"'s Card1 : "+users.getValue().get(key).getCard1());
                 System.out.println(key +"'s Card2 : "+users.getValue().get(key).getCard2());
 
@@ -200,7 +201,7 @@ public class gameViewModel extends ViewModel{
 
         int bettingMoney = TotalBettingMoney.getValue();
 
-        int halfBetting = (int) Math.floor(bettingMoney / 2);
+        int halfBetting = bettingMoney / 2;
 
         //True일때 betting성공, False일때 돈부족함
         boolean a = currentplayer.Betting(halfBetting);

@@ -10,13 +10,10 @@ public class BackPressCloseHandler {
 
     private long backKeyClickTime = 0;
     private Activity activity;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mDB = FirebaseFirestore.getInstance();
 
-    public BackPressCloseHandler(Activity activity, FirebaseAuth mAuth)
+    public BackPressCloseHandler(Activity activity)
     {
         this.activity = activity;
-        this.mAuth = mAuth;
     }
 
     public void onBackPressed() {
@@ -25,9 +22,6 @@ public class BackPressCloseHandler {
             return; }
         if (System.currentTimeMillis() <= backKeyClickTime + 2000) {
 
-//            mDB.collection("Users").document(mAuth.getCurrentUser().getUid()).update("token_id", "");
-
-//            mAuth.signOut();
 
             activity.finish();
         }

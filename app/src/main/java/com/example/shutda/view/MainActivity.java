@@ -165,8 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         decorView.setSystemUiVisibility(uiOptions);
 
-        backPressCloseHandler = new BackPressCloseHandler(this, mAuth);
-
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         if (mAuth.getCurrentUser() == null) {
 
@@ -186,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO START 부분 구현 // 우선 click해야 시작으로 해놨음 -> bool로 바꾸기
         cardDummy.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
@@ -203,29 +201,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         HalfButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
-                System.out.println("Half Button Click");
+                    System.out.println("Half Button Click");
 
-                inGame.HalfButtonExecute(MainActivity.this, "player1");
+                    inGame.HalfButtonExecute(MainActivity.this, "player1");
 
-                //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
-                inGame.getUsers().getValue().get("player2").setTurn(true);
-                inGame.getPlayer2Turn().postValue(true);
-//
+                    //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
+                    inGame.getUsers().getValue().get("player2").setTurn(true);
+                    inGame.getPlayer2Turn().postValue(true);
+
 //                gameThread.run();
 
-                inGame.setButtonSet(onlyLeaveEnable);
+                    inGame.setButtonSet(onlyLeaveEnable);
 
-                try{
-                    gameThread.join();
-                }catch (Exception e){
-                    System.out.println("쓰레드 예외처리" + e);
+                    try{
+                        gameThread.join();
+                    }catch (Exception e){
+                        System.out.println("쓰레드 예외처리" + e);
+                    }
+                    ////////////////////////////////////////////////////////////////TEST 끝
+
                 }
-                ////////////////////////////////////////////////////////////////TEST 끝
-
-            }
         });
 
         CallButton.setOnClickListener(new View.OnClickListener() {
@@ -284,10 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Leave Button Click");
             }
         });
-
-
     }
-
 
     @Override
     protected void onStart() {
@@ -298,7 +293,6 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null) {
             Toast.makeText(this, "로그인 실패", Toast.LENGTH_LONG).show();
             sendBack();
-
         }
     }
 
@@ -396,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
                         player3ScoreTextView.setText(String.valueOf(player3Score.getValue()));
                     }
                 });
-
                 userTurn.observe(MainActivity.this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(@Nullable Boolean aBoolean) {
@@ -404,8 +397,8 @@ public class MainActivity extends AppCompatActivity {
                         if(aBoolean){
 
                             if(inGame.getUsers().getValue().get("player1").isAlive()){
-                                Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
-                                inGame.setButtonSet(buttons);
+                                    Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
+                                    inGame.setButtonSet(buttons);
                             }
                             else{
                                 inGame.getUsers().getValue().get("player2").setTurn(true);
