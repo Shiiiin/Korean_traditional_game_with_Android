@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class MenuActivity extends AppCompatActivity{
 
+    private long backKeyClickTime = 0;
     private Button gameStartButton;
     private Button scoreboardButton;
     private Button ruleButton;
@@ -127,7 +128,7 @@ public class MenuActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
 
-
+        BackPressed2Login();
 
     }
 
@@ -135,7 +136,7 @@ public class MenuActivity extends AppCompatActivity{
 
   public void BackPressed2Login() {
 
-          long backKeyClickTime = 0;
+
 
         if (System.currentTimeMillis() > backKeyClickTime + 2000) { backKeyClickTime = System.currentTimeMillis();
             Toast.makeText(MenuActivity.this, "뒤로가기 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
