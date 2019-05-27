@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-        if (mAuth.getCurrentUser() == null) {
+               if (mAuth.getCurrentUser() == null) {
 
             sendBack();
 

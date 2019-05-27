@@ -17,7 +17,7 @@ public class WinnerChecker {
         playersMap.put("player3", player3Cards);
     }
 
-    public String checkWinner() {
+    public String WinnerClassifier() {
 
         String winner="";
         int player1rank = carculateCards("player1");

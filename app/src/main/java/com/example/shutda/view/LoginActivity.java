@@ -217,21 +217,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    public boolean isInternetAvailable() {
-        try {
-            InetAddress address = InetAddress.getByName("www.google.com");
-            return !address.equals("");
-        } catch (UnknownHostException e) {
-            // Log error
-        }
-        return false;
-    }
-
-    private void sendToMain() {
-        Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(loginIntent);
-    }
-
     private void sendToMenu() {
         Intent loginIntent = new Intent(LoginActivity.this, MenuActivity.class);
         startActivity(loginIntent);
@@ -654,7 +639,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         mDB.collection("Users").document(current_id).set(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                sendToMain();
+                                                sendToMenu();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override

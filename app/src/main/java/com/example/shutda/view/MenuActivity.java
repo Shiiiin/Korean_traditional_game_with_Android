@@ -28,6 +28,7 @@ public class MenuActivity extends AppCompatActivity {
     Button jogboButton;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore mFirestore;
+    String mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,14 @@ public class MenuActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
+        if (firebaseAuth.getCurrentUser() == null) {
+
+            sendBack();
+
+        } else {
+
+            mUserId = firebaseAuth.getCurrentUser().getUid();
+        }
 
         gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,4 +114,11 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void sendBack() {
+        Intent loginIntent = new Intent(MenuActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+    }
+
 }
