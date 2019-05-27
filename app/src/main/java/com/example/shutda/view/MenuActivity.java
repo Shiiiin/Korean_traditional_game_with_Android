@@ -1,5 +1,6 @@
 package com.example.shutda.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,6 @@ public class MenuActivity extends AppCompatActivity{
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore mFirestore;
     private String mUserId;
-    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,4 +132,34 @@ public class MenuActivity extends AppCompatActivity{
     }
 
 
+
+  public void BackPressed2Login() {
+
+          long backKeyClickTime = 0;
+
+        if (System.currentTimeMillis() > backKeyClickTime + 2000) { backKeyClickTime = System.currentTimeMillis();
+            Toast.makeText(MenuActivity.this, "뒤로가기 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            return; }
+        if (System.currentTimeMillis() <= backKeyClickTime + 2000) {
+
+            mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
+                    firebaseAuth.signOut();
+                    startActivity(quit);
+                    finish();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("로그아웃 실패", "오류 로그: "+e);
+                    Toast.makeText(MenuActivity.this, "로그아웃 실패", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+    }
+
 }
+
