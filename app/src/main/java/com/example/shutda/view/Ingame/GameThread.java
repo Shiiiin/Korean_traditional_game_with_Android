@@ -93,6 +93,7 @@ public class GameThread extends Thread {
             player2Turn.observe(mainActivity, new Observer<Boolean>() {
                         @Override
                         public void onChanged(@Nullable Boolean aBoolean) {
+
                             if(aBoolean){
                                 Timer timer = new Timer();
 
@@ -107,10 +108,11 @@ public class GameThread extends Thread {
                                         }
                                     },AITurnPeriod);
                                 }else{
-                                    inGame.getUsers().getValue().get("player3").setTurn(true);
+//                                    inGame.getUsers().getValue().get("player3").setTurn(true);
                                     inGame.getPlayer3Turn().postValue(true);
                                 }
                             }
+
                         }
                     });
 
@@ -133,7 +135,7 @@ public class GameThread extends Thread {
                                         }
                                     },AITurnPeriod);
                                 }else {
-                                    inGame.getUsers().getValue().get("player1").setTurn(true);
+//                                    inGame.getUsers().getValue().get("player1").setTurn(true);
                                     inGame.getUserTurn().postValue(true);
                                 }
                             }
