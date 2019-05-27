@@ -466,13 +466,10 @@ public class MainActivity extends AppCompatActivity {
                             cardDummy.setEnabled(false);
 
                             //isturnOnView(false);
-<<<<<<< HEAD
-                            inGame.execute(MainActivity.this);
 
-=======
                             inGame.execute(MainActivity.this, Winner);
                             System.out.println(Winner);
->>>>>>> HOYYY
+
                         }
 
                         if (!aBoolean) {
