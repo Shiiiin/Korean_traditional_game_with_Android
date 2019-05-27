@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 여기서 버튼 press=false 일때가 보통상황, press=true 가 눌렀을때! 그림은 여기서 안넣어주고 모양만 바꿔준다-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_pressed="false"
+        >
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <stroke android:width="2dp" android:color="@color/purple"></stroke>
+            <solid android:color="@color/colorPrimaryBackground"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+    <item
+        android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <stroke android:width="2dp" android:color="@color/purple"/>
+            <solid android:color="@color/purpleClicked"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+</selector>
+
