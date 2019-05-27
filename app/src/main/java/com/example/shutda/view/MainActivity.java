@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
                 //Player initialized
 
                 if (!userMap.isEmpty()) {
-                    //userMap.clear();
+                    userMap.clear();
                 }
                 else {
                     String name = (String) documentSnapshot.get("name");
