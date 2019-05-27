@@ -77,9 +77,14 @@ public class GameThread extends Thread {
 
     @Override
     public void interrupt() {
-        super.interrupt();
+        try {
+            super.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("@@@@ Thread Interrupt 실행 @@@@");
+        System.out.println(getState());
     }
 
     @Override

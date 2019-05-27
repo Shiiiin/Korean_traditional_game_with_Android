@@ -6,8 +6,10 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Handler;
+import android.widget.HeaderViewListAdapter;
 import android.widget.Toast;
 
+import com.example.shutda.view.MainActivity;
 import com.example.shutda.view.data.User;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -41,6 +43,8 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Boolean> player3Turn = new MutableLiveData<>();
     private MutableLiveData<Integer> CallNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
+    private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
+
 
     public LiveData<HashMap<String, User>> getUsers(){ return users;}
     public LiveData<Boolean> getIngameStatus(){ return statement; }
@@ -54,12 +58,15 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Boolean> getPlayer3Turn() { return player3Turn;  }
     public MutableLiveData<Integer> getCallNumber() { return CallNumber;  }
     public MutableLiveData<Integer> getDieNumber() { return DieNumber;  }
+    public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
+
 
     private User player1;
     private User player2;
     private User player3;
 
     private Random random = new Random();
+    private int MaxPlayerBattingScore = 0;
 
     public void setUsers(HashMap<String, User> user){
 
@@ -85,6 +92,8 @@ public class gameViewModel extends ViewModel{
     public void setCallNumber(int callNumber) { CallNumber.postValue(callNumber); }
 
     public void setDieNumber(int dieNumber) { DieNumber.postValue(dieNumber); }
+
+    public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
 
     public void execute(Context context, String Winner) {
 
@@ -174,8 +183,10 @@ public class gameViewModel extends ViewModel{
 
          System.out.println("카드끝!!!!");
 
+         MaxPlayerBattingScore = 0;
          CallNumber.postValue(0);
          DieNumber.postValue(0);
+         HalfNumber.postValue(0);
          User Winner = users.getValue().get(winner);
 //         Winner.setTurn(true);
 
@@ -254,12 +265,14 @@ public class gameViewModel extends ViewModel{
         //True일때 betting성공, False일때 돈부족함
         boolean a = currentplayer.Betting(halfBetting);
 
-        CallNumber.postValue(0);
+        HalfNumber.postValue(HalfNumber.getValue() + 1);
 
         if(a == true){
 
             this.TotalBettingMoney.postValue(bettingMoney + halfBetting);
             player1Score.postValue(player1.getScore());
+            MaxPlayerBattingScore = halfBetting;
+            System.out.println(MaxPlayerBattingScore);
 
             currentplayer.setButtonClickEnable(true, true, true, false);
 
@@ -272,6 +285,9 @@ public class gameViewModel extends ViewModel{
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
             player1Score.postValue(player1.getScore());
+            MaxPlayerBattingScore = (MaxPlayerBattingScore < All_in) ? All_in : MaxPlayerBattingScore;
+            System.out.println(MaxPlayerBattingScore);
+            System.out.println("All_in");
 
             currentplayer.setButtonClickEnable(false, true, false, false);
 
@@ -309,11 +325,13 @@ public class gameViewModel extends ViewModel{
 
         //True일때 betting성공, False일때 돈부족함
 
-        int PreviousTurnPlayerBettingMoney = player1.getSumOfBetting();
+        int HalfTurnPlayerBettingMoney = MaxPlayerBattingScore;
+        System.out.println(HalfTurnPlayerBettingMoney);
 
-        int currentBetting = TotalBettingMoney.getValue();
+        int bettingMoney = TotalBettingMoney.getValue();
 
-        int money = PreviousTurnPlayerBettingMoney - currentplayer.getSumOfBetting();
+        int money = HalfTurnPlayerBettingMoney - currentplayer.getSumOfBetting();
+        money = (money < 0) ? 0 : money;
 
         boolean a = currentplayer.Betting(money);
 
@@ -322,7 +340,7 @@ public class gameViewModel extends ViewModel{
 
         if(a == true){
 
-            this.TotalBettingMoney.postValue(currentBetting + money);
+            this.TotalBettingMoney.postValue(bettingMoney + money);
             player1Score.postValue(player1.getScore());
 
             currentplayer.setButtonClickEnable(true, true, true, false);
@@ -333,8 +351,9 @@ public class gameViewModel extends ViewModel{
             Toast.makeText(view,"올인! " ,Toast.LENGTH_LONG).show();
 
             int All_in = currentplayer.All_in();
+            System.out.println("All_in");
 
-            this.TotalBettingMoney.postValue(currentBetting + All_in);
+            this.TotalBettingMoney.postValue(bettingMoney + All_in);
             player1Score.postValue(player1.getScore());
 
             currentplayer.setButtonClickEnable(false, true, true, false);
@@ -433,11 +452,13 @@ public class gameViewModel extends ViewModel{
 
         boolean a = currentplayer.Betting(halfBetting);
 
-        CallNumber.postValue(0);
+        HalfNumber.postValue(HalfNumber.getValue() + 1);
 
         if(a == true){
 
             this.TotalBettingMoney.postValue(bettingMoney + halfBetting);
+            MaxPlayerBattingScore = halfBetting;
+            System.out.println(MaxPlayerBattingScore);
 
             if(player == "player2"){
                 player2Score.postValue(player2.getScore());
@@ -453,6 +474,9 @@ public class gameViewModel extends ViewModel{
             int All_in = currentplayer.All_in();
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
+            MaxPlayerBattingScore = (MaxPlayerBattingScore < All_in) ? All_in : MaxPlayerBattingScore;
+            System.out.println(MaxPlayerBattingScore);
+            System.out.println("All_in");
 
             if(player == "player2"){
                 player2Score.postValue(player2.getScore());
@@ -490,18 +514,20 @@ public class gameViewModel extends ViewModel{
         User currentplayer = users.getValue().get(player);
 
         //TODO TESTETET 이전 플레이어 어떻게 넣을까? 지금은 player1으로 해둠
-        int PreviousTurnPlayerBettingMoney = player1.getSumOfBetting();
+        int HalfTurnPlayerBettingMoney = MaxPlayerBattingScore;
+        System.out.println(HalfTurnPlayerBettingMoney);
 
-        int currentBetting = TotalBettingMoney.getValue();
+        int bettingMoney = TotalBettingMoney.getValue();
 
-        int money = PreviousTurnPlayerBettingMoney - currentplayer.getSumOfBetting();
+        int money = HalfTurnPlayerBettingMoney - currentplayer.getSumOfBetting();
+        money = (money < 0) ? 0 : money;
 
         //True일때 betting성공, False일때 돈부족함
         boolean a = currentplayer.Betting(money);
 
         if(a == true){
 
-            this.TotalBettingMoney.postValue(currentBetting + money);
+            this.TotalBettingMoney.postValue(bettingMoney + money);
 
             if(player == "player2"){
                 player2Score.postValue(player2.getScore());
@@ -515,7 +541,8 @@ public class gameViewModel extends ViewModel{
 
             int All_in = currentplayer.All_in();
 
-            this.TotalBettingMoney.postValue(currentBetting + All_in);
+            this.TotalBettingMoney.postValue(bettingMoney + All_in);
+            System.out.println("All_in");
 
             if(player == "player2"){
                 player2Score.postValue(player2.getScore());
@@ -549,32 +576,22 @@ public class gameViewModel extends ViewModel{
 
         if(result == player1CardValue){
             System.out.println("*******player1 이겼따*************");
-            player1Score.postValue(player1Score.getValue() + TotalBettingMoney.getValue());
-            player1.setScore(player1Score.getValue());
-            player2.setScore(player2Score.getValue());
-            player3.setScore(player3Score.getValue());
-            player2Score.postValue(player2.getScore());
-            player3Score.postValue(player3.getScore());
+            player1.setScore(player1.getScore() + TotalBettingMoney.getValue());
+            player1Score.postValue(player1.getScore());
             return "player1";
         }
         else if(result == player2CardValue){
             System.out.println("*******player2 이겼따*************");
-            player2Score.postValue(player2Score.getValue() + TotalBettingMoney.getValue());
-            player2.setScore(player2Score.getValue());
-            player1.setScore(player1Score.getValue());
-            player3.setScore(player3Score.getValue());
-            player1Score.postValue(player1.getScore());
-            player3Score.postValue(player3.getScore());
+            player2.setScore(player2.getScore() + TotalBettingMoney.getValue());
+            player2Score.postValue(player2.getScore());
+
             return "player2";
         }
         else {
             System.out.println("*******player3 이겼따*************");
-            player3Score.postValue(player3Score.getValue() + TotalBettingMoney.getValue());
-            player3.setScore(player3Score.getValue());
-            player2.setScore(player2Score.getValue());
-            player1.setScore(player1Score.getValue());
-            player1Score.postValue(player1.getScore());
-            player2Score.postValue(player2.getScore());
+            player3.setScore(player3.getScore() + TotalBettingMoney.getValue());
+            player3Score.postValue(player3.getScore());
+
             return "player3";
         }
 
@@ -589,12 +606,23 @@ public class gameViewModel extends ViewModel{
 
     public Boolean checkEnd() {
         //TODO 첫 턴에 선이 die > 두번째가 call시 게임이 안끝나게 해야한다.
-        if(2 == CallNumber.getValue() + DieNumber.getValue()) {
-            return true;
+        if (HalfNumber.getValue() != null) {
+            if (HalfNumber.getValue() > 0) {
+                if (2 == CallNumber.getValue() + DieNumber.getValue()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (3 == CallNumber.getValue() + DieNumber.getValue()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
         else {
             return false;
         }
     }
-
 }

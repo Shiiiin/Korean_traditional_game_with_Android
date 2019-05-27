@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private LiveData<Boolean> userTurn;
     private LiveData<Integer> CallNumber;
     private LiveData<Integer> DieNumber;
+    private LiveData<Integer> HalfNumber;
 
     //View
     private ImageView cardDummy;
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSet = inGame.getButtonSet();
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
+        HalfNumber = inGame.getHalfNumber();
 
         Winner = "player1";
         FirstTurn = true;
@@ -254,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try{
                     gameThread.join();
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("쓰레드 예외처리" + e);
                 }
                 //TEST 끝
@@ -443,6 +445,12 @@ public class MainActivity extends AppCompatActivity {
                                 System.out.println(2);
                             }
                         }
+                    }
+                });
+                HalfNumber.observe(MainActivity.this, new Observer<Integer>() {
+                    @Override
+                    public void onChanged(@Nullable Integer integer) {
+                        inGame.setCallNumber(0);
                     }
                 });
 
