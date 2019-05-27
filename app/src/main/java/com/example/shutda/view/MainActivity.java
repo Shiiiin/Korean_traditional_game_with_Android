@@ -352,12 +352,9 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.setUsers(userMap);
 
-<<<<<<< HEAD
-=======
                     inGame.setButtonSet(onlyLeaveEnable);
                 }
 
->>>>>>> HOYYY
                 userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
                     @Override
                     public void onChanged(@Nullable HashMap<String, User> users) {

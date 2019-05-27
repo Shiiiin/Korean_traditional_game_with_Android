@@ -5,11 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-<<<<<<< HEAD
-=======
-import android.os.Handler;
-import android.widget.HeaderViewListAdapter;
->>>>>>> HOYYY
+
 import android.widget.Toast;
 
 import com.example.shutda.view.MainActivity;
@@ -92,12 +88,6 @@ public class gameViewModel extends ViewModel{
 
     public void setCallNumber(int callNumber) { CallNumber.postValue(callNumber); }
 
-<<<<<<< HEAD
-            CardShuffling();
-
-            //카드 나눠주기 (나중에 1장씩 나눠주는거 고려해봐야함
-            System.out.println("카드시작");
-=======
     public void setDieNumber(int dieNumber) { DieNumber.postValue(dieNumber); }
 
     public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
@@ -122,7 +112,6 @@ public class gameViewModel extends ViewModel{
                     System.out.println(13);
                     break;
             }
->>>>>>> HOYYY
 
             ///////////////////////////////////////////////////////
 
@@ -151,17 +140,10 @@ public class gameViewModel extends ViewModel{
 
      public String finish() {
 
-<<<<<<< HEAD
-        //TODO 이게 문제일수도 있음
-//        UserTurn.postValue(false);
-//        player2Turn.postValue(false);
-//        player3Turn.postValue(false);
-=======
          //TODO 이게 문제일수도 있음
         UserTurn.postValue(false);
         player2Turn.postValue(false);
         player3Turn.postValue(false);
->>>>>>> HOYYY
 
          //Reset All Data apart from Name & Score
          String winner = checkWinner(); //돈가산
@@ -573,18 +555,12 @@ public class gameViewModel extends ViewModel{
     public String checkWinner(){
 
         //TODO 아직 패가 같을때 고려안함   (패가 같을경우 뒷턴 우선으로 승리)
-<<<<<<< HEAD
         int player1CardValue = player1.getCardValues();
         int player2CardValue = player2.getCardValues();
         int player3CardValue = player3.getCardValues();
-=======
-        int player1CardValue = player1.getCardRanking();
-        int player2CardValue = player2.getCardRanking();
-        int player3CardValue = player3.getCardRanking();
         System.out.println(player1CardValue);
         System.out.println(player2CardValue);
         System.out.println(player3CardValue);
->>>>>>> HOYYY
 
         int compare1n2 = (player1CardValue > player2CardValue)? player1CardValue : player2CardValue;
         int result = (compare1n2 > player3CardValue)? compare1n2 : player3CardValue;
