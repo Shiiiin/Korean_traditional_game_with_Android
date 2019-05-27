@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.background.BackPressCloseHandler;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,16 +20,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity{
 
-    Button gameStartButton;
-    Button scoreboardButton;
-    Button ruleButton;
-    Button leaveButton;
-    Button jogboButton;
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore mFirestore;
-    String mUserId;
+    private Button gameStartButton;
+    private Button scoreboardButton;
+    private Button ruleButton;
+    private Button leaveButton;
+    private Button jogboButton;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore mFirestore;
+    private String mUserId;
+    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class MenuActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
 
         decorView.setSystemUiVisibility(uiOptions);
+
 
         gameStartButton = findViewById(R.id.play_button);
         scoreboardButton = findViewById(R.id.rank_button);
@@ -120,5 +123,13 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(loginIntent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+
+
+
+    }
+
 
 }
