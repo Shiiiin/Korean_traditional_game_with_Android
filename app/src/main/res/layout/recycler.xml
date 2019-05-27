@@ -18,9 +18,14 @@
 
             <TextView
                 android:id="@+id/textview"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="2"
                 android:layout_width="99dp"
                 android:layout_height="wrap_content"
                 android:gravity="center|left"
+                android:textSize="15sp"
                 android:padding="10dp" />
 
             <ImageView
