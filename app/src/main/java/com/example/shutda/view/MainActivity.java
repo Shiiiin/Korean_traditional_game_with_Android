@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,13 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private LiveData<Boolean> userTurn;
 
     //View
-    private ImageView cardDummy;
+    private ImageView cardDummy1;
     private ImageView cardDummy2;
-    private ImageView cardDummy3;
-    private ImageView cardDummy4;
-    private ImageView cardDummy5;
-    private ImageView cardDummy6;
-    private ImageView cardDummy7;
     private ImageView user1Card1;
     private ImageView user1Card2;
     private ImageView user2Card1;
@@ -113,20 +110,18 @@ public class MainActivity extends AppCompatActivity {
 
         mainframe = findViewById(R.id.main_frame);
 
-        cardDummy = findViewById(R.id.CardDummy);
+        cardDummy1 = findViewById(R.id.CardDummy1);
         cardDummy2 = findViewById(R.id.cardDummy2);
-        cardDummy3 = findViewById(R.id.cardDummy3);
-        cardDummy4 = findViewById(R.id.cardDummy4);
-        cardDummy5 = findViewById(R.id.cardDummy5);
-        cardDummy6 = findViewById(R.id.cardDummy6);
-        cardDummy7 = findViewById(R.id.cardDummy7);
         user1Card1 = findViewById(R.id.user1Card1);
         user1Card2 = findViewById(R.id.user1Card2);
         user2Card1 = findViewById(R.id.user2Card1);
         user2Card2 = findViewById(R.id.user2Card2);
         user3Card1 = findViewById(R.id.user3Card1);
         user3Card2 = findViewById(R.id.user3Card2);
-
+        user2Card1.setVisibility(View.GONE);
+        user3Card1.setVisibility(View.GONE);
+        user2Card2.setVisibility(View.GONE);
+        user3Card2.setVisibility(View.INVISIBLE);
         buttonLayout = findViewById(R.id.button_layout);
         HalfButton = findViewById(R.id.halfbutton);
         CallButton = findViewById(R.id.callbutton);
@@ -175,7 +170,12 @@ public class MainActivity extends AppCompatActivity {
 
             mUserId = mAuth.getCurrentUser().getUid();
         }
-
+        final Animation animTransRight = AnimationUtils.loadAnimation(
+                this,R.anim.giveright);
+        final Animation animTransLeft = AnimationUtils.loadAnimation(
+                this,R.anim.giveleft);
+        final Animation animTransAlpha = AnimationUtils.loadAnimation(
+                this,R.anim.giveme);
         mainLoop();
 
         gameThread = new GameThread(inGame , MainActivity.this);
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //TODO START 부분 구현 // 우선 click해야 시작으로 해놨음 -> bool로 바꾸기
-        cardDummy.setOnClickListener(new View.OnClickListener() {
+        cardDummy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -193,6 +193,52 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Dummy Button Click");
 
                     inGame.setStatus(Boolean.TRUE);
+                    final Handler handler = new Handler();
+
+                    cardDummy1.startAnimation(animTransLeft);
+
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransRight);
+                            user2Card1.setVisibility(View.VISIBLE);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransAlpha);
+                            user3Card1.setVisibility(View.VISIBLE);
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransLeft);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1500);handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransRight);
+                            user2Card2.setVisibility(View.VISIBLE);
+
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },2000);handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransAlpha);
+                            user3Card2.setVisibility(View.VISIBLE);
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },2500);
+
 
 //                    gameThread.RegistPlayers();
                 }
@@ -419,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
                         if (aBoolean) {
 
                             //시작버튼 꺼주고
-                            cardDummy.setEnabled(false);
+                            cardDummy1.setEnabled(false);
 
                             //isturnOnView(false);
                             inGame.execute(MainActivity.this);
@@ -440,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
 
                             inGame.finish();
 
-                            cardDummy.setEnabled(true);
+                            cardDummy1.setEnabled(true);
 
                             LeaveButton.setEnabled(true);
                             //

@@ -10,7 +10,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:fromDegrees="0"
-        android:toDegrees="-110"
+        android:toDegrees="-90"
         />
 
 
