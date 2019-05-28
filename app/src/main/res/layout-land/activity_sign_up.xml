@@ -9,74 +9,70 @@
     android:id="@+id/sign_up_layout"
     tools:context=".view.SignUpActivity">
 
-    <EditText
-        android:id="@+id/emailEditView"
-        android:layout_width="311dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/edittext"
-        android:ems="10"
-        android:fontFamily="@font/nunito_semibold"
-        android:hint="Email.."
-        android:inputType="textEmailAddress"
-        android:paddingLeft="25dp"
-        android:paddingTop="15dp"
-        android:paddingRight="25dp"
-        android:paddingBottom="15dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RegisterTextView" />
 
-    <EditText
-        android:id="@+id/passwordEditView"
-        android:layout_width="311dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/edittext"
-        android:ems="10"
-        android:fontFamily="@font/nunito_semibold"
-        android:hint="Password.."
-        android:inputType="textPassword"
-        android:paddingLeft="25dp"
-        android:paddingTop="15dp"
-        android:paddingRight="25dp"
-        android:paddingBottom="15dp"
-        android:textSize="16sp"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/emailEditViewLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditView" />
+        app:layout_constraintTop_toBottomOf="@+id/RegisterTextView">
 
-    <EditText
-        android:id="@+id/nameEditView"
-        android:layout_width="311dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/edittext"
-        android:ems="10"
-        android:fontFamily="@font/nunito_semibold"
-        android:hint="Name.."
-        android:inputType="textPersonName"
-        android:paddingLeft="25dp"
-        android:paddingTop="15dp"
-        android:paddingRight="25dp"
-        android:paddingBottom="15dp"
-        android:textSize="16sp"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/emailEditView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/nunito_semibold"
+            android:hint="Email.."
+            android:inputType="textEmailAddress"
+            android:textSize="16sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/passwordEditViewLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditViewLayout"
+
+        >
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/passwordEditView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/nunito_semibold"
+            android:hint="Password.."
+            android:inputType="textPassword"
+            android:textSize="16sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditViewLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/nameEditView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:fontFamily="@font/nunito_semibold"
+            android:hint="Name.."
+            android:inputType="textPersonName"
+            android:textSize="16sp" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/confirmButton"
@@ -137,7 +133,7 @@
         android:id="@+id/signUpProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="20dp"
         android:indeterminate="true"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
