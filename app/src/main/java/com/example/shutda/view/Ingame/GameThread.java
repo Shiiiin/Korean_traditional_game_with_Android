@@ -87,7 +87,7 @@ public class GameThread extends Thread {
     }
 
     @Override
-     public synchronized void run() {
+    public synchronized void run() {
             System.out.println("@@@@ Thread AI 등록 실행 @@@@");
 
             System.out.println("@@@@ Thread Run 실행 @@@@");
@@ -115,14 +115,14 @@ public class GameThread extends Thread {
                                             //                                    },AITurnPeriod);
                                             //                                    inGame.AiDecisionMakingExecute("player2");
                                         } else {
-                                            //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
+                         먀                   //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
                                             inGame.getPlayer3Turn().postValue(true);
                                         }
                                     }
                                 },AITurnPeriod);
                             }
                         }
-                    });
+            });
 
             player3Turn.observe(mainActivity, new Observer<Boolean>() {
                         @Override
@@ -131,28 +131,30 @@ public class GameThread extends Thread {
                             Timer timer = new Timer();
 
                             if(aBoolean){
+                                timer.schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
 
-                                if(inGame.getUsers().getValue().get("player3").isAlive()){
+                                            System.out.println("@@@@ Thread player3 실행 @@@@");
 
-                                    System.out.println("@@@@ Thread player3 실행 @@@@");
-
-                                    timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
+//                                            timer.schedule(new TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    inGame.AiDecisionMakingExecute("player3");
+//                                                }
+//                                            }, AITurnPeriod);
                                             inGame.AiDecisionMakingExecute("player3");
-                                        }
-                                    },AITurnPeriod);
-//                                    inGame.AiDecisionMakingExecute("player3");
-                                }else {
+                                        } else {
 //                                    inGame.getUsers().getValue().get("player1").setTurn(true);
-                                    inGame.getUserTurn().postValue(true);
-                                }
+                                            inGame.getUserTurn().postValue(true);
+                                        }
+                                    }
+                                }, AITurnPeriod);
                             }
-
                         }
-                    });
+            });
 
-        }// run End
-
+    }// run End
 
 }
