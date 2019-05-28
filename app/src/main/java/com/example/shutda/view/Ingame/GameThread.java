@@ -28,6 +28,7 @@ public class GameThread extends Thread {
     private LiveData<Boolean> gameStatus;
     private LiveData<Boolean> player2Turn;
     private LiveData<Boolean> player3Turn;
+    private LiveData<Boolean> EndGame;
     private MainActivity mainActivity;
 
     private User player1;
@@ -44,6 +45,7 @@ public class GameThread extends Thread {
         gameStatus = inGame.getIngameStatus();
         player2Turn = inGame.getPlayer2Turn();
         player3Turn = inGame.getPlayer3Turn();
+        EndGame = inGame.getEndGame();
 
 
     }
@@ -78,11 +80,10 @@ public class GameThread extends Thread {
     @Override
     public void interrupt() {
         try {
-            super.sleep(2000);
-        } catch (InterruptedException e) {
+            super.interrupt();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         System.out.println("@@@@ Thread Interrupt 실행 @@@@");
     }
 
@@ -95,48 +96,52 @@ public class GameThread extends Thread {
             //TODO 한바퀴 돌리는데는 성공 이제 모두콜 모두 죽었을때 구현해야함
 
             player2Turn.observe(mainActivity, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(@Nullable Boolean aBoolean) {
 
-                            if(aBoolean){
-                                Timer timer = new Timer();
-                                timer.schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if (inGame.getUsers().getValue().get("player2").isAlive()) {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
 
-                                            System.out.println("@@@@ Thread player2 실행 @@@@");
+                    if(aBoolean){
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if (inGame.getUsers().getValue().get("player2").isAlive()) {
+                                    if (inGame.getUsers().getValue().get("player1").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
 
-                                            //                                    timer.schedule(new TimerTask() {
-                                            //                                        @Override
-                                            //                                        public void run() {
-                                            inGame.AiDecisionMakingExecute("player2");
-                                            //                                        }
-                                            //                                    },AITurnPeriod);
-                                            //                                    inGame.AiDecisionMakingExecute("player2");
-                                        } else {
-                                            //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
-                                            inGame.getPlayer3Turn().postValue(true);
-                                        }
+                                        System.out.println("@@@@ Thread player2 실행 @@@@");
+
+                                        //                                    timer.schedule(new TimerTask() {
+                                        //                                        @Override
+                                        //                                        public void run() {
+                                        inGame.AiDecisionMakingExecute("player2");
+                                        //                                        }
+                                        //                                    },AITurnPeriod);
+                                        //                                    inGame.AiDecisionMakingExecute("player2");
                                     }
-                                },AITurnPeriod);
+//                                        }else {
+//                                            //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
+//                                            inGame.getPlayer3Turn().postValue(true);
+                                }
                             }
-                        }
+                            },AITurnPeriod);
+                    }
+                }
             });
 
             player3Turn.observe(mainActivity, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(@Nullable Boolean aBoolean) {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
 
-                            Timer timer = new Timer();
+                    Timer timer = new Timer();
 
-                            if(aBoolean){
-                                timer.schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
+                    if(aBoolean){
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if (inGame.getUsers().getValue().get("player3").isAlive()) {
+                                    if (inGame.getUsers().getValue().get("player1").isAlive() || inGame.getUsers().getValue().get("player2").isAlive()) {
 
-                                            System.out.println("@@@@ Thread player3 실행 @@@@");
+                                        System.out.println("@@@@ Thread player3 실행 @@@@");
 
 //                                            timer.schedule(new TimerTask() {
 //                                                @Override
@@ -144,15 +149,17 @@ public class GameThread extends Thread {
 //                                                    inGame.AiDecisionMakingExecute("player3");
 //                                                }
 //                                            }, AITurnPeriod);
-                                            inGame.AiDecisionMakingExecute("player3");
-                                        } else {
-//                                    inGame.getUsers().getValue().get("player1").setTurn(true);
-                                            inGame.getUserTurn().postValue(true);
-                                        }
+                                        inGame.AiDecisionMakingExecute("player3");
                                     }
-                                }, AITurnPeriod);
+                                }
+//                                        }else {
+////                                    inGame.getUsers().getValue().get("player1").setTurn(true);
+//                                            inGame.getUserTurn().postValue(true);
+//                                        }
                             }
-                        }
+                            }, AITurnPeriod);
+                    }
+                }
             });
 
     }// run End

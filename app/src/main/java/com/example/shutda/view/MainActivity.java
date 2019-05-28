@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         HalfNumber = inGame.getHalfNumber();
 
         Winner = "player1";
-        FirstTurn = true;
+//        FirstTurn = true;
 
         final View decorView = getWindow().getDecorView();
         final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         cardDummy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FirstTurn = true;
                 inGame.initialize();
                 System.out.println("Dummy");
 
@@ -277,9 +277,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     },2500);
 
-
-                    FirstTurn = false;
-//                    gameThread.RegistPlayers();
                 }
 
             }
@@ -294,10 +291,7 @@ public class MainActivity extends AppCompatActivity {
                     inGame.HalfButtonExecute(MainActivity.this, "player1");
 
                     //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
-//                    inGame.getUsers().getValue().get("player2").setTurn(true);
                     inGame.getPlayer2Turn().postValue(true);
-
-//                gameThread.run();
 
                     buttonSetting(AllbuttonOFF);
 
@@ -319,7 +313,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Call Button Click");
 
                 //TODO TESTSET Player2로 턴 주기
-//                inGame.getUsers().getValue().get("player2").setTurn(true);
                 inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
@@ -344,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Die Button Click");
 
                 //TODO TESTSET Player2로 턴 주기
-//                inGame.getUsers().getValue().get("player2").setTurn(true);
                 inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
@@ -428,7 +420,6 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.setUsers(userMap);
 
-//                    inGame.setButtonSet(onlyLeaveEnable);
                 }
 
                 userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
@@ -487,21 +478,24 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println(6);
                         if(aBoolean){
 
-                            if(inGame.getUsers().getValue().get("player1").isAlive()){
-                                    Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
+                            if(inGame.getUsers().getValue().get("player1").isAlive()) {
+                                if (inGame.getUsers().getValue().get("player2").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
+                                    Boolean[] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
                                     buttonSetting(buttons);
+                                }
                             }
-                            else{
-//                                inGame.getUsers().getValue().get("player2").setTurn(true);
-                                inGame.setUserTurn(false);
-                                inGame.getPlayer2Turn().postValue(true);
-                            }
+//                            else{
+////                                inGame.getUsers().getValue().get("player2").setTurn(true);
+//                                inGame.setUserTurn(false);
+//                                inGame.getPlayer2Turn().postValue(true);
+//                            }
                         }
                     }
                 });
                 CallNumber.observe(MainActivity.this, new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
+                        System.out.println(FirstTurn);
                         if(!FirstTurn) {
                             if (DieNumber.getValue() != null && inGame.checkEnd()) {
                                 inGame.setStatus(false);
@@ -525,6 +519,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         inGame.setCallNumber(0);
+                        FirstTurn = false;
                     }
                 });
 
@@ -560,8 +555,6 @@ public class MainActivity extends AppCompatActivity {
                             Winner = inGame.finish();
                             System.out.println(Winner);
 
-//                            inGame.setTotalBettingMoney(0);
-
                             cardDummy1.setEnabled(true);
                             buttonSetting(onlyLeaveEnable);
 
@@ -577,8 +570,6 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("버튼 변경 요청 @_@");
 //                        if(inGame.getUsers().getValue().get("player1").isTurn()){
                             buttonSetting(booleans);
-
-
                     }
                 });
 

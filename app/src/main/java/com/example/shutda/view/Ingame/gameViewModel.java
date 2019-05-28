@@ -21,14 +21,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-
 
 
 import static com.example.shutda.view.data.DummyCards.*;
-import static com.example.shutda.view.data.constantsField.*;
 
 public class gameViewModel extends ViewModel{
 
@@ -49,6 +44,8 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> CallNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
+    private MutableLiveData<Boolean> EndGame = new MutableLiveData<>();
+
 
     private ImageView user2Card1;
     private ImageView user2Card2;
@@ -74,26 +71,16 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getCallNumber() { return CallNumber;  }
     public MutableLiveData<Integer> getDieNumber() { return DieNumber;  }
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
+    public MutableLiveData<Boolean> getEndGame() { return EndGame;  }
 
-
-//    private User player1;
-//    private User player2;
-//    private User player3;
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
     private WinnerChecker winnerChecker;
-    Timer timer = new Timer();
-
-
-
 
     public void setUsers(HashMap<String, User> user){
 
         users.postValue(user);
-//        player1 = user.get("player1");
-//        player2 = user.get("player2");
-//        player3 = user.get("player3");
         player1Score.postValue(user.get("player1").getScore());
         player2Score.postValue(user.get("player2").getScore());
         player3Score.postValue(user.get("player3").getScore());
@@ -119,31 +106,34 @@ public class gameViewModel extends ViewModel{
 
     public void execute(Context context, String Winner) {
 
-            //첫번째 턴 정하기 (나중에 메소드 만들어서 턴 정해야함)
-            //player1.setTurn(true);
-            //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
-            switch (Winner){
-                case "player1":
-//                    player1.setButtonClickEnable(true, true, true, false);
-//                    buttonSet.postValue(ButtonsWhenGameGetStarted);
-                    UserTurn.postValue(true);
-                    break;
-                case "player2":
-                    player2Turn.postValue(true);
-                    break;
-                case "player3":
-                    player3Turn.postValue(true);
-                    break;
-            }
-
-            ///////////////////////////////////////////////////////
-
+        //첫번째 턴 정하기 (나중에 메소드 만들어서 턴 정해야함)
+        //player1.setTurn(true);
+        //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
+        switch (Winner){
+            case "player1":
+                UserTurn.postValue(true);
+                break;
+            case "player2":
+                player2Turn.postValue(true);
+                break;
+            case "player3":
+                player3Turn.postValue(true);
+                break;
+        }
+        ///////////////////////////////////////////////////////
     }
 
      public String finish() {
 
          //TODO 이게 문제일수도 있음
          System.out.println("finish");
+
+         for (int i = 1; i <= users.getValue().size(); i++) {
+             String key = "player" + i;
+             User player = users.getValue().get(key);
+             player.setAlive(false);
+         }
+
          UserTurn.postValue(false);
          player2Turn.postValue(false);
          player3Turn.postValue(false);
@@ -153,7 +143,7 @@ public class gameViewModel extends ViewModel{
 
          //Reset All Data apart from Name & Score
          String winner = checkWinner(); //돈가산
-//         TotalBettingMoney.postValue(0);
+         TotalBettingMoney.postValue(0);
 
          return winner;
      }
@@ -185,7 +175,9 @@ public class gameViewModel extends ViewModel{
          int player1CardValue = users.getValue().get("player1").getCardValues();
          int player2CardValue = users.getValue().get("player2").getCardValues();
          int player3CardValue = users.getValue().get("player3").getCardValues();
-         winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
+         if(winnerChecker == null)
+            winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
+         else
 
          MaxPlayerBattingScore = 0;
          CallNumber.postValue(0);
@@ -193,7 +185,7 @@ public class gameViewModel extends ViewModel{
          HalfNumber.postValue(0);
 //         users.getValue().get(winner).(true);
 
-         TotalBettingMoney.postValue(0);
+//         TotalBettingMoney.postValue(0);
              //TODO 시작 할 때 모든 이미지 제거 (이런식으로)
          /*user2Card1.setVisibility(View.INVISIBLE);
         user3Card1.setVisibility(View.GONE);
@@ -248,7 +240,7 @@ public class gameViewModel extends ViewModel{
             player1Score.postValue(users.getValue().get("player1").getScore());
             player2Score.postValue(users.getValue().get("player2").getScore());
             player3Score.postValue(users.getValue().get("player3").getScore());
-            System.out.println( "현재 배팅액" + getTotalBettingMoney());
+            System.out.println( "현재 배팅액" + getTotalBettingMoney().getValue());
 
             return true;
         }
@@ -309,15 +301,14 @@ public class gameViewModel extends ViewModel{
         }
 
 //        currentplayer.setTurn(false);
-        UserTurn.postValue(false);
-
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                player2Turn.postValue(true);
-//            }
-//        }, AITurnPeriod);
-        player2Turn.postValue(true);
+        if(users.getValue().get("player2").isAlive()) {
+            UserTurn.postValue(false);
+            player2Turn.postValue(true);
+        }
+        else {
+            UserTurn.postValue(false);
+            player3Turn.postValue(true);
+        }
 
     }
 
@@ -338,16 +329,17 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
+//        winnerChecker.setPlayersMap("player1", -2);
 
-        UserTurn.postValue(false);
+        if(users.getValue().get("player2").isAlive()) {
+            UserTurn.postValue(false);
+            player2Turn.postValue(true);
+        }
+        else {
+            UserTurn.postValue(false);
+            player3Turn.postValue(true);
+        }
 
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                player2Turn.postValue(true);
-//            }
-//        }, AITurnPeriod);
-        player2Turn.postValue(true);
     }
 
     public void CallButtonExecute(Activity view, String player) {
@@ -391,18 +383,15 @@ public class gameViewModel extends ViewModel{
 
         }
 
-        //일단 콜하면 죽여
-        //currentplayer.setAlive(false);
-//        currentplayer.setTurn(false);
-        UserTurn.postValue(false);
+        if(users.getValue().get("player2").isAlive()) {
+            UserTurn.postValue(false);
+            player2Turn.postValue(true);
+        }
+        else {
+            UserTurn.postValue(false);
+            player3Turn.postValue(true);
+        }
 
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                player2Turn.postValue(true);
-//            }
-//        }, AITurnPeriod);
-        player2Turn.postValue(true);
     }
 
     //Ai Decision Making
@@ -458,32 +447,31 @@ public class gameViewModel extends ViewModel{
 
         if(player == "player2"){
 //            users.getValue().get(player).setTurn(false);
-            player2Turn.postValue(false);
+            if(users.getValue().get("player3").isAlive()) {
+                player2Turn.postValue(false);
+                player3Turn.postValue(true);
+            }
+            else {
+                player2Turn.postValue(false);
+                UserTurn.postValue(true);
+            }
 
             //TODO endgame시 gamethread가 먼저 실행된다.
-//            users.getValue().get("player3").setTurn(true);
-//            timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    player3Turn.postValue(true);
-//                }
-//            }, AITurnPeriod);
-            player3Turn.postValue(true);
+
         }
 
-        if(player == "player3"){
+        else if(player == "player3"){
 //            users.getValue().get(player).setTurn(false);
-            player3Turn.postValue(false);
-
+            if(users.getValue().get("player1").isAlive()) {
+                player3Turn.postValue(false);
+                UserTurn.postValue(true);
+            }
+            else {
+                player3Turn.postValue(false);
+                player2Turn.postValue(true);
+            }
             //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
-//            users.getValue().get("player1").setTurn(true);
-//            timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    UserTurn.postValue(true);
-//                }
-//            }, AITurnPeriod);
-            UserTurn.postValue(true);
+
         }
     }
 
@@ -515,7 +503,6 @@ public class gameViewModel extends ViewModel{
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
             }
-
 
         }
         if(a == false){
@@ -566,6 +553,7 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
+//        winnerChecker.setPlayersMap(player, -2);
         //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
                 /*
 
@@ -643,7 +631,7 @@ public class gameViewModel extends ViewModel{
         CallNumber.postValue(callNumber+1);
     }
 
-    public String checkWinner(){
+    public String checkWinner() {
 
         System.out.println("checkwinner");
 
@@ -705,7 +693,10 @@ public class gameViewModel extends ViewModel{
                     return false;
                 }
             } else {
-                if (3 == CallNumber.getValue() + DieNumber.getValue()) {
+                if(2 == DieNumber.getValue()) {
+                    return true;
+                }
+                else if (3 == CallNumber.getValue() + DieNumber.getValue()) {
                     return true;
                 } else {
                     return false;
