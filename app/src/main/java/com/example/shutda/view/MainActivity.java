@@ -118,10 +118,12 @@ public class MainActivity extends AppCompatActivity {
         user2Card2 = findViewById(R.id.user2Card2);
         user3Card1 = findViewById(R.id.user3Card1);
         user3Card2 = findViewById(R.id.user3Card2);
+        //처음에 카드 안보이는 용도
         user2Card1.setVisibility(View.GONE);
         user3Card1.setVisibility(View.GONE);
         user2Card2.setVisibility(View.GONE);
         user3Card2.setVisibility(View.INVISIBLE);
+
         buttonLayout = findViewById(R.id.button_layout);
         HalfButton = findViewById(R.id.halfbutton);
         CallButton = findViewById(R.id.callbutton);
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
             mUserId = mAuth.getCurrentUser().getUid();
         }
+        //애니메이션 이름 설정
         final Animation animTransRight = AnimationUtils.loadAnimation(
                 this,R.anim.giveright);
         final Animation animTransLeft = AnimationUtils.loadAnimation(
@@ -193,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Dummy Button Click");
 
                     inGame.setStatus(Boolean.TRUE);
-                    final Handler handler = new Handler();
 
+                    final Handler handler = new Handler();
+                    //애니메이션 시작
                     cardDummy1.startAnimation(animTransLeft);
 
 
