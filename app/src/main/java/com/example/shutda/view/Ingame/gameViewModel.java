@@ -19,8 +19,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.shutda.view.data.DummyCards.*;
+import static com.example.shutda.view.data.constantsField.*;
 
 public class gameViewModel extends ViewModel{
 
@@ -58,22 +61,25 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
 
 
-    private User player1;
-    private User player2;
-    private User player3;
+//    private User player1;
+//    private User player2;
+//    private User player3;
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
+    private WinnerChecker winnerChecker;
+    Timer timer = new Timer();
+
 
     public void setUsers(HashMap<String, User> user){
 
         users.postValue(user);
-        player1 = user.get("player1");
-        player2 = user.get("player2");
-        player3 = user.get("player3");
-        player1Score.postValue(player1.getScore());
-        player2Score.postValue(player2.getScore());
-        player3Score.postValue(player3.getScore());
+//        player1 = user.get("player1");
+//        player2 = user.get("player2");
+//        player3 = user.get("player3");
+        player1Score.postValue(user.get("player1").getScore());
+        player2Score.postValue(user.get("player2").getScore());
+        player3Score.postValue(user.get("player3").getScore());
 
     }
 
@@ -92,6 +98,8 @@ public class gameViewModel extends ViewModel{
 
     public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
 
+    public void setUserTurn(Boolean userTurn) { UserTurn.postValue(userTurn); }
+
     public void execute(Context context, String Winner) {
 
             //첫번째 턴 정하기 (나중에 메소드 만들어서 턴 정해야함)
@@ -99,93 +107,73 @@ public class gameViewModel extends ViewModel{
             //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
             switch (Winner){
                 case "player1":
-                    player1.setButtonClickEnable(true, true, true, false);
+//                    player1.setButtonClickEnable(true, true, true, false);
+//                    buttonSet.postValue(ButtonsWhenGameGetStarted);
                     UserTurn.postValue(true);
-                    System.out.println(11);
                     break;
                 case "player2":
                     player2Turn.postValue(true);
-                    System.out.println(12);
                     break;
                 case "player3":
                     player3Turn.postValue(true);
-                    System.out.println(13);
                     break;
             }
 
             ///////////////////////////////////////////////////////
-
-
-            //CardShuffling();
-
-
-            //카드 나눠주기 (나중에 1장씩 나눠주는거 고려해봐야함
-//            System.out.println("카드시작");
-//
-//            for(int i=1 ; i <= users.getValue().size(); i++){
-//
-//                String key = "player"+i;
-//                users.getValue().get(key).setCard1(CardsMachine.poll());
-//                users.getValue().get(key).setCard2(CardsMachine.poll());
-//
-//                System.out.println(key +"'s Card1 : "+users.getValue().get(key).getCard1());
-//                System.out.println(key +"'s Card2 : "+users.getValue().get(key).getCard2());
-//
-//            }
-//
-//            System.out.println("카드끝!!!!");
-            ///////////////////////////////////////////////////////////
 
     }
 
      public String finish() {
 
          //TODO 이게 문제일수도 있음
-        UserTurn.postValue(false);
-        player2Turn.postValue(false);
-        player3Turn.postValue(false);
+         System.out.println("finish");
+         UserTurn.postValue(false);
+         player2Turn.postValue(false);
+         player3Turn.postValue(false);
+         System.out.println(UserTurn.getValue());
+         System.out.println(player2Turn.getValue());
+         System.out.println(player3Turn.getValue());
 
          //Reset All Data apart from Name & Score
          String winner = checkWinner(); //돈가산
-         TotalBettingMoney.postValue(0);
-         //initialize(winner);
-         /////////////////////////////////////////////////////
+//         TotalBettingMoney.postValue(0);
 
          return winner;
      }
 
-     public void initialize(String winner) {
+     public void initialize() {
+         CardShuffling();
+         System.out.println("카드시작");
+
          for (int i = 1; i <= users.getValue().size(); i++) {
              String key = "player" + i;
              User player = users.getValue().get(key);
              player.setSumOfBetting(0);
 //             player.setTurn(false);
              player.setAlive(true);
-         }
 
-         CardShuffling();
-
-         System.out.println("카드시작");
-
-         for(int i=1 ; i <= users.getValue().size(); i++){
-
-             String key = "player"+i;
              users.getValue().get(key).setCard1(CardsMachine.poll());
              users.getValue().get(key).setCard2(CardsMachine.poll());
 
              System.out.println(key +"'s Card1 : "+users.getValue().get(key).getCard1());
              System.out.println(key +"'s Card2 : "+users.getValue().get(key).getCard2());
-
          }
 
          System.out.println("카드끝!!!!");
+
+         //버튼 초기화
+         users.getValue().get("player1").setButtonClickEnable(true, true, true, false);
+
+         int player1CardValue = users.getValue().get("player1").getCardValues();
+         int player2CardValue = users.getValue().get("player2").getCardValues();
+         int player3CardValue = users.getValue().get("player3").getCardValues();
+         winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
 
          MaxPlayerBattingScore = 0;
          CallNumber.postValue(0);
          DieNumber.postValue(0);
          HalfNumber.postValue(0);
-         User Winner = users.getValue().get(winner);
-//         Winner.setTurn(true);
+//         users.getValue().get(winner).(true);
 
          TotalBettingMoney.postValue(0);
      }
@@ -213,23 +201,22 @@ public class gameViewModel extends ViewModel{
     //처음 판돈 거는거
     public boolean BaseBettingExecute(Activity view, int money) {
 
-        System.out.println( player1.getName() +"%%%%%"+ player1.getScore());
+        System.out.println( users.getValue().get("player1").getName() +"%%%%%"+ users.getValue().get("player1").getScore());
 
         StringBuffer toastMessage = new StringBuffer();
 
-        boolean a = player1.Betting(money);
-        boolean b = player2.Betting(money);
-        boolean c = player3.Betting(money);
+        boolean a = users.getValue().get("player1").Betting(money);
+        boolean b = users.getValue().get("player2").Betting(money);
+        boolean c = users.getValue().get("player3").Betting(money);
 
-        System.out.println( player2.getName() +"%%%%%"+ player2.getScore());
 
         if(a & b & c){
 
             int userNumber = users.getValue().size();
             TotalBettingMoney.postValue(userNumber*money);
-            player1Score.postValue(player1.getScore());
-            player2Score.postValue(player2.getScore());
-            player3Score.postValue(player3.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
+            player2Score.postValue(users.getValue().get("player2").getScore());
+            player3Score.postValue(users.getValue().get("player3").getScore());
             System.out.println( "현재 배팅액" + getTotalBettingMoney());
 
             return true;
@@ -267,7 +254,7 @@ public class gameViewModel extends ViewModel{
         if(a == true){
 
             this.TotalBettingMoney.postValue(bettingMoney + halfBetting);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
             MaxPlayerBattingScore = halfBetting;
             System.out.println(MaxPlayerBattingScore);
 
@@ -281,7 +268,7 @@ public class gameViewModel extends ViewModel{
             int All_in = currentplayer.All_in();
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
             MaxPlayerBattingScore = (MaxPlayerBattingScore < All_in) ? All_in : MaxPlayerBattingScore;
             System.out.println(MaxPlayerBattingScore);
             System.out.println("All_in");
@@ -291,6 +278,14 @@ public class gameViewModel extends ViewModel{
         }
 
 //        currentplayer.setTurn(false);
+        UserTurn.postValue(false);
+
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                player2Turn.postValue(true);
+//            }
+//        }, AITurnPeriod);
         player2Turn.postValue(true);
 
     }
@@ -299,21 +294,29 @@ public class gameViewModel extends ViewModel{
 
         User currentplayer = users.getValue().get(player);
 
-            currentplayer.setSumOfBetting(0);
+        currentplayer.setSumOfBetting(0);
 
-            currentplayer.setButtonClickEnable(false, false, false, true);
+        currentplayer.setButtonClickEnable(false, false, false, false);
 
-            currentplayer.setAlive(false);
+        currentplayer.setAlive(false);
 
 //            currentplayer.setTurn(false);
 
-            int dieNumber = DieNumber.getValue();
-            DieNumber.postValue(dieNumber+1);
+        int dieNumber = DieNumber.getValue();
+        DieNumber.postValue(dieNumber+1);
 
-            currentplayer.setCard1(0);
-            currentplayer.setCard2(0);
+        currentplayer.setCard1(-1);
+        currentplayer.setCard2(-1);
 
-            player2Turn.postValue(true);
+        UserTurn.postValue(false);
+
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                player2Turn.postValue(true);
+//            }
+//        }, AITurnPeriod);
+        player2Turn.postValue(true);
     }
 
     public void CallButtonExecute(Activity view, String player) {
@@ -338,7 +341,7 @@ public class gameViewModel extends ViewModel{
         if(a == true){
 
             this.TotalBettingMoney.postValue(bettingMoney + money);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
 
             currentplayer.setButtonClickEnable(true, true, true, false);
 
@@ -351,15 +354,23 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
 
-            currentplayer.setButtonClickEnable(false, true, true, false);
+            currentplayer.setButtonClickEnable(false, true, false, false);
 
         }
 
         //일단 콜하면 죽여
         //currentplayer.setAlive(false);
 //        currentplayer.setTurn(false);
+        UserTurn.postValue(false);
+
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                player2Turn.postValue(true);
+//            }
+//        }, AITurnPeriod);
         player2Turn.postValue(true);
     }
 
@@ -416,19 +427,31 @@ public class gameViewModel extends ViewModel{
 
         if(player == "player2"){
 //            users.getValue().get(player).setTurn(false);
-//            player2Turn.postValue(false);
+            player2Turn.postValue(false);
 
             //TODO endgame시 gamethread가 먼저 실행된다.
 //            users.getValue().get("player3").setTurn(true);
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    player3Turn.postValue(true);
+//                }
+//            }, AITurnPeriod);
             player3Turn.postValue(true);
         }
 
         if(player == "player3"){
 //            users.getValue().get(player).setTurn(false);
-//            player3Turn.postValue(false);
+            player3Turn.postValue(false);
 
             //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
 //            users.getValue().get("player1").setTurn(true);
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    UserTurn.postValue(true);
+//                }
+//            }, AITurnPeriod);
             UserTurn.postValue(true);
         }
     }
@@ -456,10 +479,10 @@ public class gameViewModel extends ViewModel{
             System.out.println(MaxPlayerBattingScore);
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
 
 
@@ -474,10 +497,10 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
         }
     }
@@ -495,8 +518,8 @@ public class gameViewModel extends ViewModel{
         int dieNumber = DieNumber.getValue();
         DieNumber.postValue(dieNumber+1);
 
-        currentplayer.setCard1(0);
-        currentplayer.setCard2(0);
+        currentplayer.setCard1(-1);
+        currentplayer.setCard2(-1);
     }
 
     public void AiCallExecute(String player) {
@@ -522,10 +545,10 @@ public class gameViewModel extends ViewModel{
             this.TotalBettingMoney.postValue(bettingMoney + money);
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
 
         }
@@ -537,10 +560,10 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
 
         }
@@ -554,44 +577,53 @@ public class gameViewModel extends ViewModel{
 
     public String checkWinner(){
 
-        //TODO 아직 패가 같을때 고려안함   (패가 같을경우 뒷턴 우선으로 승리)
-        int player1CardValue = player1.getCardValues();
-        int player2CardValue = player2.getCardValues();
-        int player3CardValue = player3.getCardValues();
-        System.out.println(player1CardValue);
-        System.out.println(player2CardValue);
-        System.out.println(player3CardValue);
+        System.out.println("checkwinner");
 
-        int compare1n2 = (player1CardValue > player2CardValue)? player1CardValue : player2CardValue;
-        int result = (compare1n2 > player3CardValue)? compare1n2 : player3CardValue;
-        System.out.println(result);
+        String Winner = winnerChecker.WinnerClassifier();
+        System.out.println(Winner);
 
-        if(result == player1CardValue){
-            System.out.println("*******player1 이겼따*************");
-            player1.setScore(player1.getScore() + TotalBettingMoney.getValue());
-            player1Score.postValue(player1.getScore());
-            return "player1";
+        switch(Winner) {
+            case "player1":
+                System.out.println("*******player1 이겼따*************");
+                users.getValue().get("player1").setScore(users.getValue().get("player1").getScore() + TotalBettingMoney.getValue());
+                player1Score.postValue(users.getValue().get("player1").getScore());
+                break;
+
+            case "player2":
+                System.out.println("*******player2 이겼따*************");
+                users.getValue().get("player2").setScore(users.getValue().get("player2").getScore() + TotalBettingMoney.getValue());
+                player2Score.postValue(users.getValue().get("player2").getScore());
+                break;
+
+            case "player3":
+                System.out.println("*******player3 이겼따*************");
+                users.getValue().get("player3").setScore(users.getValue().get("player3").getScore() + TotalBettingMoney.getValue());
+                player3Score.postValue(users.getValue().get("player3").getScore());
+                break;
+
+            case "rematch":
+                System.out.println("*******rematch*************");
+                break;
+
+            case "rematch12":
+                System.out.println("*******rematch12*************");
+                break;
+
+            case "rematch31":
+                System.out.println("*******rematch31*************");
+                break;
+
+            case "rematch23":
+                System.out.println("*******rematch23*************");
+                break;
         }
-        else if(result == player2CardValue){
-            System.out.println("*******player2 이겼따*************");
-            player2.setScore(player2.getScore() + TotalBettingMoney.getValue());
-            player2Score.postValue(player2.getScore());
 
-            return "player2";
-        }
-        else {
-            System.out.println("*******player3 이겼따*************");
-            player3.setScore(player3.getScore() + TotalBettingMoney.getValue());
-            player3Score.postValue(player3.getScore());
-
-            return "player3";
-        }
-
+        return Winner;
     }
 
     public void uploadScoreToFirestore(DocumentReference database){
 
-        database.update("score", player1.getScore());
+        database.update("score", users.getValue().get("player1").getScore());
 
     }
 
