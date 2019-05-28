@@ -317,13 +317,17 @@ public class WinnerChecker {
                     System.out.println("세번째위치"+thirdOneLocation);
                 }
             }
+            if(secondOneLocation == 0 & thirdOneLocation == 0){
+                value1 = 1;
+                value2 = firstOneLocation;
+            }
+            if(thirdOneLocation == 0 & secondOneLocation != 0){
+                value1 = firstOneLocation;
+                value2 = secondOneLocation;
+            }
             if(thirdOneLocation != 0){
                 value1 = secondOneLocation;
                 value2 = thirdOneLocation;
-            }
-            if(thirdOneLocation == 0){
-                value1 = firstOneLocation;
-                value2 = secondOneLocation;
             }
             System.out.println("value1///"+value1);
             System.out.println("value2///"+value2);
