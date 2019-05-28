@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                gameThread.run();
 
-                    inGame.setButtonSet(onlyLeaveEnable);
+                    buttonSetting(AllbuttonOFF);
 
                     try{
                         gameThread.join();
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
 //                inGame.getUsers().getValue().get("player2").setTurn(true);
                 inGame.getPlayer2Turn().postValue(true);
 
-                buttonSetting(onlyLeaveEnable);
+                buttonSetting(AllbuttonOFF);
 
                 try{
                     gameThread.join();
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 //                inGame.getUsers().getValue().get("player2").setTurn(true);
                 inGame.getPlayer2Turn().postValue(true);
 
-                inGame.setButtonSet(onlyLeaveEnable);
+                buttonSetting(AllbuttonOFF);
 
                 try{
                     gameThread.join();
@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.setUsers(userMap);
 
-                    inGame.setButtonSet(onlyLeaveEnable);
+//                    inGame.setButtonSet(onlyLeaveEnable);
                 }
 
                 userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
@@ -413,10 +413,11 @@ public class MainActivity extends AppCompatActivity {
 
                             if(inGame.getUsers().getValue().get("player1").isAlive()){
                                     Boolean [] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
-                                    inGame.setButtonSet(buttons);
+                                    buttonSetting(buttons);
                             }
                             else{
 //                                inGame.getUsers().getValue().get("player2").setTurn(true);
+                                inGame.setUserTurn(false);
                                 inGame.getPlayer2Turn().postValue(true);
                             }
                         }
@@ -482,12 +483,10 @@ public class MainActivity extends AppCompatActivity {
 
                             Winner = inGame.finish();
                             System.out.println(Winner);
+//                            inGame.setTotalBettingMoney(0);
 
                             cardDummy.setEnabled(true);
-                            DieButton.setEnabled(false);
-                            HalfButton.setEnabled(false);
-                            CallButton.setEnabled(false);
-                            LeaveButton.setEnabled(true);
+                            buttonSetting(onlyLeaveEnable);
                             //
                         }
                     }

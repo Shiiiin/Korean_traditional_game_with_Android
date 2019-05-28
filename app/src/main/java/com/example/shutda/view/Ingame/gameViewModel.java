@@ -21,6 +21,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import static com.example.shutda.view.data.DummyCards.*;
+import static com.example.shutda.view.data.constantsField.*;
 
 public class gameViewModel extends ViewModel{
 
@@ -64,6 +65,7 @@ public class gameViewModel extends ViewModel{
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
+    private WinnerChecker winnerChecker;
 
     public void setUsers(HashMap<String, User> user){
 
@@ -92,6 +94,8 @@ public class gameViewModel extends ViewModel{
 
     public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
 
+    public void setUserTurn(Boolean userTurn) { UserTurn.postValue(userTurn); }
+
     public void execute(Context context, String Winner) {
 
             //첫번째 턴 정하기 (나중에 메소드 만들어서 턴 정해야함)
@@ -99,86 +103,63 @@ public class gameViewModel extends ViewModel{
             //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
             switch (Winner){
                 case "player1":
-                    player1.setButtonClickEnable(true, true, true, false);
+//                    player1.setButtonClickEnable(true, true, true, false);
+//                    buttonSet.postValue(ButtonsWhenGameGetStarted);
                     UserTurn.postValue(true);
-                    System.out.println(11);
                     break;
                 case "player2":
                     player2Turn.postValue(true);
-                    System.out.println(12);
                     break;
                 case "player3":
                     player3Turn.postValue(true);
-                    System.out.println(13);
                     break;
             }
 
             ///////////////////////////////////////////////////////
-
-
-            //CardShuffling();
-
-
-            //카드 나눠주기 (나중에 1장씩 나눠주는거 고려해봐야함
-//            System.out.println("카드시작");
-//
-//            for(int i=1 ; i <= users.getValue().size(); i++){
-//
-//                String key = "player"+i;
-//                users.getValue().get(key).setCard1(CardsMachine.poll());
-//                users.getValue().get(key).setCard2(CardsMachine.poll());
-//
-//                System.out.println(key +"'s Card1 : "+users.getValue().get(key).getCard1());
-//                System.out.println(key +"'s Card2 : "+users.getValue().get(key).getCard2());
-//
-//            }
-//
-//            System.out.println("카드끝!!!!");
-            ///////////////////////////////////////////////////////////
 
     }
 
      public String finish() {
 
          //TODO 이게 문제일수도 있음
-        UserTurn.postValue(false);
-        player2Turn.postValue(false);
-        player3Turn.postValue(false);
+         UserTurn.postValue(false);
+         player2Turn.postValue(false);
+         player3Turn.postValue(false);
 
          //Reset All Data apart from Name & Score
          String winner = checkWinner(); //돈가산
-         TotalBettingMoney.postValue(0);
-         //initialize(winner);
-         /////////////////////////////////////////////////////
+//         TotalBettingMoney.postValue(0);
 
          return winner;
      }
 
      public void initialize(String winner) {
+         CardShuffling();
+         System.out.println("카드시작");
+
          for (int i = 1; i <= users.getValue().size(); i++) {
              String key = "player" + i;
              User player = users.getValue().get(key);
              player.setSumOfBetting(0);
 //             player.setTurn(false);
              player.setAlive(true);
-         }
 
-         CardShuffling();
-
-         System.out.println("카드시작");
-
-         for(int i=1 ; i <= users.getValue().size(); i++){
-
-             String key = "player"+i;
              users.getValue().get(key).setCard1(CardsMachine.poll());
              users.getValue().get(key).setCard2(CardsMachine.poll());
 
              System.out.println(key +"'s Card1 : "+users.getValue().get(key).getCard1());
              System.out.println(key +"'s Card2 : "+users.getValue().get(key).getCard2());
-
          }
 
          System.out.println("카드끝!!!!");
+
+         //버튼 초기화
+         users.getValue().get("player1").setButtonClickEnable(true, true, true, false);
+
+         int player1CardValue = users.getValue().get("player1").getCardValues();
+         int player2CardValue = users.getValue().get("player2").getCardValues();
+         int player3CardValue = users.getValue().get("player3").getCardValues();
+         winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
 
          MaxPlayerBattingScore = 0;
          CallNumber.postValue(0);
@@ -291,6 +272,7 @@ public class gameViewModel extends ViewModel{
         }
 
 //        currentplayer.setTurn(false);
+        UserTurn.postValue(false);
         player2Turn.postValue(true);
 
     }
@@ -299,21 +281,22 @@ public class gameViewModel extends ViewModel{
 
         User currentplayer = users.getValue().get(player);
 
-            currentplayer.setSumOfBetting(0);
+        currentplayer.setSumOfBetting(0);
 
-            currentplayer.setButtonClickEnable(false, false, false, true);
+        currentplayer.setButtonClickEnable(false, false, false, false);
 
-            currentplayer.setAlive(false);
+        currentplayer.setAlive(false);
 
 //            currentplayer.setTurn(false);
 
-            int dieNumber = DieNumber.getValue();
-            DieNumber.postValue(dieNumber+1);
+        int dieNumber = DieNumber.getValue();
+        DieNumber.postValue(dieNumber+1);
 
-            currentplayer.setCard1(0);
-            currentplayer.setCard2(0);
+        currentplayer.setCard1(-1);
+        currentplayer.setCard2(-1);
 
-            player2Turn.postValue(true);
+        UserTurn.postValue(false);
+        player2Turn.postValue(true);
     }
 
     public void CallButtonExecute(Activity view, String player) {
@@ -353,13 +336,14 @@ public class gameViewModel extends ViewModel{
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
             player1Score.postValue(player1.getScore());
 
-            currentplayer.setButtonClickEnable(false, true, true, false);
+            currentplayer.setButtonClickEnable(false, true, false, false);
 
         }
 
         //일단 콜하면 죽여
         //currentplayer.setAlive(false);
 //        currentplayer.setTurn(false);
+        UserTurn.postValue(false);
         player2Turn.postValue(true);
     }
 
@@ -416,7 +400,7 @@ public class gameViewModel extends ViewModel{
 
         if(player == "player2"){
 //            users.getValue().get(player).setTurn(false);
-//            player2Turn.postValue(false);
+            player2Turn.postValue(false);
 
             //TODO endgame시 gamethread가 먼저 실행된다.
 //            users.getValue().get("player3").setTurn(true);
@@ -425,7 +409,7 @@ public class gameViewModel extends ViewModel{
 
         if(player == "player3"){
 //            users.getValue().get(player).setTurn(false);
-//            player3Turn.postValue(false);
+            player3Turn.postValue(false);
 
             //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
 //            users.getValue().get("player1").setTurn(true);
@@ -495,8 +479,8 @@ public class gameViewModel extends ViewModel{
         int dieNumber = DieNumber.getValue();
         DieNumber.postValue(dieNumber+1);
 
-        currentplayer.setCard1(0);
-        currentplayer.setCard2(0);
+        currentplayer.setCard1(-1);
+        currentplayer.setCard2(-1);
     }
 
     public void AiCallExecute(String player) {
@@ -554,39 +538,31 @@ public class gameViewModel extends ViewModel{
 
     public String checkWinner(){
 
-        //TODO 아직 패가 같을때 고려안함   (패가 같을경우 뒷턴 우선으로 승리)
-        int player1CardValue = player1.getCardValues();
-        int player2CardValue = player2.getCardValues();
-        int player3CardValue = player3.getCardValues();
-        System.out.println(player1CardValue);
-        System.out.println(player2CardValue);
-        System.out.println(player3CardValue);
+        System.out.println("checkwinner");
 
-        int compare1n2 = (player1CardValue > player2CardValue)? player1CardValue : player2CardValue;
-        int result = (compare1n2 > player3CardValue)? compare1n2 : player3CardValue;
-        System.out.println(result);
+        String Winner = winnerChecker.checkWinner();
+        System.out.println(Winner);
 
-        if(result == player1CardValue){
-            System.out.println("*******player1 이겼따*************");
-            player1.setScore(player1.getScore() + TotalBettingMoney.getValue());
-            player1Score.postValue(player1.getScore());
-            return "player1";
+        switch(Winner) {
+            case "player1":
+                System.out.println("*******player1 이겼따*************");
+                player1.setScore(player1.getScore() + TotalBettingMoney.getValue());
+                player1Score.postValue(player1.getScore());
+                break;
+
+            case "player2":
+                System.out.println("*******player2 이겼따*************");
+                player2.setScore(player2.getScore() + TotalBettingMoney.getValue());
+                player2Score.postValue(player2.getScore());
+                break;
+
+            case "player3":
+                System.out.println("*******player3 이겼따*************");
+                player3.setScore(player3.getScore() + TotalBettingMoney.getValue());
+                player3Score.postValue(player3.getScore());
+                break;
         }
-        else if(result == player2CardValue){
-            System.out.println("*******player2 이겼따*************");
-            player2.setScore(player2.getScore() + TotalBettingMoney.getValue());
-            player2Score.postValue(player2.getScore());
-
-            return "player2";
-        }
-        else {
-            System.out.println("*******player3 이겼따*************");
-            player3.setScore(player3.getScore() + TotalBettingMoney.getValue());
-            player3Score.postValue(player3.getScore());
-
-            return "player3";
-        }
-
+        return Winner;
     }
 
     public void uploadScoreToFirestore(DocumentReference database){
