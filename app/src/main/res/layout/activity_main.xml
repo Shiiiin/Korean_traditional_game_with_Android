@@ -181,6 +181,39 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/user1Card1"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="324dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
+        app:layout_constraintVertical_bias="0.271"
+        app:srcCompat="@android:color/holo_red_dark" />
+
+    <ImageView
+        android:id="@+id/user1Card2"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="316dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/player1Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/user1Card1"
+        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
+        app:srcCompat="@android:color/holo_red_dark" />
+
+    <ImageView
         android:id="@+id/user2Card1"
         android:layout_width="40dp"
         android:layout_height="60dp"
@@ -214,38 +247,7 @@
         app:layout_constraintVertical_bias="0.378"
         app:srcCompat="@android:color/holo_red_dark" />
 
-    <ImageView
-        android:id="@+id/user1Card1"
-        android:layout_width="40dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="324dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
-        app:layout_constraintVertical_bias="0.271"
-        app:srcCompat="@android:color/holo_red_dark" />
 
-    <ImageView
-        android:id="@+id/user1Card2"
-        android:layout_width="40dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="316dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/player1Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/user1Card1"
-        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
-        app:srcCompat="@android:color/holo_red_dark" />
 
     <ImageView
         android:id="@+id/user3Card1"
@@ -344,5 +346,61 @@
         app:layout_constraintStart_toEndOf="@+id/player2Name"
         app:layout_constraintTop_toBottomOf="@+id/cardDummy2"
         app:layout_constraintVertical_bias="0.133" />
+
+
+    <ImageView
+        android:id="@+id/user2call"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/call"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="44dp"
+        app:layout_constraint=""/>
+
+    <ImageView
+        android:id="@+id/user2die"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/die"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="44dp" />
+
+    <ImageView
+        android:id="@+id/user2half"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/half"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="44dp" />
+
+
+    <ImageView
+        android:id="@+id/user3call"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/call"
+        tools:layout_editor_absoluteX="565dp"
+        tools:layout_editor_absoluteY="44dp" />
+
+    <ImageView
+        android:id="@+id/user3die"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/die"
+        tools:layout_editor_absoluteX="565dp"
+        tools:layout_editor_absoluteY="44dp" />
+
+
+    <ImageView
+        android:id="@+id/user3half"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/half"
+        tools:layout_editor_absoluteX="565dp"
+        tools:layout_editor_absoluteY="44dp" />
+
+
+
+
 
 </android.support.constraint.ConstraintLayout>

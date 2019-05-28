@@ -121,12 +121,9 @@ public class MainActivity extends AppCompatActivity {
         user2Card2 = findViewById(R.id.user2Card2);
         user3Card1 = findViewById(R.id.user3Card1);
         user3Card2 = findViewById(R.id.user3Card2);
-<<<<<<< HEAD
         //처음에 카드 안보이는 용도
         user2Card1.setVisibility(View.GONE);
-=======
         user2Card1.setVisibility(View.INVISIBLE);
->>>>>>> 5d85546eb3a57a746a21b0b793b22195f8fe62ec
         user3Card1.setVisibility(View.GONE);
         user2Card2.setVisibility(View.GONE);
         user3Card2.setVisibility(View.INVISIBLE);
