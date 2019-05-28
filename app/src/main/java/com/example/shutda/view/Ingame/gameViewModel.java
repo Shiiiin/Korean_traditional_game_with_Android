@@ -6,8 +6,11 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.shutda.R;
 import com.example.shutda.view.data.User;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -44,8 +47,16 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
 
-
-
+    private ImageView user2Card1;
+    private ImageView user2Card2;
+    private ImageView user3Card1;
+    private ImageView user3Card2;
+    public ImageView user2call;
+    public ImageView user2die;
+    public ImageView user2half;
+    public ImageView user3call;
+    public ImageView user3die;
+    public ImageView user3half;
 
     public LiveData<HashMap<String, User>> getUsers(){ return users;}
     public LiveData<Boolean> getIngameStatus(){ return statement; }
@@ -178,8 +189,23 @@ public class gameViewModel extends ViewModel{
 
          TotalBettingMoney.postValue(0);
 
-
-
+      /*   user2call  = getView().findViewById(R.id.user2call);
+         user2die   = findViewById(R.id.user2die);
+         user2half  = findViewById(R.id.user2half);
+         user3call  = findViewById(R.id.user3call);
+         user3die   = findViewById(R.id.user3die);
+         user3half  = findViewById(R.id.user3half);
+         user2Card1.setVisibility(View.INVISIBLE);
+         user3Card1.setVisibility(View.GONE);
+         user2Card2.setVisibility(View.GONE);
+         user3Card2.setVisibility(View.INVISIBLE);
+         user2call.setVisibility(View.GONE);
+         user2die.setVisibility(View.GONE);
+         user2half.setVisibility(View.GONE);
+         user3call.setVisibility(View.GONE);
+         user3die.setVisibility(View.GONE);
+         user3half.setVisibility(View.GONE);
+*/
 
      }
 
@@ -551,9 +577,18 @@ public class gameViewModel extends ViewModel{
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
+                /*user2call.setVisibility(View.VISIBLE);
+                user2die.setVisibility(View.GONE);
+                user2half.setVisibility(View.GONE);
+                user2call.startAnimation(call);*/
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
+                /*user3call.setVisibility(View.VISIBLE);
+                user3die.setVisibility(View.GONE);
+                user3half.setVisibility(View.GONE);
+                user3call.startAnimation(call);*/
+
             }
 
         }
