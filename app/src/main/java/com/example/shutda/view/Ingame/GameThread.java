@@ -78,7 +78,7 @@ public class GameThread extends Thread {
     @Override
     public void interrupt() {
         try {
-            super.sleep(1300);
+            super.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -105,12 +105,13 @@ public class GameThread extends Thread {
 
                                     System.out.println("@@@@ Thread player2 실행 @@@@");
 
-                                    timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            inGame.AiDecisionMakingExecute("player2");
-                                        }
-                                    },AITurnPeriod);
+//                                    timer.schedule(new TimerTask() {
+//                                        @Override
+//                                        public void run() {
+//                                            inGame.AiDecisionMakingExecute("player2");
+//                                        }
+//                                    },AITurnPeriod);
+                                    inGame.AiDecisionMakingExecute("player2");
                                 }else{
 //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
                                     inGame.getPlayer3Turn().postValue(true);
@@ -132,12 +133,13 @@ public class GameThread extends Thread {
 
                                     System.out.println("@@@@ Thread player3 실행 @@@@");
 
-                                    timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            inGame.AiDecisionMakingExecute("player3");
-                                        }
-                                    },AITurnPeriod);
+//                                    timer.schedule(new TimerTask() {
+//                                        @Override
+//                                        public void run() {
+//                                            inGame.AiDecisionMakingExecute("player3");
+//                                        }
+//                                    },AITurnPeriod);
+                                    inGame.AiDecisionMakingExecute("player3");
                                 }else {
 //                                    inGame.getUsers().getValue().get("player1").setTurn(true);
                                     inGame.getUserTurn().postValue(true);

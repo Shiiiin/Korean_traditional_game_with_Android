@@ -197,8 +197,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                inGame.initialize(Winner);
-                System.out.println(Winner);
+                inGame.initialize();
+                System.out.println("Dummy");
 
                 if (inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)) {
 
@@ -466,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
                             //isturnOnView(false);
 
                             inGame.execute(MainActivity.this, Winner);
-                            System.out.println(Winner);
+                            System.out.println("gamestatus true");
 
                         }
 
