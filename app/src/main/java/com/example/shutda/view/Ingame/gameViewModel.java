@@ -175,9 +175,12 @@ public class gameViewModel extends ViewModel{
          int player1CardValue = users.getValue().get("player1").getCardValues();
          int player2CardValue = users.getValue().get("player2").getCardValues();
          int player3CardValue = users.getValue().get("player3").getCardValues();
-         if(winnerChecker == null)
-            winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
-         else
+         if(winnerChecker == null) {
+             winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
+         }
+         else {
+             winnerChecker.setPlayersMap(player1CardValue, player2CardValue, player3CardValue);
+         }
 
          MaxPlayerBattingScore = 0;
          CallNumber.postValue(0);
@@ -329,7 +332,7 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
-//        winnerChecker.setPlayersMap("player1", -2);
+//        winnerChecker.setPlayer("player1", -2);
 
         if(users.getValue().get("player2").isAlive()) {
             UserTurn.postValue(false);
@@ -553,7 +556,7 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
-//        winnerChecker.setPlayersMap(player, -2);
+//        winnerChecker.setPlayer(player, -2);
         //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
                 /*
 

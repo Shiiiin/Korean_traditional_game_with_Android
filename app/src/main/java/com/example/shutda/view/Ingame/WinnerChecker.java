@@ -20,10 +20,16 @@ public class WinnerChecker {
         System.out.println("player3카드" + player3Cards);
     }
 
-    public void setPlayersMap(String key, int playerCards) {
+    public void setPlayer(String key, int playerCards) {
         playersMap.put(key, playerCards);
-        System.out.println(playersMap.get(key));
     }
+
+    public void setPlayersMap(int player1Cards, int player2Cards, int player3Cards) {
+        playersMap.put("player1", player1Cards);
+        playersMap.put("player2", player2Cards);
+        playersMap.put("player3", player3Cards);
+    }
+
 
     public String WinnerClassifier() {
 
