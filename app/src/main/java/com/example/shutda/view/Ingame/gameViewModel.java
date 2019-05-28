@@ -532,6 +532,19 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(0);
         currentplayer.setCard2(0);
+        //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
+                /*
+
+                        user2call.setVisibility(View.GONE);
+                        user2die.setVisibility(View.VISIBLE);
+                        user2half.setVisibility(View.GONE);
+                        user2die.startAnimation(blink);
+
+                        user3call.setVisibility(View.GONE);
+                        user3die.setVisibility(View.VISIBLE);
+                        user3half.setVisibility(View.GONE);
+                        user3die.startAnimation(blink);
+                */
     }
 
     public void AiCallExecute(String player) {
