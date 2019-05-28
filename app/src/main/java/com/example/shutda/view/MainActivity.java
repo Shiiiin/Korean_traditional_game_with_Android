@@ -374,6 +374,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        user2Card1.setVisibility(View.INVISIBLE);
+        user3Card1.setVisibility(View.GONE);
+        user2Card2.setVisibility(View.GONE);
+        user3Card2.setVisibility(View.INVISIBLE);
 
         if (currentUser == null) {
             Toast.makeText(this, "로그인 실패", Toast.LENGTH_LONG).show();
