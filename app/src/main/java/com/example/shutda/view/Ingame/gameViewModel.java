@@ -8,7 +8,6 @@ import android.content.Context;
 
 import android.widget.Toast;
 
-import com.example.shutda.view.MainActivity;
 import com.example.shutda.view.data.User;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -44,6 +43,8 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> CallNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
+
+
 
 
     public LiveData<HashMap<String, User>> getUsers(){ return users;}
@@ -176,6 +177,10 @@ public class gameViewModel extends ViewModel{
 //         users.getValue().get(winner).(true);
 
          TotalBettingMoney.postValue(0);
+
+
+
+
      }
 
     public void CardShuffling() {
