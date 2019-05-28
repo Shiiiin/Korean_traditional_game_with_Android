@@ -115,7 +115,7 @@ public class GameThread extends Thread {
                                             //                                    },AITurnPeriod);
                                             //                                    inGame.AiDecisionMakingExecute("player2");
                                         } else {
-                         먀                   //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
+                                            //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
                                             inGame.getPlayer3Turn().postValue(true);
                                         }
                                     }
