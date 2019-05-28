@@ -402,9 +402,9 @@ public class MainActivity extends AppCompatActivity {
 
         currentUser = mDB.collection("Users").document(mUserId);
 
-        currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                 //Player initialized
 
