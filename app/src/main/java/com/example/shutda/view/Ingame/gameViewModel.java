@@ -61,9 +61,9 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
 
 
-    private User player1;
-    private User player2;
-    private User player3;
+//    private User player1;
+//    private User player2;
+//    private User player3;
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
@@ -74,12 +74,12 @@ public class gameViewModel extends ViewModel{
     public void setUsers(HashMap<String, User> user){
 
         users.postValue(user);
-        player1 = user.get("player1");
-        player2 = user.get("player2");
-        player3 = user.get("player3");
-        player1Score.postValue(player1.getScore());
-        player2Score.postValue(player2.getScore());
-        player3Score.postValue(player3.getScore());
+//        player1 = user.get("player1");
+//        player2 = user.get("player2");
+//        player3 = user.get("player3");
+        player1Score.postValue(user.get("player1").getScore());
+        player2Score.postValue(user.get("player2").getScore());
+        player3Score.postValue(user.get("player3").getScore());
 
     }
 
@@ -201,23 +201,22 @@ public class gameViewModel extends ViewModel{
     //처음 판돈 거는거
     public boolean BaseBettingExecute(Activity view, int money) {
 
-        System.out.println( player1.getName() +"%%%%%"+ player1.getScore());
+        System.out.println( users.getValue().get("player1").getName() +"%%%%%"+ users.getValue().get("player1").getScore());
 
         StringBuffer toastMessage = new StringBuffer();
 
-        boolean a = player1.Betting(money);
-        boolean b = player2.Betting(money);
-        boolean c = player3.Betting(money);
+        boolean a = users.getValue().get("player1").Betting(money);
+        boolean b = users.getValue().get("player2").Betting(money);
+        boolean c = users.getValue().get("player3").Betting(money);
 
-        System.out.println( player2.getName() +"%%%%%"+ player2.getScore());
 
         if(a & b & c){
 
             int userNumber = users.getValue().size();
             TotalBettingMoney.postValue(userNumber*money);
-            player1Score.postValue(player1.getScore());
-            player2Score.postValue(player2.getScore());
-            player3Score.postValue(player3.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
+            player2Score.postValue(users.getValue().get("player2").getScore());
+            player3Score.postValue(users.getValue().get("player3").getScore());
             System.out.println( "현재 배팅액" + getTotalBettingMoney());
 
             return true;
@@ -255,7 +254,7 @@ public class gameViewModel extends ViewModel{
         if(a == true){
 
             this.TotalBettingMoney.postValue(bettingMoney + halfBetting);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
             MaxPlayerBattingScore = halfBetting;
             System.out.println(MaxPlayerBattingScore);
 
@@ -269,7 +268,7 @@ public class gameViewModel extends ViewModel{
             int All_in = currentplayer.All_in();
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
             MaxPlayerBattingScore = (MaxPlayerBattingScore < All_in) ? All_in : MaxPlayerBattingScore;
             System.out.println(MaxPlayerBattingScore);
             System.out.println("All_in");
@@ -281,13 +280,13 @@ public class gameViewModel extends ViewModel{
 //        currentplayer.setTurn(false);
         UserTurn.postValue(false);
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                player2Turn.postValue(true);
-            }
-        }, AITurnPeriod);
-//        player2Turn.postValue(true);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                player2Turn.postValue(true);
+//            }
+//        }, AITurnPeriod);
+        player2Turn.postValue(true);
 
     }
 
@@ -311,13 +310,13 @@ public class gameViewModel extends ViewModel{
 
         UserTurn.postValue(false);
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                player2Turn.postValue(true);
-            }
-        }, AITurnPeriod);
-//        player2Turn.postValue(true);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                player2Turn.postValue(true);
+//            }
+//        }, AITurnPeriod);
+        player2Turn.postValue(true);
     }
 
     public void CallButtonExecute(Activity view, String player) {
@@ -342,7 +341,7 @@ public class gameViewModel extends ViewModel{
         if(a == true){
 
             this.TotalBettingMoney.postValue(bettingMoney + money);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
 
             currentplayer.setButtonClickEnable(true, true, true, false);
 
@@ -355,7 +354,7 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
-            player1Score.postValue(player1.getScore());
+            player1Score.postValue(users.getValue().get("player1").getScore());
 
             currentplayer.setButtonClickEnable(false, true, false, false);
 
@@ -366,13 +365,13 @@ public class gameViewModel extends ViewModel{
 //        currentplayer.setTurn(false);
         UserTurn.postValue(false);
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                player2Turn.postValue(true);
-            }
-        }, AITurnPeriod);
-//        player2Turn.postValue(true);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                player2Turn.postValue(true);
+//            }
+//        }, AITurnPeriod);
+        player2Turn.postValue(true);
     }
 
     //Ai Decision Making
@@ -432,13 +431,13 @@ public class gameViewModel extends ViewModel{
 
             //TODO endgame시 gamethread가 먼저 실행된다.
 //            users.getValue().get("player3").setTurn(true);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    player3Turn.postValue(true);
-                }
-            }, AITurnPeriod);
-//            player3Turn.postValue(true);
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    player3Turn.postValue(true);
+//                }
+//            }, AITurnPeriod);
+            player3Turn.postValue(true);
         }
 
         if(player == "player3"){
@@ -447,13 +446,13 @@ public class gameViewModel extends ViewModel{
 
             //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
 //            users.getValue().get("player1").setTurn(true);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    UserTurn.postValue(true);
-                }
-            }, AITurnPeriod);
-//            UserTurn.postValue(true);
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    UserTurn.postValue(true);
+//                }
+//            }, AITurnPeriod);
+            UserTurn.postValue(true);
         }
     }
 
@@ -480,10 +479,10 @@ public class gameViewModel extends ViewModel{
             System.out.println(MaxPlayerBattingScore);
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
 
 
@@ -498,10 +497,10 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
         }
     }
@@ -546,10 +545,10 @@ public class gameViewModel extends ViewModel{
             this.TotalBettingMoney.postValue(bettingMoney + money);
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
 
         }
@@ -561,10 +560,10 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             if(player == "player2"){
-                player2Score.postValue(player2.getScore());
+                player2Score.postValue(users.getValue().get("player2").getScore());
             }
             if(player == "player3"){
-                player3Score.postValue(player3.getScore());
+                player3Score.postValue(users.getValue().get("player3").getScore());
             }
 
         }
@@ -586,20 +585,20 @@ public class gameViewModel extends ViewModel{
         switch(Winner) {
             case "player1":
                 System.out.println("*******player1 이겼따*************");
-                player1.setScore(player1.getScore() + TotalBettingMoney.getValue());
-                player1Score.postValue(player1.getScore());
+                users.getValue().get("player1").setScore(users.getValue().get("player1").getScore() + TotalBettingMoney.getValue());
+                player1Score.postValue(users.getValue().get("player1").getScore());
                 break;
 
             case "player2":
                 System.out.println("*******player2 이겼따*************");
-                player2.setScore(player2.getScore() + TotalBettingMoney.getValue());
-                player2Score.postValue(player2.getScore());
+                users.getValue().get("player2").setScore(users.getValue().get("player2").getScore() + TotalBettingMoney.getValue());
+                player2Score.postValue(users.getValue().get("player2").getScore());
                 break;
 
             case "player3":
                 System.out.println("*******player3 이겼따*************");
-                player3.setScore(player3.getScore() + TotalBettingMoney.getValue());
-                player3Score.postValue(player3.getScore());
+                users.getValue().get("player3").setScore(users.getValue().get("player3").getScore() + TotalBettingMoney.getValue());
+                player3Score.postValue(users.getValue().get("player3").getScore());
                 break;
 
             case "rematch":
@@ -624,7 +623,7 @@ public class gameViewModel extends ViewModel{
 
     public void uploadScoreToFirestore(DocumentReference database){
 
-        database.update("score", player1.getScore());
+        database.update("score", users.getValue().get("player1").getScore());
 
     }
 
