@@ -6,15 +6,16 @@
         android:state_pressed="false"
         >
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <stroke android:width="2dp" android:color="@color/colorPrimaryLight"></stroke>
+            <stroke android:width="2dp" android:color="@color/purple"></stroke>
+            <solid android:color="@color/colorPrimaryBackground"/>
             <corners android:radius="20dp"/>
         </shape>
     </item>
     <item
         android:state_pressed="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <stroke android:width="2dp" android:color="@color/colorPrimary"/>
-            <solid android:color="@color/colorPrimaryLight"/>
+            <stroke android:width="2dp" android:color="@color/purple"/>
+            <solid android:color="@color/purpleClicked"/>
             <corners android:radius="20dp"/>
         </shape>
     </item>

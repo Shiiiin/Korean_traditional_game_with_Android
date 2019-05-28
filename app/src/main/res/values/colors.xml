@@ -2,12 +2,17 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#FF5722</color>
-    <color name="colorPrimaryLight">#A73F5D</color>
+    <color name="colorAccent">#D500F9</color>
+    <color name="colorPrimaryLight">#45AA05</color>
     <color name="colorPrimaryBackground">#FFFFFF</color>
     <color name="tertiary_text_light">@android:color/tertiary_text_light</color>
     <color name="profile">#831A1C</color>
-
+    <color name="bluedark">#2f333f</color>
+    <color name="bluelight">#49acd5</color>
+    <color name="green">#45bc62</color>
+    <color name="orange">#eaad43</color>
     <color name="black_overlay">#66000000</color>
+    <color name="purple">#D500F9</color>
+    <color name="purpleClicked">#CE93D8</color>
 
 </resources>

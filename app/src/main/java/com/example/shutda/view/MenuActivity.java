@@ -1,5 +1,6 @@
 package com.example.shutda.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.background.BackPressCloseHandler;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,15 +21,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity{
 
-    Button gameStartButton;
-    Button scoreboardButton;
-    Button ruleButton;
-    Button leaveButton;
-    Button jogboButton;
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore mFirestore;
+    private long backKeyClickTime = 0;
+    private Button gameStartButton;
+    private Button scoreboardButton;
+    private Button ruleButton;
+    private Button leaveButton;
+    private Button jogboButton;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore mFirestore;
+    private String mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class MenuActivity extends AppCompatActivity {
 
         decorView.setSystemUiVisibility(uiOptions);
 
+
         gameStartButton = findViewById(R.id.play_button);
         scoreboardButton = findViewById(R.id.rank_button);
         ruleButton = findViewById(R.id.rule_button);
@@ -49,6 +54,14 @@ public class MenuActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
+        if (firebaseAuth.getCurrentUser() == null) {
+
+            sendBack();
+
+        } else {
+
+            mUserId = firebaseAuth.getCurrentUser().getUid();
+        }
 
         gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +74,9 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                //TODO 스코어보드 intent
+
+                Intent go2Rankboard = new Intent(MenuActivity.this, RankActivity.class);
+                startActivity(go2Rankboard);
 
             }
         });
@@ -70,6 +85,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO rule intent
+
             }
         });
 
@@ -85,7 +101,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id,", "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
@@ -102,4 +118,49 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void sendBack() {
+        Intent loginIntent = new Intent(MenuActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        BackPressed2Login();
+
+    }
+
+
+
+  public void BackPressed2Login() {
+
+
+
+        if (System.currentTimeMillis() > backKeyClickTime + 2000) { backKeyClickTime = System.currentTimeMillis();
+            Toast.makeText(MenuActivity.this, "뒤로가기 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            return; }
+        if (System.currentTimeMillis() <= backKeyClickTime + 2000) {
+
+            mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
+                    firebaseAuth.signOut();
+                    startActivity(quit);
+                    finish();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("로그아웃 실패", "오류 로그: "+e);
+                    Toast.makeText(MenuActivity.this, "로그아웃 실패", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+    }
+
 }
+

@@ -84,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInOptions gso;
@@ -114,7 +113,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         decorView.setSystemUiVisibility(uiOptions);
 
-
         // Configure Google Sign In
 
         // Button listeners
@@ -136,12 +134,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mAuth = FirebaseAuth.getInstance();
         mDB = FirebaseFirestore.getInstance();
-
-
-
-
-
-
 
         // Set up the login form.
 
@@ -223,21 +215,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
-    public boolean isInternetAvailable() {
-        try {
-            InetAddress address = InetAddress.getByName("www.google.com");
-            return !address.equals("");
-        } catch (UnknownHostException e) {
-            // Log error
-        }
-        return false;
-    }
-
-    private void sendToMain() {
-        Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(loginIntent);
     }
 
     private void sendToMenu() {
@@ -662,7 +639,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         mDB.collection("Users").document(current_id).set(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                sendToMain();
+                                                sendToMenu();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
