@@ -24,6 +24,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+
+
 import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.*;
 
@@ -81,6 +84,8 @@ public class gameViewModel extends ViewModel{
     private int MaxPlayerBattingScore = 0;
     private WinnerChecker winnerChecker;
     Timer timer = new Timer();
+
+
 
 
     public void setUsers(HashMap<String, User> user){
@@ -153,6 +158,7 @@ public class gameViewModel extends ViewModel{
          return winner;
      }
 
+
      public void initialize() {
          CardShuffling();
          System.out.println("카드시작");
@@ -188,24 +194,18 @@ public class gameViewModel extends ViewModel{
 //         users.getValue().get(winner).(true);
 
          TotalBettingMoney.postValue(0);
-
-      /*   user2call  = getView().findViewById(R.id.user2call);
-         user2die   = findViewById(R.id.user2die);
-         user2half  = findViewById(R.id.user2half);
-         user3call  = findViewById(R.id.user3call);
-         user3die   = findViewById(R.id.user3die);
-         user3half  = findViewById(R.id.user3half);
-         user2Card1.setVisibility(View.INVISIBLE);
-         user3Card1.setVisibility(View.GONE);
-         user2Card2.setVisibility(View.GONE);
-         user3Card2.setVisibility(View.INVISIBLE);
-         user2call.setVisibility(View.GONE);
-         user2die.setVisibility(View.GONE);
-         user2half.setVisibility(View.GONE);
-         user3call.setVisibility(View.GONE);
-         user3die.setVisibility(View.GONE);
-         user3half.setVisibility(View.GONE);
-*/
+             //TODO 시작 할 때 모든 이미지 제거 (이런식으로)
+         /*user2Card1.setVisibility(View.INVISIBLE);
+        user3Card1.setVisibility(View.GONE);
+        user2Card2.setVisibility(View.GONE);
+        user3Card2.setVisibility(View.INVISIBLE);
+        user2call.setVisibility(View.GONE);
+        user2die.setVisibility(View.GONE);
+        user2half.setVisibility(View.GONE);
+        user3call.setVisibility(View.GONE);
+        user3die.setVisibility(View.GONE);
+        user3half.setVisibility(View.GONE);
+        */
 
      }
 
@@ -529,9 +529,23 @@ public class gameViewModel extends ViewModel{
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
+                //TODO user2half animation - blink 실행 및 다른 이미지들 제거
+                /*
+                        user2call.setVisibility(View.GONE);
+                        user2die.setVisibility(View.GONE);
+                        user2half.setVisibility(View.VISIBLE);
+                        user2half.startAnimation(blink);
+                */
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
+                //TODO user2half animation - blink 실행 및 다른 이미지들 제거
+                /*
+                        user3call.setVisibility(View.GONE);
+                        user3die.setVisibility(View.GONE);
+                        user3half.setVisibility(View.VISIBLE);
+                        user3half.startAnimation(blink);
+                */
             }
         }
     }
@@ -549,8 +563,22 @@ public class gameViewModel extends ViewModel{
         int dieNumber = DieNumber.getValue();
         DieNumber.postValue(dieNumber+1);
 
+
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
+        //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
+                /*
+
+                        user2call.setVisibility(View.GONE);
+                        user2die.setVisibility(View.VISIBLE);
+                        user2half.setVisibility(View.GONE);
+                        user2die.startAnimation(blink);
+
+                        user3call.setVisibility(View.GONE);
+                        user3die.setVisibility(View.VISIBLE);
+                        user3half.setVisibility(View.GONE);
+                        user3die.startAnimation(blink);
+                */
     }
 
     public void AiCallExecute(String player) {
