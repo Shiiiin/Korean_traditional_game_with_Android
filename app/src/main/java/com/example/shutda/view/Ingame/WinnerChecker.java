@@ -177,7 +177,7 @@ public class WinnerChecker {
 
 
         //땡부분
-       if(sumOfCards == (January1+January2)){
+        if(sumOfCards == (January1+January2)){
 
             rank = oneDDang;
         }
@@ -282,51 +282,51 @@ public class WinnerChecker {
         //끗 판별
         else{
 
-           int theNumberOfZero = 1;
-           int firstOneLocation = 0;
-           int secondOneLocation = 0;
-           int thirdOneLocation = 0;
-           int value1=0;
-           int value2=0;
+            int theNumberOfZero = 1;
+            int firstOneLocation = 0;
+            int secondOneLocation = 0;
+            int thirdOneLocation = 0;
+            int value1=0;
+            int value2=0;
 
-           while(sumOfCards != 0){
-               if(sumOfCards % 10 == 2){
-                   firstOneLocation = theNumberOfZero;
-                   theNumberOfZero++;
-                   sumOfCards = sumOfCards/10;
-               }
-               else if(sumOfCards % 10 == 0){
-                   theNumberOfZero++;
-                   sumOfCards = sumOfCards/10;
-                   System.out.println("한번나눠준거"+sumOfCards);
-               }
-               else if ( firstOneLocation == 0 & sumOfCards % 10 == 1){
-                   firstOneLocation = theNumberOfZero;
-                   theNumberOfZero++;
-                   sumOfCards = sumOfCards/10;
-                   System.out.println("첫번째위치"+firstOneLocation);
-               }else if ( (firstOneLocation != 0 & sumOfCards % 10 == 1) & secondOneLocation == 0){
-                   secondOneLocation = theNumberOfZero;
-                   theNumberOfZero++;
-                   sumOfCards = sumOfCards/10;
-                   System.out.println("두번째위치"+secondOneLocation);
-               }else if( (secondOneLocation != 0) & ((sumOfCards % 10) == 1)){
-                   thirdOneLocation = theNumberOfZero;
-                   theNumberOfZero++;
-                   sumOfCards = sumOfCards/10;
-                   System.out.println("세번째위치"+thirdOneLocation);
-               }
-           }
-           if(thirdOneLocation != 0){
-               value1 = secondOneLocation;
-               value2 = thirdOneLocation;
-           }
-           if(thirdOneLocation == 0){
-               value1 = firstOneLocation;
-               value2 = secondOneLocation;
-           }
-           System.out.println("value1///"+value1);
-           System.out.println("value2///"+value2);
+            while(sumOfCards != 0){
+                if(sumOfCards % 10 == 2){
+                    firstOneLocation = theNumberOfZero;
+                    theNumberOfZero++;
+                    sumOfCards = sumOfCards/10;
+                }
+                else if(sumOfCards % 10 == 0){
+                    theNumberOfZero++;
+                    sumOfCards = sumOfCards/10;
+                    System.out.println("한번나눠준거"+sumOfCards);
+                }
+                else if ( firstOneLocation == 0 & sumOfCards % 10 == 1){
+                    firstOneLocation = theNumberOfZero;
+                    theNumberOfZero++;
+                    sumOfCards = sumOfCards/10;
+                    System.out.println("첫번째위치"+firstOneLocation);
+                }else if ( (firstOneLocation != 0 & sumOfCards % 10 == 1) & secondOneLocation == 0){
+                    secondOneLocation = theNumberOfZero;
+                    theNumberOfZero++;
+                    sumOfCards = sumOfCards/10;
+                    System.out.println("두번째위치"+secondOneLocation);
+                }else if( (secondOneLocation != 0) & ((sumOfCards % 10) == 1)){
+                    thirdOneLocation = theNumberOfZero;
+                    theNumberOfZero++;
+                    sumOfCards = sumOfCards/10;
+                    System.out.println("세번째위치"+thirdOneLocation);
+                }
+            }
+            if(thirdOneLocation != 0){
+                value1 = secondOneLocation;
+                value2 = thirdOneLocation;
+            }
+            if(thirdOneLocation == 0){
+                value1 = firstOneLocation;
+                value2 = secondOneLocation;
+            }
+            System.out.println("value1///"+value1);
+            System.out.println("value2///"+value2);
 
 
             if(0 == (value1 + value2) %10 ){
@@ -335,32 +335,32 @@ public class WinnerChecker {
             if( 1 == (value1 + value2) %10){
                 rank = onegguk;
             }
-           if( 2 == (value1 + value2) %10){
-               rank = twogguk;
-           }
-           if( 3 == (value1 + value2) %10){
-               rank = threegguk;
-           }
-           if( 4 == (value1 + value2) %10){
-               rank = fourgguk;
-           }
-           if( 5 == (value1 + value2) %10){
-               rank = fivegguk;
-           }
-           if( 6 == (value1 + value2) %10){
-               rank = sixgguk;
-           }
-           if( 7 == (value1 + value2) %10){
-               rank = sevengguk;
-           }
-           if( 8 == (value1 + value2) %10){
-               rank = eightgguk;
-           }
-           if( 9 == (value1 + value2) %10){
-               rank = gapou;
-           }
+            if( 2 == (value1 + value2) %10){
+                rank = twogguk;
+            }
+            if( 3 == (value1 + value2) %10){
+                rank = threegguk;
+            }
+            if( 4 == (value1 + value2) %10){
+                rank = fourgguk;
+            }
+            if( 5 == (value1 + value2) %10){
+                rank = fivegguk;
+            }
+            if( 6 == (value1 + value2) %10){
+                rank = sixgguk;
+            }
+            if( 7 == (value1 + value2) %10){
+                rank = sevengguk;
+            }
+            if( 8 == (value1 + value2) %10){
+                rank = eightgguk;
+            }
+            if( 9 == (value1 + value2) %10){
+                rank = gapou;
+            }
 
-       }
+        }
 
         System.out.print(player +"패 계산끝...!!!");
         return rank;
