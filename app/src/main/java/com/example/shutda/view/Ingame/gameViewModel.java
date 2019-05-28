@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+
+
+
 import static com.example.shutda.view.data.DummyCards.*;
 
 public class gameViewModel extends ViewModel{
@@ -65,6 +68,8 @@ public class gameViewModel extends ViewModel{
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
+
+
 
     public void setUsers(HashMap<String, User> user){
 
@@ -156,6 +161,18 @@ public class gameViewModel extends ViewModel{
      }
 
      public void initialize(String winner) {
+        //TODO 시작 할 때 모든 이미지 제거 (이런식으로)
+         /*user2Card1.setVisibility(View.INVISIBLE);
+        user3Card1.setVisibility(View.GONE);
+        user2Card2.setVisibility(View.GONE);
+        user3Card2.setVisibility(View.INVISIBLE);
+        user2call.setVisibility(View.GONE);
+        user2die.setVisibility(View.GONE);
+        user2half.setVisibility(View.GONE);
+        user3call.setVisibility(View.GONE);
+        user3die.setVisibility(View.GONE);
+        user3half.setVisibility(View.GONE);
+        */
          for (int i = 1; i <= users.getValue().size(); i++) {
              String key = "player" + i;
              User player = users.getValue().get(key);
@@ -189,7 +206,6 @@ public class gameViewModel extends ViewModel{
 //         Winner.setTurn(true);
 
          TotalBettingMoney.postValue(0);
-
 
 
 
@@ -479,9 +495,23 @@ public class gameViewModel extends ViewModel{
             System.out.println("All_in");
 
             if(player == "player2"){
+                //TODO user2half animation - blink 실행 및 다른 이미지들 제거
+                /*
+                        user2call.setVisibility(View.GONE);
+                        user2die.setVisibility(View.GONE);
+                        user2half.setVisibility(View.VISIBLE);
+                        user2half.startAnimation(blink);
+                */
                 player2Score.postValue(player2.getScore());
             }
             if(player == "player3"){
+                //TODO user2half animation - blink 실행 및 다른 이미지들 제거
+                /*
+                        user3call.setVisibility(View.GONE);
+                        user3die.setVisibility(View.GONE);
+                        user3half.setVisibility(View.VISIBLE);
+                        user3half.startAnimation(blink);
+                */
                 player3Score.postValue(player3.getScore());
             }
         }
@@ -527,9 +557,23 @@ public class gameViewModel extends ViewModel{
             this.TotalBettingMoney.postValue(bettingMoney + money);
 
             if(player == "player2"){
+                //TODO user2call animation - blink 실행 및 다른 이미지들 제거
+                /*
+                        user2call.setVisibility(View.VISIBLE);
+                        user2die.setVisibility(View.GONE);
+                        user2half.setVisibility(View.GONE);
+                        user2call.startAnimation(blink);
+                */
                 player2Score.postValue(player2.getScore());
             }
             if(player == "player3"){
+                //TODO user3call animation - blink 실행
+                /*
+                        user3call.setVisibility(View.VISIBLE);
+                        user3die.setVisibility(View.GONE);
+                        user3half.setVisibility(View.GONE);
+                        user3call.startAnimation(blink);
+ */
                 player3Score.postValue(player3.getScore());
             }
 
