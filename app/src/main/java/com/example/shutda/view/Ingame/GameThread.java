@@ -26,8 +26,7 @@ public class GameThread extends Thread {
 
     private gameViewModel inGame;
     private LiveData<Boolean> gameStatus;
-    private LiveData<Boolean> player2Turn;
-    private LiveData<Boolean> player3Turn;
+
     private MainActivity mainActivity;
 
     private User player1;
@@ -42,8 +41,7 @@ public class GameThread extends Thread {
         this.mainActivity = mainActivity;
 
         gameStatus = inGame.getIngameStatus();
-        player2Turn = inGame.getPlayer2Turn();
-        player3Turn = inGame.getPlayer3Turn();
+
 
 
     }
@@ -88,72 +86,7 @@ public class GameThread extends Thread {
 
     @Override
     public synchronized void run() {
-            System.out.println("@@@@ Thread AI 등록 실행 @@@@");
 
-            System.out.println("@@@@ Thread Run 실행 @@@@");
-
-            //TODO 한바퀴 돌리는데는 성공 이제 모두콜 모두 죽었을때 구현해야함
-
-            player2Turn.observe(mainActivity, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(@Nullable Boolean aBoolean) {
-
-                            if(aBoolean){
-                                Timer timer = new Timer();
-                                timer.schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if (inGame.getUsers().getValue().get("player2").isAlive()) {
-
-                                            System.out.println("@@@@ Thread player2 실행 @@@@");
-
-                                            //                                    timer.schedule(new TimerTask() {
-                                            //                                        @Override
-                                            //                                        public void run() {
-                                            inGame.AiDecisionMakingExecute("player2");
-                                            //                                        }
-                                            //                                    },AITurnPeriod);
-                                            //                                    inGame.AiDecisionMakingExecute("player2");
-                                        } else {
-                                            //                                    inGame.getUsers().getValue().get("player3").setTurn(true);
-                                            inGame.getPlayer3Turn().postValue(true);
-                                        }
-                                    }
-                                },AITurnPeriod);
-                            }
-                        }
-            });
-
-            player3Turn.observe(mainActivity, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(@Nullable Boolean aBoolean) {
-
-                            Timer timer = new Timer();
-
-                            if(aBoolean){
-                                timer.schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
-
-                                            System.out.println("@@@@ Thread player3 실행 @@@@");
-
-//                                            timer.schedule(new TimerTask() {
-//                                                @Override
-//                                                public void run() {
-//                                                    inGame.AiDecisionMakingExecute("player3");
-//                                                }
-//                                            }, AITurnPeriod);
-                                            inGame.AiDecisionMakingExecute("player3");
-                                        } else {
-//                                    inGame.getUsers().getValue().get("player1").setTurn(true);
-                                            inGame.getUserTurn().postValue(true);
-                                        }
-                                    }
-                                }, AITurnPeriod);
-                            }
-                        }
-            });
 
     }// run End
 
