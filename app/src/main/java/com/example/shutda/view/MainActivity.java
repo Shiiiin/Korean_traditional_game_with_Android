@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton CallButton;
     private ImageButton DieButton;
     private ImageButton Checkbutton;
-    private ImageButton button5;
-    private ImageButton LeaveButton;
 
     private TextView player1NameTextView;
     private TextView player1ScoreTextView;
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     private CardView jokbo;
     private String Winner;
     private String[] rematch = {"rematch", "rematch12", "rematch31", "rematch23"};
-    private Timer timer;
+    private GameThread gameThread;
 
     private View decorView;
     private int uiOptions;
@@ -138,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         inGame = ViewModelProviders.of(this).get(gameViewModel.class);
-        GameThread gameThread;
 
         mainframe = findViewById(R.id.main_frame);
 
@@ -171,8 +168,6 @@ public class MainActivity extends AppCompatActivity {
         CallButton = findViewById(R.id.callbutton);
         DieButton = findViewById(R.id.diebutton);
         Checkbutton = findViewById(R.id.checkbutton);
-        button5 = findViewById(R.id.button5);
-        LeaveButton = findViewById(R.id.leavebutton);
 
         player1NameTextView = findViewById(R.id.player1Name);
         player1ScoreTextView = findViewById(R.id.player1Score);
@@ -205,11 +200,7 @@ public class MainActivity extends AppCompatActivity {
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
         HalfNumber = inGame.getHalfNumber();
-        Locked = inGame.getLocked();
-//        FirstTurn = inGame.getFirstTurn();
-
         Winner = "player1";
-//        FirstTurn = true;
 
         decorView = getWindow().getDecorView();
         uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -301,18 +292,9 @@ public class MainActivity extends AppCompatActivity {
         Checkbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-            }
-        });
-
-        LeaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                inGame.setStatus(Boolean.FALSE);
-
-
-                System.out.println("Leave Button Click");
+                inGame.CheckButtonExecute(MainActivity.this, "player1");
+                System.out.println("Check Button Click");
+                buttonSetting(AllbuttonOFF);
             }
         });
 
@@ -601,19 +583,17 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("활성화 버튼 변경!");
 
-        boolean halfbutton = buttonset[0];
+        boolean checkbutton = buttonset[0];
         boolean callbutton = buttonset[1];
-        boolean diebutton = buttonset[2];
-        boolean leavebutton = buttonset[3];
+        boolean halfbutton = buttonset[2];
+        boolean diebutton = buttonset[3];
 
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
         DieButton.setEnabled(diebutton);
-        Checkbutton.setEnabled(false);
-        button5.setEnabled(false);
-        LeaveButton.setEnabled(leavebutton);
+        Checkbutton.setEnabled(checkbutton);
 
-        System.out.println("HALF "+ halfbutton +" , CALL "+callbutton + " , DIE "+diebutton+ ", LEAVE "+leavebutton);
+        System.out.println("Check "+ callbutton +" , CALL "+ callbutton +" , HALF "+ halfbutton +", DIE "+ diebutton);
     }
 
 
@@ -628,6 +608,7 @@ public class MainActivity extends AppCompatActivity {
 
         cardVisibleInitialize();
 
+        gameThread.interrupte();
         Winner = inGame.finish();
 
         System.out.println(Winner);
