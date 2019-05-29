@@ -46,43 +46,47 @@ public class GameThread extends Thread {
 
     }
 
+    public void interrupte(){
+        super.interrupt();
+    }
+
     @Override
     public synchronized void run() {
 
-            System.out.println("@@@@ Thread Run 실행 @@@@");
+        System.out.println("@@@@ Thread Run 실행 @@@@");
 
-            player2Turn.observe(mainActivity, new Observer<Boolean>() {
+        player2Turn.observe(mainActivity, new Observer<Boolean>() {
 
-                @Override
-                public void onChanged(@Nullable Boolean aBoolean) {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
 
-                    if(aBoolean){
-                        Timer timer = new Timer();
+                if(aBoolean){
+                    Timer timer = new Timer();
 
-                        if (inGame.getUsers().getValue().get("player2").isAlive()) {
-                            if (inGame.getUsers().getValue().get("player1").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
-                                timer.schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
+                    if (inGame.getUsers().getValue().get("player2").isAlive()) {
+                        if (inGame.getUsers().getValue().get("player1").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
                                     System.out.println("@@@@ Thread player2 실행 @@@@");
                                     inGame.AiDecisionMakingExecute("player2");
-                                    }
-                                }, AITurnPeriod);
-                            }
+                                }
+                            }, AITurnPeriod);
                         }
                     }
                 }
-            });
+            }
+        });
 
-            player3Turn.observe(mainActivity, new Observer<Boolean>() {
-                @Override
-                public void onChanged(@Nullable Boolean aBoolean) {
+        player3Turn.observe(mainActivity, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
 
-                    if(aBoolean){
-                        Timer timer = new Timer();
-                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
-                            if (inGame.getUsers().getValue().get("player1").isAlive() || inGame.getUsers().getValue().get("player2").isAlive()) {
-                                timer.schedule(new TimerTask() {
+                if(aBoolean){
+                    Timer timer = new Timer();
+                    if (inGame.getUsers().getValue().get("player3").isAlive()) {
+                        if (inGame.getUsers().getValue().get("player1").isAlive() || inGame.getUsers().getValue().get("player2").isAlive()) {
+                            timer.schedule(new TimerTask() {
                                     @Override
                                     public void run() {
                                     System.out.println("@@@@ Thread player3 실행 @@@@");
@@ -94,7 +98,6 @@ public class GameThread extends Thread {
                     }
                 }
             });
-
 
     }// run End
 
