@@ -44,7 +44,8 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> CallNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
-    private MutableLiveData<Boolean> EndGame = new MutableLiveData<>();
+    private MutableLiveData<Boolean> FirstTurn = new MutableLiveData<>();
+    private MutableLiveData<String[]> Locked = new MutableLiveData<>();
 
 
     private ImageView user2Card1;
@@ -71,12 +72,14 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getCallNumber() { return CallNumber;  }
     public MutableLiveData<Integer> getDieNumber() { return DieNumber;  }
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
-    public MutableLiveData<Boolean> getEndGame() { return EndGame;  }
+    public MutableLiveData<Boolean> getFirstTurn() { return FirstTurn; }
+    public MutableLiveData<String[]> getLocked() { return Locked; }
 
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
     private WinnerChecker winnerChecker;
+    private String[] LockArray;
 
     public void setUsers(HashMap<String, User> user){
 
@@ -104,6 +107,10 @@ public class gameViewModel extends ViewModel{
 
     public void setUserTurn(Boolean userTurn) { UserTurn.postValue(userTurn); }
 
+    public void setFirstTurn(Boolean firstTurn) { FirstTurn.postValue(firstTurn); }
+
+    public void setLocked(String[] locked) { Locked.postValue(locked); }
+
     public void execute(Context context, String Winner) {
 
         //첫번째 턴 정하기 (나중에 메소드 만들어서 턴 정해야함)
@@ -111,12 +118,15 @@ public class gameViewModel extends ViewModel{
         //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
         switch (Winner){
             case "player1":
+                users.getValue().get("player1").setTurn(true);
                 UserTurn.postValue(true);
                 break;
             case "player2":
+                users.getValue().get("player2").setTurn(true);
                 player2Turn.postValue(true);
                 break;
             case "player3":
+                users.getValue().get("player3").setTurn(true);
                 player3Turn.postValue(true);
                 break;
         }
@@ -127,6 +137,7 @@ public class gameViewModel extends ViewModel{
 
          //TODO 이게 문제일수도 있음
          System.out.println("finish");
+//         FirstTurn.postValue(true);
 
          for (int i = 1; i <= users.getValue().size(); i++) {
              String key = "player" + i;
@@ -143,13 +154,13 @@ public class gameViewModel extends ViewModel{
 
          //Reset All Data apart from Name & Score
          String winner = checkWinner(); //돈가산
-         TotalBettingMoney.postValue(0);
 
          return winner;
      }
 
 
      public void initialize() {
+
          CardShuffling();
          System.out.println("카드시작");
 
@@ -160,11 +171,11 @@ public class gameViewModel extends ViewModel{
 //             player.setTurn(false);
              player.setAlive(true);
 
-             users.getValue().get(key).setCard1(CardsMachine.poll());
-             users.getValue().get(key).setCard2(CardsMachine.poll());
+             player.setCard1(CardsMachine.poll());
+             player.setCard2(CardsMachine.poll());
 
-             System.out.println(key +"'s Card1 : "+users.getValue().get(key).getCard1());
-             System.out.println(key +"'s Card2 : "+users.getValue().get(key).getCard2());
+             System.out.println(key +"'s Card1 : "+player.getCard1());
+             System.out.println(key +"'s Card2 : "+player.getCard2());
          }
 
          System.out.println("카드끝!!!!");
@@ -186,6 +197,7 @@ public class gameViewModel extends ViewModel{
          CallNumber.postValue(0);
          DieNumber.postValue(0);
          HalfNumber.postValue(0);
+
 //         users.getValue().get(winner).(true);
 
 //         TotalBettingMoney.postValue(0);
@@ -235,6 +247,16 @@ public class gameViewModel extends ViewModel{
         boolean b = users.getValue().get("player2").Betting(money);
         boolean c = users.getValue().get("player3").Betting(money);
 
+        if(!b) {
+            users.getValue().get("player2").setScore(100000);
+            b = users.getValue().get("player2").Betting(money);
+            Toast.makeText(view, "AI1 DIE!!" ,Toast.LENGTH_LONG).show();
+        }
+        if(!c) {
+            users.getValue().get("player3").setScore(100000);
+            c = users.getValue().get("player3").Betting(money);
+            Toast.makeText(view, "AI3 DIE!!" ,Toast.LENGTH_LONG).show();
+        }
 
         if(a & b & c){
 
@@ -251,20 +273,24 @@ public class gameViewModel extends ViewModel{
             if(!a){
                 toastMessage.append("player1 ");
             }
-            if(!b){
-                toastMessage.append("player2 ");
-            }
-            if(!c){
-                toastMessage.append("player3 ");
-            }
-
+//            if(!b){
+//                toastMessage.append("player2 ");
+//            }
+//            if(!c){
+//                toastMessage.append("player3 ");
+//            }
+//
             Toast.makeText(view, toastMessage.toString() +"의 배팅금액이 부족합니다. " ,Toast.LENGTH_LONG).show();
-
+//
             return false;
         }
     }
 
     public void HalfButtonExecute(Activity view, String player) {
+//        LockArray = new String[] {"true", player};
+//        Locked.postValue(LockArray);
+//        FirstTurn.postValue(false);
+
 
         User currentplayer = users.getValue().get(player);
 
@@ -304,18 +330,28 @@ public class gameViewModel extends ViewModel{
         }
 
 //        currentplayer.setTurn(false);
+
         if(users.getValue().get("player2").isAlive()) {
+            currentplayer.setTurn(false);
             UserTurn.postValue(false);
+            users.getValue().get("player2").setTurn(true);
             player2Turn.postValue(true);
         }
         else {
+            currentplayer.setTurn(false);
             UserTurn.postValue(false);
+            users.getValue().get("player3").setTurn(true);
             player3Turn.postValue(true);
         }
+//        LockArray = new String[] {"false", player};
+//        Locked.postValue(LockArray);
 
     }
 
     public void DieButtonExecute(Activity view, String player) {
+//        LockArray = new String[] {"true", player};
+//        Locked.postValue(LockArray);
+//        FirstTurn.postValue(false);
 
         User currentplayer = users.getValue().get(player);
 
@@ -335,17 +371,26 @@ public class gameViewModel extends ViewModel{
 //        winnerChecker.setPlayer("player1", -2);
 
         if(users.getValue().get("player2").isAlive()) {
+            currentplayer.setTurn(false);
             UserTurn.postValue(false);
+            users.getValue().get("player2").setTurn(true);
             player2Turn.postValue(true);
         }
         else {
+            currentplayer.setTurn(false);
             UserTurn.postValue(false);
+            users.getValue().get("player3").setTurn(true);
             player3Turn.postValue(true);
         }
+//        LockArray = new String[] {"false", player};
+//        Locked.postValue(LockArray);
 
     }
 
     public void CallButtonExecute(Activity view, String player) {
+//        LockArray = new String[] {"true", player};
+//        Locked.postValue(LockArray);
+//        FirstTurn.postValue(false);
 
         User currentplayer = users.getValue().get(player);
 
@@ -387,18 +432,27 @@ public class gameViewModel extends ViewModel{
         }
 
         if(users.getValue().get("player2").isAlive()) {
+            currentplayer.setTurn(false);
             UserTurn.postValue(false);
+            users.getValue().get("player2").setTurn(true);
             player2Turn.postValue(true);
         }
         else {
+            currentplayer.setTurn(false);
             UserTurn.postValue(false);
+            users.getValue().get("player3").setTurn(true);
             player3Turn.postValue(true);
         }
+//        LockArray = new String[] {"false", player};
+//        Locked.postValue(LockArray);
 
     }
 
     //Ai Decision Making
     public void AiDecisionMakingExecute(String player){
+//        LockArray = new String[] {"true", player};
+//        Locked.postValue(LockArray);
+//        FirstTurn.postValue(false);
 
         User currentplayer = users.getValue().get(player);
 
@@ -448,34 +502,41 @@ public class gameViewModel extends ViewModel{
             }
         }
 
-        if(player == "player2"){
+
+//        if(!Locked.getValue()) {
+            if (player == "player2") {
 //            users.getValue().get(player).setTurn(false);
-            if(users.getValue().get("player3").isAlive()) {
-                player2Turn.postValue(false);
-                player3Turn.postValue(true);
-            }
-            else {
-                player2Turn.postValue(false);
-                UserTurn.postValue(true);
-            }
-
-            //TODO endgame시 gamethread가 먼저 실행된다.
-
-        }
-
-        else if(player == "player3"){
+                if (users.getValue().get("player3").isAlive()) {
+                    users.getValue().get("player2").setTurn(false);
+                    player2Turn.postValue(false);
+                    users.getValue().get("player3").setTurn(true);
+                    player3Turn.postValue(true);
+                } else {
+                    users.getValue().get("player2").setTurn(false);
+                    player2Turn.postValue(false);
+                    users.getValue().get("player1").setTurn(true);
+                    UserTurn.postValue(true);
+                }
+//
+//                //TODO endgame시 gamethread가 먼저 실행된다.
+//
+            } else if (player == "player3") {
 //            users.getValue().get(player).setTurn(false);
-            if(users.getValue().get("player1").isAlive()) {
-                player3Turn.postValue(false);
-                UserTurn.postValue(true);
+                if (users.getValue().get("player1").isAlive()) {
+                    users.getValue().get("player3").setTurn(false);
+                    player3Turn.postValue(false);
+                    users.getValue().get("player1").setTurn(true);
+                    UserTurn.postValue(true);
+                } else {
+                    users.getValue().get("player3").setTurn(false);
+                    player3Turn.postValue(false);
+                    users.getValue().get("player2").setTurn(true);
+                    player2Turn.postValue(true);
+                }
+                //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
             }
-            else {
-                player3Turn.postValue(false);
-                player2Turn.postValue(true);
-            }
-            //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
+//        }
 
-        }
     }
 
     public void AiHalfExecute(String player) {
@@ -538,9 +599,14 @@ public class gameViewModel extends ViewModel{
                 */
             }
         }
+//        LockArray = new String[] {"false", player};
+//        Locked.postValue(LockArray);
     }
 
     public void AiDieExecute(String player) {
+
+        int dieNumber = DieNumber.getValue();
+        DieNumber.postValue(dieNumber+1);
 
         System.out.println("@@@@ Thread    " + player + "    Die 실행 @@@@");
 
@@ -549,10 +615,6 @@ public class gameViewModel extends ViewModel{
         currentplayer.setSumOfBetting(0);
 
         currentplayer.setAlive(false);
-
-        int dieNumber = DieNumber.getValue();
-        DieNumber.postValue(dieNumber+1);
-
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
@@ -570,9 +632,14 @@ public class gameViewModel extends ViewModel{
                         user3half.setVisibility(View.GONE);
                         user3die.startAnimation(blink);
                 */
+//        LockArray = new String[] {"false", player};
+//        Locked.postValue(LockArray);
     }
 
     public void AiCallExecute(String player) {
+
+        int callNumber = CallNumber.getValue();
+        CallNumber.postValue(callNumber+1);
 
         System.out.println("@@@@ Thread    " + player + "    Call 실행 @@@@");
 
@@ -626,12 +693,9 @@ public class gameViewModel extends ViewModel{
             }
 
         }
+//        LockArray = new String[] {"false", player};
+//        Locked.postValue(LockArray);
 
-        //일단 콜하면 죽여
-        //currentplayer.setAlive(false);
-
-        int callNumber = CallNumber.getValue();
-        CallNumber.postValue(callNumber+1);
     }
 
     public String checkWinner() {
@@ -646,34 +710,41 @@ public class gameViewModel extends ViewModel{
                 System.out.println("*******player1 이겼따*************");
                 users.getValue().get("player1").setScore(users.getValue().get("player1").getScore() + TotalBettingMoney.getValue());
                 player1Score.postValue(users.getValue().get("player1").getScore());
+                TotalBettingMoney.postValue(0);
                 break;
 
             case "player2":
                 System.out.println("*******player2 이겼따*************");
                 users.getValue().get("player2").setScore(users.getValue().get("player2").getScore() + TotalBettingMoney.getValue());
                 player2Score.postValue(users.getValue().get("player2").getScore());
+                TotalBettingMoney.postValue(0);
                 break;
 
             case "player3":
                 System.out.println("*******player3 이겼따*************");
                 users.getValue().get("player3").setScore(users.getValue().get("player3").getScore() + TotalBettingMoney.getValue());
                 player3Score.postValue(users.getValue().get("player3").getScore());
+                TotalBettingMoney.postValue(0);
                 break;
 
             case "rematch":
                 System.out.println("*******rematch*************");
+                rematchPlayers(new String[] {"player1", "player2", "player3"});
                 break;
 
             case "rematch12":
                 System.out.println("*******rematch12*************");
+                rematchPlayers(new String[] {"player1", "player2"});
                 break;
 
             case "rematch31":
                 System.out.println("*******rematch31*************");
+                rematchPlayers(new String[] {"player1", "player3"});
                 break;
 
             case "rematch23":
                 System.out.println("*******rematch23*************");
+                rematchPlayers(new String[] {"player2", "player3"});
                 break;
         }
 
@@ -709,5 +780,53 @@ public class gameViewModel extends ViewModel{
         else {
             return false;
         }
+    }
+
+    public void rematchPlayers(String[] Keys) {
+        CardShuffling();
+        System.out.println("카드시작");
+
+        for (int i = 0; i < Keys.length; i++) {
+            User player = users.getValue().get(Keys[i]);
+            player.setSumOfBetting(0);
+            player.setAlive(true);
+
+            player.setCard1(CardsMachine.poll());
+            player.setCard2(CardsMachine.poll());
+
+            System.out.println(Keys[i] +"'s Card1 : "+player.getCard1());
+            System.out.println(Keys[i] +"'s Card2 : "+player.getCard2());
+        }
+
+        System.out.println("카드끝!!!!");
+
+        //버튼 초기화
+        if(users.getValue().get("player1").isAlive())
+            users.getValue().get("player1").setButtonClickEnable(true, true, true, false);
+
+        int player1CardValue = users.getValue().get("player1").getCardValues();
+        int player2CardValue = users.getValue().get("player2").getCardValues();
+        int player3CardValue = users.getValue().get("player3").getCardValues();
+        if(winnerChecker == null) {
+            winnerChecker = new WinnerChecker(player1CardValue, player2CardValue, player3CardValue);
+        }
+        else {
+            winnerChecker.setPlayersMap(player1CardValue, player2CardValue, player3CardValue);
+        }
+
+//        if(Keys.length == 3) {
+            FirstTurn.postValue(true);
+            CallNumber.postValue(0);
+            HalfNumber.postValue(0);
+//        }
+//        else {
+//            CallNumber.postValue(0);
+//            HalfNumber.postValue(0);
+//        }
+
+        if(users.getValue().get("player1").isAlive())
+            UserTurn.postValue(true);
+        else
+            player2Turn.postValue(true);
     }
 }

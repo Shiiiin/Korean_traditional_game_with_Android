@@ -35,7 +35,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.shutda.view.data.constantsField.*;
 /**
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private LiveData<Integer> CallNumber;
     private LiveData<Integer> DieNumber;
     private LiveData<Integer> HalfNumber;
+    private LiveData<String[]> Locked;
+//    private LiveData<Boolean> FirstTurn;
 
     //View
     private ImageView cardDummy1;
@@ -88,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     public ImageView user3call;
     public ImageView user3die;
     public ImageView user3half;
-
 
 
     private LinearLayout buttonLayout;
@@ -109,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView currentBettingMoney;
     private CardView jokbo;
     private String Winner;
-    private Boolean FirstTurn;
+    private String[] rematch = {"rematch", "rematch12", "rematch31", "rematch23"};
+    private Timer timer;
 
 
     @Override
@@ -182,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
         HalfNumber = inGame.getHalfNumber();
+        Locked = inGame.getLocked();
+//        FirstTurn = inGame.getFirstTurn();
 
         Winner = "player1";
 //        FirstTurn = true;
@@ -221,7 +228,8 @@ public class MainActivity extends AppCompatActivity {
         cardDummy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirstTurn = true;
+                inGame.setFirstTurn(true);
+
                 inGame.initialize();
                 System.out.println("Dummy");
 
@@ -411,9 +419,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(name + "//" + score + "///" + token_id);
 
                     //Edit Players
-                    Me = new User(name, score, token_id, true);
-                    Ai = new User("AI", 100000, "ALPHAGO", true);
-                    Ai2 = new User("AI2", 100000, "ALPHAGO2", true);
+                    Me = new User(name, score, true, token_id, true);
+                    Ai = new User("AI", 100000, TurnInitializing, "ALPHAGO", true);
+                    Ai2 = new User("AI2", 100000, TurnInitializing, "ALPHAGO2", true);
                     userMap.put("player1", Me);
                     userMap.put("player2", Ai);
                     userMap.put("player3", Ai2);
@@ -495,9 +503,12 @@ public class MainActivity extends AppCompatActivity {
                 CallNumber.observe(MainActivity.this, new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
-                        System.out.println(FirstTurn);
-                        if(!FirstTurn) {
+                        System.out.println(inGame.getFirstTurn().getValue());
+                        if(!inGame.getFirstTurn().getValue()) {
                             if (DieNumber.getValue() != null && inGame.checkEnd()) {
+                                inGame.getUsers().getValue().get("player1").setTurn(false);
+                                inGame.getUsers().getValue().get("player2").setTurn(false);
+                                inGame.getUsers().getValue().get("player3").setTurn(false);
                                 inGame.setStatus(false);
                                 System.out.println(1);
                             }
@@ -507,8 +518,11 @@ public class MainActivity extends AppCompatActivity {
                 DieNumber.observe(MainActivity.this, new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
-                        if(!FirstTurn) {
+                        if(!inGame.getFirstTurn().getValue()) {
                             if (CallNumber.getValue() != null && inGame.checkEnd()) {
+                                inGame.getUsers().getValue().get("player1").setTurn(false);
+                                inGame.getUsers().getValue().get("player2").setTurn(false);
+                                inGame.getUsers().getValue().get("player3").setTurn(false);
                                 inGame.setStatus(false);
                                 System.out.println(2);
                             }
@@ -519,9 +533,50 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         inGame.setCallNumber(0);
-                        FirstTurn = false;
+                        inGame.setFirstTurn(false);
                     }
                 });
+//                Locked.observe(MainActivity.this, new Observer<String[]>() {
+//                    @Override
+//                    public void onChanged(@Nullable String[] aString) {
+//                        if (aString[0].equals("false")) {
+//                            timer = new Timer();
+//                            timer.schedule(new TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    if (aString[1].equals("player2")) {
+//                                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
+//                                            inGame.getPlayer2Turn().postValue(false);
+//                                            inGame.getPlayer3Turn().postValue(true);
+//                                        } else {
+//                                            inGame.getPlayer2Turn().postValue(false);
+//                                            inGame.getUserTurn().postValue(true);
+//                                        }
+//                                    }
+//                                    else if(aString[1].equals("player3")){
+//                                        if (inGame.getUsers().getValue().get("player1").isAlive()) {
+//                                            inGame.getPlayer3Turn().postValue(false);
+//                                            inGame.getUserTurn().postValue(true);
+//                                        } else {
+//                                            inGame.getPlayer3Turn().postValue(false);
+//                                            inGame.getPlayer2Turn().postValue(true);
+//                                        }
+//                                    }
+//                                    else {
+//                                        if(inGame.getUsers().getValue().get("player2").isAlive()) {
+//                                            inGame.getUserTurn().postValue(false);
+//                                            inGame.getPlayer2Turn().postValue(true);
+//                                        }
+//                                        else {
+//                                            inGame.getUserTurn().postValue(false);
+//                                            inGame.getPlayer3Turn().postValue(true);
+//                                        }
+//                                    }
+//                                }
+//                            }, 500);
+//                        }
+//                    }
+//                });
 
 
                 //StartGame관련
@@ -555,8 +610,10 @@ public class MainActivity extends AppCompatActivity {
                             Winner = inGame.finish();
                             System.out.println(Winner);
 
-                            cardDummy1.setEnabled(true);
-                            buttonSetting(onlyLeaveEnable);
+                            if(Arrays.binarySearch(rematch, Winner) <= 0) {
+                                cardDummy1.setEnabled(true);
+                                buttonSetting(onlyLeaveEnable);
+                            }
 
                             //
                         }
