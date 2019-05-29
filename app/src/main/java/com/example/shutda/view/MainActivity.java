@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
-
+    
                 try{
                     gameThread.join();
                 }catch (Exception e){
