@@ -116,15 +116,12 @@ public class gameViewModel extends ViewModel{
         //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
         switch (Winner){
             case "player1":
-
                 UserTurn.postValue(true);
                 break;
             case "player2":
-
                 player2Turn.postValue(true);
                 break;
             case "player3":
-
                 player3Turn.postValue(true);
                 break;
         }
@@ -179,7 +176,7 @@ public class gameViewModel extends ViewModel{
          System.out.println("카드끝!!!!");
 
          //버튼 초기화
-         users.getValue().get("player1").setButtonClickEnable(true, true, true, false);
+         users.getValue().get("player1").setButtonClickEnable(true, false, true, true);
 
          int player1CardValue = users.getValue().get("player1").getCardValues();
          int player2CardValue = users.getValue().get("player2").getCardValues();
@@ -299,7 +296,7 @@ public class gameViewModel extends ViewModel{
             MaxPlayerBattingScore = halfBetting;
             System.out.println(MaxPlayerBattingScore);
 
-            currentplayer.setButtonClickEnable(true, true, true, false);
+            currentplayer.setButtonClickEnable(false, true, true, true);
 
         }
         if(a == false){
@@ -395,7 +392,7 @@ public class gameViewModel extends ViewModel{
             this.TotalBettingMoney.postValue(bettingMoney + money);
             player1Score.postValue(users.getValue().get("player1").getScore());
 
-            currentplayer.setButtonClickEnable(true, true, true, false);
+            currentplayer.setButtonClickEnable(false, true, true, true);
 
         }
         if(a == false){

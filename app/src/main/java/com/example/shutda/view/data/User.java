@@ -12,7 +12,7 @@ public class User {
     private boolean EnableClickHalfButton;
     private boolean EnableClickCallButton;
     private boolean EnableClickDieButton;
-    private boolean EnableClickLeaveButton;
+    private boolean EnableClickCheckButton;
 
 
     public User (String name, long score, String token_id, boolean life){
@@ -115,26 +115,20 @@ public class User {
         EnableClickDieButton = enableClickDieButton;
     }
 
-    public boolean isEnableClickLeaveButton() {
-        return EnableClickLeaveButton;
-    }
 
-    public void setEnableClickLeaveButton(boolean enableClickLeaveButton) {
-        EnableClickLeaveButton = enableClickLeaveButton;
-    }
 
-    public void setButtonClickEnable(boolean halfbutton, boolean callbutton, boolean diebutton, boolean leavebutton){
+    public void setButtonClickEnable(boolean checkbutton, boolean callbutton, boolean halfbutton, boolean diebutton){
 
-        this.EnableClickHalfButton = halfbutton;
+        this.EnableClickCheckButton = checkbutton;
         this.EnableClickCallButton = callbutton;
+        this.EnableClickHalfButton = halfbutton;
         this.EnableClickDieButton = diebutton;
-        this.EnableClickLeaveButton = leavebutton;
     }
 
     public Boolean[] getButtonClickEnable(){
 
-        Boolean groupbutton[] = {EnableClickHalfButton, EnableClickCallButton,
-                                  EnableClickDieButton, EnableClickLeaveButton};
+        Boolean groupbutton[] = {EnableClickCheckButton, EnableClickCallButton,
+                                  EnableClickHalfButton, EnableClickDieButton};
 
         return groupbutton;
     }

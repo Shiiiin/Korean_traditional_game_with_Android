@@ -168,8 +168,7 @@ public class MainActivity extends AppCompatActivity {
         CallButton = findViewById(R.id.callbutton);
         DieButton = findViewById(R.id.diebutton);
         Checkbutton = findViewById(R.id.checkbutton);
-        button5 = findViewById(R.id.button5);
-        LeaveButton = findViewById(R.id.leavebutton);
+
 
         player1NameTextView = findViewById(R.id.player1Name);
         player1ScoreTextView = findViewById(R.id.player1Score);
@@ -442,8 +441,6 @@ public class MainActivity extends AppCompatActivity {
 
                     cardDummy1.setEnabled(true);
 
-//                    inGame.setButtonSet(onlyLeaveEnable);
-
                 }
 
                 userlist.observe(MainActivity.this, new Observer<HashMap<String, User>>() {
@@ -584,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
 
                             //지금은 이렇게 되어있는데 인게임 밖으로 나가게 만들어야함
 
-//                            gameThread.interrupt();
+                            gameThread.interrupt();
 
                             Winner = inGame.finish();
                             GameEnd(MainActivity.this);
@@ -629,19 +626,17 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("활성화 버튼 변경!");
 
-        boolean halfbutton = buttonset[0];
+        boolean checkbutton = buttonset[0];
         boolean callbutton = buttonset[1];
-        boolean diebutton = buttonset[2];
-        boolean leavebutton = buttonset[3];
+        boolean halfbutton = buttonset[2];
+        boolean diebutton = buttonset[3];
 
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
         DieButton.setEnabled(diebutton);
-        Checkbutton.setEnabled(false);
-        button5.setEnabled(false);
-        LeaveButton.setEnabled(leavebutton);
+        Checkbutton.setEnabled(checkbutton);
 
-        System.out.println("HALF "+ halfbutton +" , CALL "+callbutton + " , DIE "+diebutton+ ", LEAVE "+leavebutton);
+        System.out.println("CHECK "+ checkbutton +" , CALL "+ callbutton +" , HALF "+halfbutton + " , DIE "+diebutton);
     }
 
 
@@ -657,8 +652,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                     //TODO 게임 끝나면 패 초기화해저야함함
-                   start();
-                    PopUpMessage.dismiss();
+                start();
+                PopUpMessage.dismiss();
             }
         });
 
