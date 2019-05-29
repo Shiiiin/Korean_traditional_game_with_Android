@@ -1,21 +1,29 @@
 package com.example.shutda.view;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.os.Message;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,7 +33,7 @@ import android.widget.Toast;
 import com.example.shutda.R;
 import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.gameViewModel;
-import com.example.shutda.view.background.BackPressCloseHandler;
+import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,8 +46,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.TimerTask;
 
+import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.*;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -48,8 +56,6 @@ import static com.example.shutda.view.data.constantsField.*;
 public class MainActivity extends AppCompatActivity {
 
     private View mainframe;
-
-    private GameThread gameThread;
 
     private BackPressCloseHandler backPressCloseHandler;
 
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     protected User Ai;
     protected User Ai2;
     private HashMap<String, User> userMap = new HashMap<>();
-
+    private Dialog PopUpMessage;
 
     private gameViewModel inGame;
     private LiveData<Boolean> gameStatus;
@@ -72,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private LiveData<Long> player3Score;
     private LiveData<Boolean []> buttonSet;
     private LiveData<Boolean> userTurn;
+
     private LiveData<Integer> CallNumber;
     private LiveData<Integer> DieNumber;
     private LiveData<Integer> HalfNumber;
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView user2Card2;
     private ImageView user3Card1;
     private ImageView user3Card2;
+
     public ImageView user2call;
     public ImageView user2die;
     public ImageView user2half;
@@ -94,12 +102,11 @@ public class MainActivity extends AppCompatActivity {
     public ImageView user3die;
     public ImageView user3half;
 
-
     private LinearLayout buttonLayout;
     private ImageButton HalfButton;
     private ImageButton CallButton;
     private ImageButton DieButton;
-    private ImageButton button4;
+    private ImageButton Checkbutton;
     private ImageButton button5;
     private ImageButton LeaveButton;
 
@@ -116,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
     private String[] rematch = {"rematch", "rematch12", "rematch31", "rematch23"};
     private Timer timer;
 
+    //애니메이션 이름 설정
+    Handler mhandler = new Handler();
+    Animation animTransRight;
+    Animation animTransLeft;
+    Animation animTransAlpha;
+    GameThread gameThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,25 +154,21 @@ public class MainActivity extends AppCompatActivity {
         user3die   = findViewById(R.id.user3die);
         user3half  = findViewById(R.id.user3half);
 
+        cardVisibleInitialize();
 
-        //처음에 카드 안보이는 용도
-        
-        user2Card1.setVisibility(View.INVISIBLE);
-        user3Card1.setVisibility(View.GONE);
-        user2Card2.setVisibility(View.GONE);
-        user3Card2.setVisibility(View.INVISIBLE);
-        user2call.setVisibility(View.GONE);
-        user2die.setVisibility(View.GONE);
-        user2half.setVisibility(View.GONE);
-        user3call.setVisibility(View.GONE);
-        user3die.setVisibility(View.GONE);
-        user3half.setVisibility(View.GONE);
+
+        animTransRight = AnimationUtils.loadAnimation(
+                this,R.anim.giveright);
+        animTransLeft = AnimationUtils.loadAnimation(
+                this,R.anim.giveleft);
+        animTransAlpha = AnimationUtils.loadAnimation(
+                this,R.anim.giveme);
 
         buttonLayout = findViewById(R.id.button_layout);
         HalfButton = findViewById(R.id.halfbutton);
         CallButton = findViewById(R.id.callbutton);
         DieButton = findViewById(R.id.diebutton);
-        button4 = findViewById(R.id.button4);
+        Checkbutton = findViewById(R.id.checkbutton);
         button5 = findViewById(R.id.button5);
         LeaveButton = findViewById(R.id.leavebutton);
 
@@ -176,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         mDB = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-
+        PopUpMessage = new Dialog(this);
         gameStatus = inGame.getIngameStatus();
         userlist = inGame.getUsers();
         TotalBettingMoney = inGame.getTotalBettingMoney();
@@ -184,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         player2Score = inGame.getPlayer2Score();
         player3Score = inGame.getPlayer3Score();
         userTurn = inGame.getUserTurn();
+
         buttonSet = inGame.getButtonSet();
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
@@ -211,13 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
             mUserId = mAuth.getCurrentUser().getUid();
         }
-        //애니메이션 이름 설정
-        final Animation animTransRight = AnimationUtils.loadAnimation(
-                this,R.anim.giveright);
-        final Animation animTransLeft = AnimationUtils.loadAnimation(
-                this,R.anim.giveleft);
-        final Animation animTransAlpha = AnimationUtils.loadAnimation(
-                this,R.anim.giveme);
+
         mainLoop();
 
         gameThread = new GameThread(inGame , MainActivity.this);
@@ -229,64 +233,8 @@ public class MainActivity extends AppCompatActivity {
         cardDummy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inGame.setFirstTurn(true);
 
-                inGame.initialize();
-                System.out.println("Dummy");
-
-                if (inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)) {
-
-                    System.out.println("Dummy Button Click");
-
-                    inGame.setStatus(Boolean.TRUE);
-
-                    final Handler handler = new Handler();
-                    //애니메이션 시작
-                    cardDummy1.startAnimation(animTransLeft);
-
-
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            cardDummy1.startAnimation(animTransRight);
-                            user2Card1.setVisibility(View.VISIBLE);
-
-                            //지연시키길 원하는 밀리초 뒤에 동작
-                        }
-                    },500);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            cardDummy1.startAnimation(animTransAlpha);
-                            user3Card1.setVisibility(View.VISIBLE);
-                            //지연시키길 원하는 밀리초 뒤에 동작
-                        }
-                    },1000);handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            cardDummy1.startAnimation(animTransLeft);
-
-                            //지연시키길 원하는 밀리초 뒤에 동작
-                        }
-                    },1500);handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            cardDummy1.startAnimation(animTransRight);
-                            user2Card2.setVisibility(View.VISIBLE);
-
-
-                            //지연시키길 원하는 밀리초 뒤에 동작
-                        }
-                    },2000);handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            cardDummy1.startAnimation(animTransAlpha);
-                            user3Card2.setVisibility(View.VISIBLE);
-                            //지연시키길 원하는 밀리초 뒤에 동작
-                        }
-                    },2500);
-
-                }
+               start();
 
             }
         });
@@ -299,16 +247,18 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.HalfButtonExecute(MainActivity.this, "player1");
 
+                    ReactDecision(user2half);
+
                     //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
-                    inGame.getPlayer2Turn().postValue(true);
+//                    inGame.getPlayer2Turn().postValue(true);
 
                     buttonSetting(AllbuttonOFF);
 
-                    try{
-                        gameThread.join();
-                    }catch (Exception e){
-                        System.out.println("쓰레드 예외처리" + e);
-                    }
+//                    try{
+//                        gameThread.join();
+//                    }catch (Exception e){
+//                        System.out.println("쓰레드 예외처리" + e);
+//                    }
                     ////////////////////////////////////////////////////////////////TEST 끝
 
                 }
@@ -321,16 +271,19 @@ public class MainActivity extends AppCompatActivity {
                inGame.CallButtonExecute(MainActivity.this, "player1");
                 System.out.println("Call Button Click");
 
+
+                ReactDecision(user2call);
+
                 //TODO TESTSET Player2로 턴 주기
-                inGame.getPlayer2Turn().postValue(true);
+//                inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
 
-                try{
-                    gameThread.join();
-                } catch (Exception e) {
-                    System.out.println("쓰레드 예외처리" + e);
-                }
+//                try{
+//                    gameThread.join();
+//                } catch (Exception e) {
+//                    System.out.println("쓰레드 예외처리" + e);
+//                }
                 //TEST 끝
 
             }
@@ -345,17 +298,30 @@ public class MainActivity extends AppCompatActivity {
 
                 System.out.println("Die Button Click");
 
+                ReactDecision(user2die);
+
+                //죽었으니까 패 뒤집어주기
+                user1Card1.setImageResource(R.drawable.card_back_view);
+                user1Card2.setImageResource(R.drawable.card_back_view);
+
                 //TODO TESTSET Player2로 턴 주기
-                inGame.getPlayer2Turn().postValue(true);
+//                inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
-    
-                try{
-                    gameThread.join();
-                }catch (Exception e){
-                    System.out.println("쓰레드 예외처리" + e);
-                }
+
+//                try{
+//                    gameThread.join();
+//                }catch (Exception e){
+//                    System.out.println("쓰레드 예외처리" + e);
+//                }
                 //TEST 끝
+            }
+        });
+
+        Checkbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -368,17 +334,63 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Leave Button Click");
             }
         });
+
+        user1Card1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(user1Card1.getVisibility() == View.VISIBLE){
+
+                    int player1card1 = inGame.getUsers().getValue().get("player1").getCard1();
+
+                    cardImageChecker(user1Card1, player1card1);
+
+                    user1Card1.setEnabled(false);
+
+                }
+            }
+        });
+
+
+        user1Card2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(user1Card2.getVisibility() == View.VISIBLE){
+
+                    int player1card2 = inGame.getUsers().getValue().get("player1").getCard2();
+
+                    cardImageChecker(user1Card2, player1card2);
+
+                    user1Card2.setEnabled(false);
+
+
+                }
+            }
+        });
+
+
     }
+
+    private void ReactDecision(ImageView image) {
+        //TODO user2를 user1으로 바꿔주기
+
+        image.setVisibility(View.VISIBLE);
+
+        mhandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                image.setVisibility(View.GONE);
+
+            }
+        },1500);
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        user2Card1.setVisibility(View.INVISIBLE);
-        user3Card1.setVisibility(View.GONE);
-        user2Card2.setVisibility(View.GONE);
-        user3Card2.setVisibility(View.INVISIBLE);
 
         if (currentUser == null) {
             Toast.makeText(this, "로그인 실패", Toast.LENGTH_LONG).show();
@@ -420,14 +432,18 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(name + "//" + score + "///" + token_id);
 
                     //Edit Players
-                    Me = new User(name, score, true, token_id, true);
-                    Ai = new User("AI", 100000, TurnInitializing, "ALPHAGO", true);
-                    Ai2 = new User("AI2", 100000, TurnInitializing, "ALPHAGO2", true);
+                    Me = new User(name, score, token_id, true);
+                    Ai = new User("AI", 100000, "ALPHAGO", true);
+                    Ai2 = new User("AI2", 100000, "ALPHAGO2", true);
                     userMap.put("player1", Me);
                     userMap.put("player2", Ai);
                     userMap.put("player3", Ai2);
 
                     inGame.setUsers(userMap);
+
+                    cardDummy1.setEnabled(true);
+
+//                    inGame.setButtonSet(onlyLeaveEnable);
 
                 }
 
@@ -493,23 +509,27 @@ public class MainActivity extends AppCompatActivity {
                                     buttonSetting(buttons);
                                 }
                             }
-//                            else{
-////                                inGame.getUsers().getValue().get("player2").setTurn(true);
-//                                inGame.setUserTurn(false);
-//                                inGame.getPlayer2Turn().postValue(true);
-//                            }
+
                         }
+
+                        System.out.println(aBoolean);
                     }
                 });
+
+                        System.out.println("@@@@ Thread AI 등록 실행 @@@@");
+
+                        System.out.println("@@@@ Thread Run 실행 @@@@");
+
+
                 CallNumber.observe(MainActivity.this, new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         System.out.println(inGame.getFirstTurn().getValue());
                         if(!inGame.getFirstTurn().getValue()) {
                             if (DieNumber.getValue() != null && inGame.checkEnd()) {
-                                inGame.getUsers().getValue().get("player1").setTurn(false);
-                                inGame.getUsers().getValue().get("player2").setTurn(false);
-                                inGame.getUsers().getValue().get("player3").setTurn(false);
+                                inGame.getUsers().getValue().get("player1").setAlive(false);
+                                inGame.getUsers().getValue().get("player2").setAlive(false);
+                                inGame.getUsers().getValue().get("player3").setAlive(false);
                                 inGame.setStatus(false);
                                 System.out.println(1);
                             }
@@ -521,9 +541,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onChanged(@Nullable Integer integer) {
                         if(!inGame.getFirstTurn().getValue()) {
                             if (CallNumber.getValue() != null && inGame.checkEnd()) {
-                                inGame.getUsers().getValue().get("player1").setTurn(false);
-                                inGame.getUsers().getValue().get("player2").setTurn(false);
-                                inGame.getUsers().getValue().get("player3").setTurn(false);
+                                inGame.getUsers().getValue().get("player1").setAlive(false);
+                                inGame.getUsers().getValue().get("player2").setAlive(false);
+                                inGame.getUsers().getValue().get("player3").setAlive(false);
                                 inGame.setStatus(false);
                                 System.out.println(2);
                             }
@@ -537,47 +557,6 @@ public class MainActivity extends AppCompatActivity {
                         inGame.setFirstTurn(false);
                     }
                 });
-//                Locked.observe(MainActivity.this, new Observer<String[]>() {
-//                    @Override
-//                    public void onChanged(@Nullable String[] aString) {
-//                        if (aString[0].equals("false")) {
-//                            timer = new Timer();
-//                            timer.schedule(new TimerTask() {
-//                                @Override
-//                                public void run() {
-//                                    if (aString[1].equals("player2")) {
-//                                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
-//                                            inGame.getPlayer2Turn().postValue(false);
-//                                            inGame.getPlayer3Turn().postValue(true);
-//                                        } else {
-//                                            inGame.getPlayer2Turn().postValue(false);
-//                                            inGame.getUserTurn().postValue(true);
-//                                        }
-//                                    }
-//                                    else if(aString[1].equals("player3")){
-//                                        if (inGame.getUsers().getValue().get("player1").isAlive()) {
-//                                            inGame.getPlayer3Turn().postValue(false);
-//                                            inGame.getUserTurn().postValue(true);
-//                                        } else {
-//                                            inGame.getPlayer3Turn().postValue(false);
-//                                            inGame.getPlayer2Turn().postValue(true);
-//                                        }
-//                                    }
-//                                    else {
-//                                        if(inGame.getUsers().getValue().get("player2").isAlive()) {
-//                                            inGame.getUserTurn().postValue(false);
-//                                            inGame.getPlayer2Turn().postValue(true);
-//                                        }
-//                                        else {
-//                                            inGame.getUserTurn().postValue(false);
-//                                            inGame.getPlayer3Turn().postValue(true);
-//                                        }
-//                                    }
-//                                }
-//                            }, 500);
-//                        }
-//                    }
-//                });
 
 
                 //StartGame관련
@@ -606,9 +585,12 @@ public class MainActivity extends AppCompatActivity {
 
                             //지금은 이렇게 되어있는데 인게임 밖으로 나가게 만들어야함
 
-                            gameThread.interrupt();
+//                            gameThread.interrupt();
 
                             Winner = inGame.finish();
+                            GameEnd(MainActivity.this);
+
+                            cardVisibleInitialize();
                             System.out.println(Winner);
 
                             if(Arrays.binarySearch(rematch, Winner) <= 0) {
@@ -657,11 +639,214 @@ public class MainActivity extends AppCompatActivity {
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
         DieButton.setEnabled(diebutton);
-        button4.setEnabled(false);
+        Checkbutton.setEnabled(false);
         button5.setEnabled(false);
         LeaveButton.setEnabled(leavebutton);
 
         System.out.println("HALF "+ halfbutton +" , CALL "+callbutton + " , DIE "+diebutton+ ", LEAVE "+leavebutton);
+    }
+
+
+    public void GameEnd(Activity view){
+        Button retry;
+        Button quitGame;
+        PopUpMessage.setContentView(R.layout.game_end_dialog);
+        retry = PopUpMessage.findViewById(R.id.retryGame);
+        quitGame = PopUpMessage.findViewById(R.id.quitGame);
+
+        retry.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                    //TODO 게임 끝나면 패 초기화해저야함함
+                   start();
+                    PopUpMessage.dismiss();
+            }
+        });
+
+        quitGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                PopUpMessage.dismiss();
+            }
+        });
+
+        PopUpMessage.setCancelable(false);
+    }
+
+    public void start(){
+
+        inGame.setFirstTurn(true);
+        PopUpMessage.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        PopUpMessage.show();
+
+
+        inGame.initialize();
+        System.out.println("Dummy");
+
+        if (inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)) {
+
+            System.out.println("Dummy Button Click");
+
+            inGame.setStatus(Boolean.TRUE);
+
+            //애니메이션 시작
+            cardDummy1.startAnimation(animTransLeft);
+
+            mhandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardDummy1.startAnimation(animTransRight);
+                    user2Card1.setVisibility(View.VISIBLE);
+
+                    //지연시키길 원하는 밀리초 뒤에 동작
+                }
+            },500);
+
+            mhandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardDummy1.startAnimation(animTransAlpha);
+                    user3Card1.setVisibility(View.VISIBLE);
+                    //지연시키길 원하는 밀리초 뒤에 동작
+                }
+            },1000);
+
+            mhandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardDummy1.startAnimation(animTransLeft);
+                    user1Card1.setVisibility(View.VISIBLE);
+                    user1Card1.setEnabled(true);
+
+                    //지연시키길 원하는 밀리초 뒤에 동작
+                }
+            },1500);
+
+            mhandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardDummy1.startAnimation(animTransRight);
+                    user2Card2.setVisibility(View.VISIBLE);
+
+
+                    //지연시키길 원하는 밀리초 뒤에 동작
+                }
+            },2000);
+
+            mhandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardDummy1.startAnimation(animTransAlpha);
+                    user3Card2.setVisibility(View.VISIBLE);
+                    //지연시키길 원하는 밀리초 뒤에 동작
+                }
+            },2500);
+
+            mhandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    user1Card2.setVisibility(View.VISIBLE);
+                    user1Card2.setEnabled(true);
+                    //지연시키길 원하는 밀리초 뒤에 동작
+                }
+            },3000);
+
+        }
+    }
+
+    private void cardImageChecker(ImageView card, int cardnumber) {
+
+        if(cardnumber == January1){
+            card.setImageResource(R.drawable.card011);
+        }
+        if(cardnumber == January2){
+            card.setImageResource(R.drawable.card012);
+        }
+        if(cardnumber == February1){
+            card.setImageResource(R.drawable.card021);
+        }
+        if(cardnumber == February2){
+            card.setImageResource(R.drawable.card022);
+        }
+        if(cardnumber == March1){
+            card.setImageResource(R.drawable.card031);
+        }
+        if(cardnumber == March2){
+            card.setImageResource(R.drawable.card032);
+        }
+        if(cardnumber == April1){
+            card.setImageResource(R.drawable.card041);
+        }
+        if(cardnumber == April2){
+            card.setImageResource(R.drawable.card042);
+        }
+        if(cardnumber == May1){
+            card.setImageResource(R.drawable.card051);
+        }
+        if(cardnumber == May2){
+            card.setImageResource(R.drawable.card052);
+        }
+        if(cardnumber == June1){
+            card.setImageResource(R.drawable.card061);
+        }
+        if(cardnumber == June2){
+            card.setImageResource(R.drawable.card062);
+        }
+        if(cardnumber == July1){
+            card.setImageResource(R.drawable.card071);
+        }
+        if(cardnumber == July2){
+            card.setImageResource(R.drawable.card072);
+        }
+        if(cardnumber == August1){
+            card.setImageResource(R.drawable.card081);
+        }
+        if(cardnumber == August2){
+            card.setImageResource(R.drawable.card082);
+        }
+        if(cardnumber == September1){
+            card.setImageResource(R.drawable.card091);
+        }
+        if(cardnumber == September2){
+            card.setImageResource(R.drawable.card092);
+        }
+        if(cardnumber == October1){
+            card.setImageResource(R.drawable.card101);
+        }
+        if(cardnumber == October2){
+            card.setImageResource(R.drawable.card102);
+        }
+    }
+
+    private void cardVisibleInitialize() {
+
+        cardDummy1.setEnabled(false);
+
+        //처음에 카드 안보이는 용도
+
+        user1Card1.setImageResource(R.drawable.card_back_view);
+        user1Card1.setEnabled(false);
+        user1Card1.setVisibility(View.INVISIBLE);
+
+        user1Card2.setImageResource(R.drawable.card_back_view);
+        user1Card2.setEnabled(false);
+        user1Card2.setVisibility(View.GONE);
+
+        user2Card1.setVisibility(View.INVISIBLE);
+        user2Card2.setVisibility(View.GONE);
+
+        user3Card1.setVisibility(View.GONE);
+        user3Card2.setVisibility(View.INVISIBLE);
+
+        user2call.setVisibility(View.GONE);
+        user2die.setVisibility(View.GONE);
+        user2half.setVisibility(View.GONE);
+
+        user3call.setVisibility(View.GONE);
+        user3die.setVisibility(View.GONE);
+        user3half.setVisibility(View.GONE);
     }
 
 

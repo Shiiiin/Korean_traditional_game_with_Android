@@ -8,5 +8,6 @@ public class constantsField {
     public static final Boolean ButtonsWhenGameGetStarted[] = {true, true, true, false};
     public static final Boolean [] AllbuttonOFF = {false, false, false, false};
 
-    public static final int AITurnPeriod = 3000;
+    public static final int AITurnPeriod = 4000;
+
 }

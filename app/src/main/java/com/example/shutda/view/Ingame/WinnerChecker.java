@@ -195,42 +195,61 @@ public class WinnerChecker {
         if(sumOfCards == (January1+January2)){
 
             rank = oneDDang;
+            System.out.println("1땡");
         }
         else if(sumOfCards == (February1+February2)){
 
             rank = twoDDang;
+            System.out.println("2땡");
+
         }
         else if(sumOfCards == (March1+March2)){
 
             rank = threeDDang;
+            System.out.println("3땡");
+
         }
         else if(sumOfCards == (April1+April2)){
 
             rank = fourDDang;
+            System.out.println("4땡");
+
         }
         else if(sumOfCards == (March1+March2)){
 
             rank = fiveDDang;
+            System.out.println("5땡");
+
         }
         else if(sumOfCards == (June1+June2)){
 
             rank = sixDDang;
+            System.out.println("6땡");
+
         }
         else if(sumOfCards == (July1+July2)){
 
             rank = sevenDDang;
+            System.out.println("7땡");
+
         }
         else if(sumOfCards == (August1+August2)){
 
             rank = eightDDang;
+            System.out.println("8땡");
+
         }
         else if(sumOfCards == (September1+September2)){
 
             rank = nineDDang;
+            System.out.println("9땡");
+
         }
         else if(sumOfCards == (October1+October2)){
 
             rank = jangDDang;
+            System.out.println("10땡");
+
         }
 
         //족보부분
@@ -238,50 +257,70 @@ public class WinnerChecker {
                 (sumOfCards == (April2+June1)) || (sumOfCards == (April2+June2))){
 
             rank = seryuk;
+            System.out.println("세륙");
+
         }
         else if((sumOfCards == (October1+April1)) | (sumOfCards == (October1+April2)) |
                 (sumOfCards == (October2+April1)) | (sumOfCards == (October2+April2))){
             rank = jangsa;
+            System.out.println("장사");
+
         }
         else if((sumOfCards == (October1+January1)) | (sumOfCards == (October1+January2)) |
                 (sumOfCards == (October2+January1)) | (sumOfCards == (October2+January2))){
 
             rank = jangping;
+            System.out.println("장삥");
+
         }
         else if((sumOfCards == (September1+January1)) | (sumOfCards == (September1+January2)) |
                 (sumOfCards == (September2+January1)) | (sumOfCards == (September2+January2))){
 
             rank = guping;
+            System.out.println("구삥");
+
         }
         else if((sumOfCards == (April1+January1)) | (sumOfCards == (April1+January2)) |
                 (sumOfCards == (April2+January1)) | (sumOfCards == (April2+January2))){
 
             rank = doksa;
+            System.out.println("독사");
+
         }
         else if((sumOfCards == (January1+February1)) | (sumOfCards == (January1+February2)) |
                 (sumOfCards == (January2+February1)) | (sumOfCards == (January2+February1))){
 
             rank = alli;
+            System.out.println("독사");
+
         }
 
         //광땡부분
         else if(sumOfCards == (January1+March1)){
 
             rank = gwangDDang13;
+            System.out.println("13광땡");
+
         }
         else if(sumOfCards == (January1+August1)){
 
             rank = gwangDDAng18;
+            System.out.println("18광땡");
+
         }
         else if(sumOfCards == (March1+August1)){
 
             rank = gwangDDAng38;
+            System.out.println("38광땡");
+
         }
 
         //땡잡이
         else if(sumOfCards == (July1+March1) | sumOfCards == (July1+March2) | sumOfCards == (July2+March1) | sumOfCards == (July2+March2) ){
 
             rank = DDangCatcher;
+            System.out.println("땡잡이");
+
         }
         //구사
         else if(sumOfCards == (September1+April2) | sumOfCards == (September2+April1) | sumOfCards == (September2+April2)){
