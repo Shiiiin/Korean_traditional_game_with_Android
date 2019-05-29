@@ -1,4 +1,4 @@
-package com.example.shutda.view.background;
+package com.example.shutda.view.utils;
 
 import android.app.Activity;
 import android.widget.Toast;

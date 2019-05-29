@@ -1,4 +1,4 @@
-package com.example.shutda.view;
+package com.example.shutda.view.background;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +8,12 @@ import android.widget.TextView;
 import android.view.View;
 
 import com.example.shutda.R;
+import com.example.shutda.view.data.JogboData;
 
 import java.util.ArrayList;
 
 public class JogboAdapter extends RecyclerView.Adapter<JogboAdapter.ViewHolder> {
-    private ArrayList<Data> mDataset;
+    private ArrayList<JogboData> mDataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -26,7 +27,7 @@ public class JogboAdapter extends RecyclerView.Adapter<JogboAdapter.ViewHolder> 
         }
     }
 
-    public JogboAdapter(ArrayList<Data> myDataset) {
+    public JogboAdapter(ArrayList<JogboData> myDataset) {
         mDataset = myDataset;
     }
 
@@ -53,12 +54,4 @@ public class JogboAdapter extends RecyclerView.Adapter<JogboAdapter.ViewHolder> 
     }
 }
 
-class Data{
-    public String text;
-    public int img;
-    public Data(String text, int img){
-        this.text = text;
-        this.img = img;
-    }
-}
 

@@ -1,6 +1,5 @@
 package com.example.shutda.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,15 +10,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.shutda.R;
-import com.example.shutda.view.background.BackPressCloseHandler;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MenuActivity extends AppCompatActivity{
 
@@ -33,15 +27,26 @@ public class MenuActivity extends AppCompatActivity{
     private FirebaseFirestore mFirestore;
     private String mUserId;
 
+    private View decorView;
+    private int uiOptions;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        final View decorView = getWindow().getDecorView();
-        final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        decorView = getWindow().getDecorView();
+        uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
+
 
         decorView.setSystemUiVisibility(uiOptions);
 
