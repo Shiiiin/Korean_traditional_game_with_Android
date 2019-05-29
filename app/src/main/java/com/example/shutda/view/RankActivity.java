@@ -91,6 +91,8 @@ public class RankActivity extends AppCompatActivity {
 
                             Log.d("USER LIST LOAD", documentSnapshot.getId() + " => " + documentSnapshot.getData());
 
+                            //TODO USER로 바꿔보기  UserforRank 지울수 잇나....보자구!
+
                         UserForRank user = new UserForRank(documentSnapshot.getString("name"), documentSnapshot.getLong("score"));
 
                         Log.d("USER LIST LOAD", documentSnapshot.getString("name") + " &&& " + documentSnapshot.getLong("score"));

@@ -18,12 +18,8 @@ public class UserForRank {
         this.name = name;
     }
 
-
     public Long getScore() {
         return score;
     }
 
-    public void setScore(Long score) {
-        this.score = score;
-    }
 }

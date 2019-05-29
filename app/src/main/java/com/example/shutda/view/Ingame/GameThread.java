@@ -25,6 +25,8 @@ public class GameThread extends Thread {
     private static final String TAG = "GameThread";
 
     private gameViewModel inGame;
+    private LiveData<Boolean> gameStatus;
+
     private LiveData<Boolean> player2Turn;
     private LiveData<Boolean> player3Turn;
 
@@ -40,54 +42,14 @@ public class GameThread extends Thread {
         player2Turn = inGame.getPlayer2Turn();
         player3Turn = inGame.getPlayer3Turn();
 
+        gameStatus = inGame.getIngameStatus();
 
-    }
-
-//    public synchronized void RegistPlayers(){
-//
-//        player1 = inGame.getUsers().getValue().get("player1");
-//        player2 = inGame.getUsers().getValue().get("player2");
-//        player3 = inGame.getUsers().getValue().get("player3");
-//
-//
-//    }
-
-
-    @Override
-    public synchronized void start() {
-
-        //이 메소드 사용금지
-
-        super.start();
-
-        System.out.println("@@@@ Thread start 실행 @@@@");
-
-
-    }
-
-    @Override
-    public State getState() {
-        return super.getState();
-    }
-
-    @Override
-    public void interrupt() {
-        try {
-            super.interrupt();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("@@@@ Thread Interrupt 실행 @@@@");
     }
 
     @Override
     public synchronized void run() {
 
-            System.out.println("@@@@ Thread AI 등록 실행 @@@@");
-
             System.out.println("@@@@ Thread Run 실행 @@@@");
-
-            //TODO 한바퀴 돌리는데는 성공 이제 모두콜 모두 죽었을때 구현해야함
 
             player2Turn.observe(mainActivity, new Observer<Boolean>() {
 
