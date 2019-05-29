@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //처음에 카드 안보이는 용도
+        
         user2Card1.setVisibility(View.INVISIBLE);
         user3Card1.setVisibility(View.GONE);
         user2Card2.setVisibility(View.GONE);

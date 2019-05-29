@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.shutda.R;
@@ -24,11 +25,11 @@ import java.util.Map;
 public class MenuActivity extends AppCompatActivity{
 
     private long backKeyClickTime = 0;
-    private Button gameStartButton;
-    private Button scoreboardButton;
-    private Button ruleButton;
-    private Button leaveButton;
-    private Button jogboButton;
+    private ImageButton gameStartButton;
+    private ImageButton scoreboardButton;
+    private ImageButton ruleButton;
+    private ImageButton leaveButton;
+    private ImageButton jogboButton;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore mFirestore;
     private String mUserId;

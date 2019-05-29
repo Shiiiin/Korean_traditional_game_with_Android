@@ -189,12 +189,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
-        app:layout_constraintVertical_bias="0.271"
+        app:layout_constraintTop_toBottomOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.374"
         app:srcCompat="@android:color/holo_red_dark" />
 
     <ImageView
@@ -202,15 +202,16 @@
         android:layout_width="40dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="316dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/player1Name"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/user1Card1"
-        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/cardDummy2"
+        app:layout_constraintTop_toBottomOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.374"
         app:srcCompat="@android:color/holo_red_dark" />
 
     <ImageView
@@ -344,7 +345,7 @@
         app:layout_constraintEnd_toStartOf="@+id/player3Name"
         app:layout_constraintStart_toEndOf="@+id/player2Name"
         app:layout_constraintTop_toBottomOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.133" />
+        app:layout_constraintVertical_bias="0.3" />
 
 
     <ImageView
@@ -433,6 +434,168 @@
         app:layout_constraintStart_toStartOf="@+id/turnView"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
         app:layout_constraintVertical_bias="0.019" />
+
+    <ImageView
+        android:id="@+id/card011"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card011"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="86dp" />
+
+    <ImageView
+        android:id="@+id/card012"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card012"
+        tools:layout_editor_absoluteX="256dp"
+        tools:layout_editor_absoluteY="155dp" />
+
+    <ImageView
+        android:id="@+id/card021"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card021"
+        tools:layout_editor_absoluteX="241dp"
+        tools:layout_editor_absoluteY="155dp" />
+
+    <ImageView
+        android:id="@+id/card022"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card022"
+        tools:layout_editor_absoluteX="256dp"
+        tools:layout_editor_absoluteY="142dp" />
+
+    <ImageView
+        android:id="@+id/card031"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card031"
+        tools:layout_editor_absoluteX="263dp"
+        tools:layout_editor_absoluteY="146dp" />
+
+    <ImageView
+        android:id="@+id/card032"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card032"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="175dp" />
+
+    <ImageView
+        android:id="@+id/card041"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card041"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="146dp" />
+
+    <ImageView
+        android:id="@+id/card042"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card042"
+        tools:layout_editor_absoluteX="270dp"
+        tools:layout_editor_absoluteY="176dp" />
+
+    <ImageView
+        android:id="@+id/card051"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card051"
+        tools:layout_editor_absoluteX="256dp"
+        tools:layout_editor_absoluteY="164dp" />
+
+    <ImageView
+        android:id="@+id/card052"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card052"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="169dp" />
+
+    <ImageView
+        android:id="@+id/card061"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card061"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="176dp" />
+
+    <ImageView
+        android:id="@+id/card062"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card062"
+        tools:layout_editor_absoluteX="241dp"
+        tools:layout_editor_absoluteY="176dp" />
+
+    <ImageView
+        android:id="@+id/card071"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card071"
+        tools:layout_editor_absoluteX="190dp"
+        tools:layout_editor_absoluteY="129dp" />
+
+    <ImageView
+        android:id="@+id/card072"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card072"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="129dp" />
+
+    <ImageView
+        android:id="@+id/card081"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card081"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="104dp" />
+
+    <ImageView
+        android:id="@+id/card082"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card082"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="176dp" />
+
+    <ImageView
+        android:id="@+id/card091"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card091"
+        tools:layout_editor_absoluteX="281dp"
+        tools:layout_editor_absoluteY="161dp" />
+
+    <ImageView
+        android:id="@+id/card092"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card092"
+        tools:layout_editor_absoluteX="281dp"
+        tools:layout_editor_absoluteY="146dp" />
+
+    <ImageView
+        android:id="@+id/card101"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card101"
+        tools:layout_editor_absoluteX="270dp"
+        tools:layout_editor_absoluteY="175dp" />
+
+    <ImageView
+        android:id="@+id/card102"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:src="@drawable/card102"
+        tools:layout_editor_absoluteX="256dp"
+        tools:layout_editor_absoluteY="236dp" />
+
+
 
 
 
