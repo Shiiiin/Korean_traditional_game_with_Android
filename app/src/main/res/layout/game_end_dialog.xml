@@ -10,7 +10,7 @@
     android:backgroundTint="@color/purple"
     >
 
-    <android.support.design.button.MaterialButton
+    <Button
         android:id="@+id/retryGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <android.support.design.button.MaterialButton
+    <Button
         android:id="@+id/quitGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

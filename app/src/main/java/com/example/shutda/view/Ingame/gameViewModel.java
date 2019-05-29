@@ -6,11 +6,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.shutda.R;
 import com.example.shutda.view.data.User;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -118,15 +116,15 @@ public class gameViewModel extends ViewModel{
         //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
         switch (Winner){
             case "player1":
-//                users.getValue().get("player1").setTurn(true);
+
                 UserTurn.postValue(true);
                 break;
             case "player2":
-//                users.getValue().get("player2").setTurn(true);
+
                 player2Turn.postValue(true);
                 break;
             case "player3":
-//                users.getValue().get("player3").setTurn(true);
+
                 player3Turn.postValue(true);
                 break;
         }

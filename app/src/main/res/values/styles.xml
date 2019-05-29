@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/starcraft</item>
     </style>
 
     <style name="MainActivityLabel">
@@ -16,13 +17,16 @@
         <item name="android:padding">15dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/tertiary_text_light</item>
-        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="android:fontFamily">@font/starcraft</item>
+
     </style>
 
     <style name="LoginActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/starcraft</item>
+
     </style>
 
     <style name="FullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -30,10 +34,14 @@
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:fontFamily">@font/starcraft</item>
+
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
+        <item name="android:fontFamily">@font/starcraft</item>
+
     </style>
 
 </resources>

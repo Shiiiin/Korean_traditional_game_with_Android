@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.shutda.R;
-import com.example.shutda.view.background.BackPressCloseHandler;
+import com.example.shutda.view.utils.BackPressCloseHandler;
+import com.example.shutda.view.background.JogboAdapter;
+import com.example.shutda.view.data.JogboData;
 
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ public class JogboActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<Data> jogboDataset;
+    private ArrayList<JogboData> jogboDataset;
     private BackPressCloseHandler backPressCloseHandler;
 
     @Override
@@ -44,18 +46,18 @@ public class JogboActivity extends AppCompatActivity {
         mAdapter = new JogboAdapter(jogboDataset);
         mRecyclerView.setAdapter(mAdapter);
 
-        jogboDataset.add(new Data("1. 삼팔광땡", R.drawable.sampal));
-        jogboDataset.add(new Data("2. 광땡", R.drawable.gwang));
-        jogboDataset.add(new Data("3. 땡", R.drawable.ttaeng));
-        jogboDataset.add(new Data("4. 알리", R.drawable.alli));
-        jogboDataset.add(new Data("5. 독사", R.drawable.dogsa));
-        jogboDataset.add(new Data("6. 구삥", R.drawable.gupping));
-        jogboDataset.add(new Data("7. 장삥", R.drawable.jangpping));
-        jogboDataset.add(new Data("8. 장사", R.drawable.jangsa));
-        jogboDataset.add(new Data("9. 세륙", R.drawable.selyug));
-        jogboDataset.add(new Data("10. 땡잡이", R.drawable.ttaengjabi));
-        jogboDataset.add(new Data("11. 구사", R.drawable.gusa));
-        jogboDataset.add(new Data("12. 멍텅구리", R.drawable.meongteong));
+        jogboDataset.add(new JogboData("1. 삼팔광땡", R.drawable.sampal));
+        jogboDataset.add(new JogboData("2. 광땡", R.drawable.gwang));
+        jogboDataset.add(new JogboData("3. 땡", R.drawable.ttaeng));
+        jogboDataset.add(new JogboData("4. 알리", R.drawable.alli));
+        jogboDataset.add(new JogboData("5. 독사", R.drawable.dogsa));
+        jogboDataset.add(new JogboData("6. 구삥", R.drawable.gupping));
+        jogboDataset.add(new JogboData("7. 장삥", R.drawable.jangpping));
+        jogboDataset.add(new JogboData("8. 장사", R.drawable.jangsa));
+        jogboDataset.add(new JogboData("9. 세륙", R.drawable.selyug));
+        jogboDataset.add(new JogboData("10. 땡잡이", R.drawable.ttaengjabi));
+        jogboDataset.add(new JogboData("11. 구사", R.drawable.gusa));
+        jogboDataset.add(new JogboData("12. 멍텅구리", R.drawable.meongteong));
     }
 
     @Override

@@ -11,12 +11,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.shutda.R;
-import com.example.shutda.view.background.BackPressCloseHandler;
+import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.background.RankAdapter;
-import com.example.shutda.view.data.User;
 import com.example.shutda.view.data.UserForRank;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

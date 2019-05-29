@@ -26,13 +26,11 @@ public class GameThread extends Thread {
 
     private gameViewModel inGame;
     private LiveData<Boolean> gameStatus;
+
     private LiveData<Boolean> player2Turn;
     private LiveData<Boolean> player3Turn;
-    private MainActivity mainActivity;
 
-    private User player1;
-    private User player2;
-    private User player3;
+    private MainActivity mainActivity;
 
     public GameThread(gameViewModel viewModel, MainActivity mainActivity) {
 
@@ -41,9 +39,11 @@ public class GameThread extends Thread {
         this.inGame = viewModel;
         this.mainActivity = mainActivity;
 
-        gameStatus = inGame.getIngameStatus();
         player2Turn = inGame.getPlayer2Turn();
         player3Turn = inGame.getPlayer3Turn();
+
+        gameStatus = inGame.getIngameStatus();
+
 
     }
 
@@ -86,6 +86,7 @@ public class GameThread extends Thread {
 
     @Override
     public synchronized void run() {
+
             System.out.println("@@@@ Thread AI 등록 실행 @@@@");
 
             System.out.println("@@@@ Thread Run 실행 @@@@");
@@ -135,6 +136,7 @@ public class GameThread extends Thread {
                     }
                 }
             });
+
 
     }// run End
 
