@@ -118,15 +118,15 @@ public class gameViewModel extends ViewModel{
         //게임 시작했을때 버튼(무조건 사용자 먼저 시작이라 모든 버튼 클릭가능)
         switch (Winner){
             case "player1":
-                users.getValue().get("player1").setTurn(true);
+//                users.getValue().get("player1").setTurn(true);
                 UserTurn.postValue(true);
                 break;
             case "player2":
-                users.getValue().get("player2").setTurn(true);
+//                users.getValue().get("player2").setTurn(true);
                 player2Turn.postValue(true);
                 break;
             case "player3":
-                users.getValue().get("player3").setTurn(true);
+//                users.getValue().get("player3").setTurn(true);
                 player3Turn.postValue(true);
                 break;
         }
@@ -139,11 +139,11 @@ public class gameViewModel extends ViewModel{
          System.out.println("finish");
 //         FirstTurn.postValue(true);
 
-         for (int i = 1; i <= users.getValue().size(); i++) {
-             String key = "player" + i;
-             User player = users.getValue().get(key);
-             player.setAlive(false);
-         }
+//         for (int i = 1; i <= users.getValue().size(); i++) {
+//             String key = "player" + i;
+//             User player = users.getValue().get(key);
+//             player.setAlive(false);
+//         }
 
          UserTurn.postValue(false);
          player2Turn.postValue(false);
@@ -273,15 +273,8 @@ public class gameViewModel extends ViewModel{
             if(!a){
                 toastMessage.append("player1 ");
             }
-//            if(!b){
-//                toastMessage.append("player2 ");
-//            }
-//            if(!c){
-//                toastMessage.append("player3 ");
-//            }
-//
+
             Toast.makeText(view, toastMessage.toString() +"의 배팅금액이 부족합니다. " ,Toast.LENGTH_LONG).show();
-//
             return false;
         }
     }
@@ -332,25 +325,21 @@ public class gameViewModel extends ViewModel{
 //        currentplayer.setTurn(false);
 
         if(users.getValue().get("player2").isAlive()) {
-            currentplayer.setTurn(false);
+//            currentplayer.setTurn(false);
             UserTurn.postValue(false);
-            users.getValue().get("player2").setTurn(true);
+//            users.getValue().get("player2").setTurn(true);
             player2Turn.postValue(true);
         }
         else {
-            currentplayer.setTurn(false);
+//            currentplayer.setTurn(false);
             UserTurn.postValue(false);
-            users.getValue().get("player3").setTurn(true);
+//            users.getValue().get("player3").setTurn(true);
             player3Turn.postValue(true);
         }
-//        LockArray = new String[] {"false", player};
-//        Locked.postValue(LockArray);
 
     }
 
     public void DieButtonExecute(Activity view, String player) {
-//        LockArray = new String[] {"true", player};
-//        Locked.postValue(LockArray);
 //        FirstTurn.postValue(false);
 
         User currentplayer = users.getValue().get(player);
@@ -369,28 +358,23 @@ public class gameViewModel extends ViewModel{
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
         winnerChecker.setPlayer("player1", -2);
-//        winnerChecker.setPlayersMap(0, users.getValue().get("player2").getCardValues(), users.getValue().get("player3").getCardValues());
 
         if(users.getValue().get("player2").isAlive()) {
-            currentplayer.setTurn(false);
+//            currentplayer.setTurn(false);
             UserTurn.postValue(false);
-            users.getValue().get("player2").setTurn(true);
+//            users.getValue().get("player2").setTurn(true);
             player2Turn.postValue(true);
         }
         else {
-            currentplayer.setTurn(false);
+//            currentplayer.setTurn(false);
             UserTurn.postValue(false);
-            users.getValue().get("player3").setTurn(true);
+//            users.getValue().get("player3").setTurn(true);
             player3Turn.postValue(true);
         }
-//        LockArray = new String[] {"false", player};
-//        Locked.postValue(LockArray);
 
     }
 
     public void CallButtonExecute(Activity view, String player) {
-//        LockArray = new String[] {"true", player};
-//        Locked.postValue(LockArray);
 //        FirstTurn.postValue(false);
 
         User currentplayer = users.getValue().get(player);
@@ -433,26 +417,22 @@ public class gameViewModel extends ViewModel{
         }
 
         if(users.getValue().get("player2").isAlive()) {
-            currentplayer.setTurn(false);
+//            currentplayer.setTurn(false);
             UserTurn.postValue(false);
-            users.getValue().get("player2").setTurn(true);
+//            users.getValue().get("player2").setTurn(true);
             player2Turn.postValue(true);
         }
         else {
-            currentplayer.setTurn(false);
+//            currentplayer.setTurn(false);
             UserTurn.postValue(false);
-            users.getValue().get("player3").setTurn(true);
+//            users.getValue().get("player3").setTurn(true);
             player3Turn.postValue(true);
         }
-//        LockArray = new String[] {"false", player};
-//        Locked.postValue(LockArray);
 
     }
 
     //Ai Decision Making
     public void AiDecisionMakingExecute(String player){
-//        LockArray = new String[] {"true", player};
-//        Locked.postValue(LockArray);
 //        FirstTurn.postValue(false);
 
         User currentplayer = users.getValue().get(player);
@@ -508,14 +488,14 @@ public class gameViewModel extends ViewModel{
             if (player == "player2") {
 //            users.getValue().get(player).setTurn(false);
                 if (users.getValue().get("player3").isAlive()) {
-                    users.getValue().get("player2").setTurn(false);
+//                    users.getValue().get("player2").setTurn(false);
                     player2Turn.postValue(false);
-                    users.getValue().get("player3").setTurn(true);
+//                    users.getValue().get("player3").setTurn(true);
                     player3Turn.postValue(true);
                 } else {
-                    users.getValue().get("player2").setTurn(false);
+//                    users.getValue().get("player2").setTurn(false);
                     player2Turn.postValue(false);
-                    users.getValue().get("player1").setTurn(true);
+//                    users.getValue().get("player1").setTurn(true);
                     UserTurn.postValue(true);
                 }
 //
@@ -524,14 +504,14 @@ public class gameViewModel extends ViewModel{
             } else if (player == "player3") {
 //            users.getValue().get(player).setTurn(false);
                 if (users.getValue().get("player1").isAlive()) {
-                    users.getValue().get("player3").setTurn(false);
+//                    users.getValue().get("player3").setTurn(false);
                     player3Turn.postValue(false);
-                    users.getValue().get("player1").setTurn(true);
+//                    users.getValue().get("player1").setTurn(true);
                     UserTurn.postValue(true);
                 } else {
-                    users.getValue().get("player3").setTurn(false);
+//                    users.getValue().get("player3").setTurn(false);
                     player3Turn.postValue(false);
-                    users.getValue().get("player2").setTurn(true);
+//                    users.getValue().get("player2").setTurn(true);
                     player2Turn.postValue(true);
                 }
                 //TODO 다음턴설정해놓는거.... 어떻게할까 ?????ㅠㅠ
@@ -600,8 +580,7 @@ public class gameViewModel extends ViewModel{
                 */
             }
         }
-//        LockArray = new String[] {"false", player};
-//        Locked.postValue(LockArray);
+
     }
 
     public void AiDieExecute(String player) {
@@ -620,10 +599,6 @@ public class gameViewModel extends ViewModel{
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
         winnerChecker.setPlayer(player, -2);
-//        if(player.equals("player2"))
-//            winnerChecker.setPlayersMap(users.getValue().get("player1").getCardValues(), 0, users.getValue().get("player3").getCardValues());
-//        else
-//            winnerChecker.setPlayersMap(users.getValue().get("player1").getCardValues(), users.getValue().get("player2").getCardValues(), 0);
 
         //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
                 /*
@@ -638,8 +613,7 @@ public class gameViewModel extends ViewModel{
                         user3half.setVisibility(View.GONE);
                         user3die.startAnimation(blink);
                 */
-//        LockArray = new String[] {"false", player};
-//        Locked.postValue(LockArray);
+
     }
 
     public void AiCallExecute(String player) {
@@ -699,8 +673,7 @@ public class gameViewModel extends ViewModel{
             }
 
         }
-//        LockArray = new String[] {"false", player};
-//        Locked.postValue(LockArray);
+
 
     }
 
@@ -820,15 +793,10 @@ public class gameViewModel extends ViewModel{
             winnerChecker.setPlayersMap(player1CardValue, player2CardValue, player3CardValue);
         }
 
-//        if(Keys.length == 3) {
-            FirstTurn.postValue(true);
-            CallNumber.postValue(0);
-            HalfNumber.postValue(0);
-//        }
-//        else {
-//            CallNumber.postValue(0);
-//            HalfNumber.postValue(0);
-//        }
+        FirstTurn.postValue(true);
+        CallNumber.postValue(0);
+        HalfNumber.postValue(0);
+
 
         if(users.getValue().get("player1").isAlive())
             UserTurn.postValue(true);

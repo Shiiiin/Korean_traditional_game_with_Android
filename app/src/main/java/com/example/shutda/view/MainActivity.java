@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -38,7 +37,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.example.shutda.view.data.constantsField.*;
 /**
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton HalfButton;
     private ImageButton CallButton;
     private ImageButton DieButton;
-    private ImageButton button4;
+    private ImageButton Checkbutton;
     private ImageButton button5;
     private ImageButton LeaveButton;
 
@@ -158,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         HalfButton = findViewById(R.id.halfbutton);
         CallButton = findViewById(R.id.callbutton);
         DieButton = findViewById(R.id.diebutton);
-        button4 = findViewById(R.id.button4);
+        Checkbutton = findViewById(R.id.checkbutton);
         button5 = findViewById(R.id.button5);
         LeaveButton = findViewById(R.id.leavebutton);
 
@@ -299,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
                     inGame.HalfButtonExecute(MainActivity.this, "player1");
 
                     //TODO TESTSET Player2로 턴 주기/////////////////////////////////////
-                    inGame.getPlayer2Turn().postValue(true);
+//                    inGame.getPlayer2Turn().postValue(true);
 
                     buttonSetting(AllbuttonOFF);
 
@@ -321,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Call Button Click");
 
                 //TODO TESTSET Player2로 턴 주기
-                inGame.getPlayer2Turn().postValue(true);
+//                inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
 
@@ -345,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Die Button Click");
 
                 //TODO TESTSET Player2로 턴 주기
-                inGame.getPlayer2Turn().postValue(true);
+//                inGame.getPlayer2Turn().postValue(true);
 
                 buttonSetting(AllbuttonOFF);
 
@@ -355,6 +353,13 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("쓰레드 예외처리" + e);
                 }
                 //TEST 끝
+            }
+        });
+
+        Checkbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -419,9 +424,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(name + "//" + score + "///" + token_id);
 
                     //Edit Players
-                    Me = new User(name, score, true, token_id, true);
-                    Ai = new User("AI", 100000, TurnInitializing, "ALPHAGO", true);
-                    Ai2 = new User("AI2", 100000, TurnInitializing, "ALPHAGO2", true);
+                    Me = new User(name, score, token_id, true);
+                    Ai = new User("AI", 100000, "ALPHAGO", true);
+                    Ai2 = new User("AI2", 100000, "ALPHAGO2", true);
                     userMap.put("player1", Me);
                     userMap.put("player2", Ai);
                     userMap.put("player3", Ai2);
@@ -492,11 +497,7 @@ public class MainActivity extends AppCompatActivity {
                                     buttonSetting(buttons);
                                 }
                             }
-//                            else{
-////                                inGame.getUsers().getValue().get("player2").setTurn(true);
-//                                inGame.setUserTurn(false);
-//                                inGame.getPlayer2Turn().postValue(true);
-//                            }
+
                         }
                     }
                 });
@@ -506,9 +507,9 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println(inGame.getFirstTurn().getValue());
                         if(!inGame.getFirstTurn().getValue()) {
                             if (DieNumber.getValue() != null && inGame.checkEnd()) {
-                                inGame.getUsers().getValue().get("player1").setTurn(false);
-                                inGame.getUsers().getValue().get("player2").setTurn(false);
-                                inGame.getUsers().getValue().get("player3").setTurn(false);
+                                inGame.getUsers().getValue().get("player1").setAlive(false);
+                                inGame.getUsers().getValue().get("player2").setAlive(false);
+                                inGame.getUsers().getValue().get("player3").setAlive(false);
                                 inGame.setStatus(false);
                                 System.out.println(1);
                             }
@@ -520,9 +521,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onChanged(@Nullable Integer integer) {
                         if(!inGame.getFirstTurn().getValue()) {
                             if (CallNumber.getValue() != null && inGame.checkEnd()) {
-                                inGame.getUsers().getValue().get("player1").setTurn(false);
-                                inGame.getUsers().getValue().get("player2").setTurn(false);
-                                inGame.getUsers().getValue().get("player3").setTurn(false);
+                                inGame.getUsers().getValue().get("player1").setAlive(false);
+                                inGame.getUsers().getValue().get("player2").setAlive(false);
+                                inGame.getUsers().getValue().get("player3").setAlive(false);
                                 inGame.setStatus(false);
                                 System.out.println(2);
                             }
@@ -536,47 +537,6 @@ public class MainActivity extends AppCompatActivity {
                         inGame.setFirstTurn(false);
                     }
                 });
-//                Locked.observe(MainActivity.this, new Observer<String[]>() {
-//                    @Override
-//                    public void onChanged(@Nullable String[] aString) {
-//                        if (aString[0].equals("false")) {
-//                            timer = new Timer();
-//                            timer.schedule(new TimerTask() {
-//                                @Override
-//                                public void run() {
-//                                    if (aString[1].equals("player2")) {
-//                                        if (inGame.getUsers().getValue().get("player3").isAlive()) {
-//                                            inGame.getPlayer2Turn().postValue(false);
-//                                            inGame.getPlayer3Turn().postValue(true);
-//                                        } else {
-//                                            inGame.getPlayer2Turn().postValue(false);
-//                                            inGame.getUserTurn().postValue(true);
-//                                        }
-//                                    }
-//                                    else if(aString[1].equals("player3")){
-//                                        if (inGame.getUsers().getValue().get("player1").isAlive()) {
-//                                            inGame.getPlayer3Turn().postValue(false);
-//                                            inGame.getUserTurn().postValue(true);
-//                                        } else {
-//                                            inGame.getPlayer3Turn().postValue(false);
-//                                            inGame.getPlayer2Turn().postValue(true);
-//                                        }
-//                                    }
-//                                    else {
-//                                        if(inGame.getUsers().getValue().get("player2").isAlive()) {
-//                                            inGame.getUserTurn().postValue(false);
-//                                            inGame.getPlayer2Turn().postValue(true);
-//                                        }
-//                                        else {
-//                                            inGame.getUserTurn().postValue(false);
-//                                            inGame.getPlayer3Turn().postValue(true);
-//                                        }
-//                                    }
-//                                }
-//                            }, 500);
-//                        }
-//                    }
-//                });
 
 
                 //StartGame관련
@@ -655,7 +615,7 @@ public class MainActivity extends AppCompatActivity {
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
         DieButton.setEnabled(diebutton);
-        button4.setEnabled(false);
+        Checkbutton.setEnabled(false);
         button5.setEnabled(false);
         LeaveButton.setEnabled(leavebutton);
 
