@@ -34,11 +34,11 @@ public class WinnerChecker {
     public String WinnerClassifier() {
 
         String winner="";
-        System.out.println("asdfsafdasfsaf");
-        System.out.println("asdfsafdasfsaf");
+
         int player1rank = carculateCards("player1");
         int player2rank = carculateCards("player2");
         int player3rank = carculateCards("player3");
+
 
         System.out.println("player1랭크@@@" + player1rank);
         System.out.println("player2랭크@@@" + player2rank);
@@ -188,6 +188,8 @@ public class WinnerChecker {
         int sumOfCards = playersMap.get(player);
         int rank = -5;
 
+        if(sumOfCards == -2)
+            return -2;
 
         //땡부분
         if(sumOfCards == (January1+January2)){

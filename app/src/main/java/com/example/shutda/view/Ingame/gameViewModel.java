@@ -368,7 +368,8 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
-//        winnerChecker.setPlayer("player1", -2);
+        winnerChecker.setPlayer("player1", -2);
+//        winnerChecker.setPlayersMap(0, users.getValue().get("player2").getCardValues(), users.getValue().get("player3").getCardValues());
 
         if(users.getValue().get("player2").isAlive()) {
             currentplayer.setTurn(false);
@@ -618,7 +619,12 @@ public class gameViewModel extends ViewModel{
 
         currentplayer.setCard1(-1);
         currentplayer.setCard2(-1);
-//        winnerChecker.setPlayer(player, -2);
+        winnerChecker.setPlayer(player, -2);
+//        if(player.equals("player2"))
+//            winnerChecker.setPlayersMap(users.getValue().get("player1").getCardValues(), 0, users.getValue().get("player3").getCardValues());
+//        else
+//            winnerChecker.setPlayersMap(users.getValue().get("player1").getCardValues(), users.getValue().get("player2").getCardValues(), 0);
+
         //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
                 /*
 
