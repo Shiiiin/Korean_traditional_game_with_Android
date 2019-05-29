@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView user3Card1;
     private ImageView user3Card2;
 
+
+    public ImageView user1call;
+    public ImageView user1die;
+    public ImageView user1half;
     public ImageView user2call;
     public ImageView user2die;
     public ImageView user2half;
@@ -147,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
         user2Card2 = findViewById(R.id.user2Card2);
         user3Card1 = findViewById(R.id.user3Card1);
         user3Card2 = findViewById(R.id.user3Card2);
+        user1call  = findViewById(R.id.user1call);
+        user1die   = findViewById(R.id.user1die);
+        user1half  = findViewById(R.id.user1half);
         user2call  = findViewById(R.id.user2call);
         user2die   = findViewById(R.id.user2die);
         user2half  = findViewById(R.id.user2half);
@@ -839,6 +846,10 @@ public class MainActivity extends AppCompatActivity {
 
         user3Card1.setVisibility(View.GONE);
         user3Card2.setVisibility(View.INVISIBLE);
+
+        user1call.setVisibility(View.GONE);
+        user1die.setVisibility(View.GONE);
+        user1half.setVisibility(View.GONE);
 
         user2call.setVisibility(View.GONE);
         user2die.setVisibility(View.GONE);
