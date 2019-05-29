@@ -36,7 +36,7 @@
         android:text="player1name"
         app:layout_constraintEnd_toStartOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
         app:layout_constraintTop_toBottomOf="@+id/user1Card1"
         app:layout_constraintWidth_percent="0.5" />
@@ -53,10 +53,10 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toStartOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
         app:layout_constraintTop_toBottomOf="@+id/player1Name"
-        app:layout_constraintVertical_bias="0.555"
+        app:layout_constraintVertical_bias="0.529"
         app:layout_constraintWidth_percent="0.5" />
 
     <TextView
@@ -184,17 +184,11 @@
         android:id="@+id/user1Card1"
         android:layout_width="40dp"
         android:layout_height="60dp"
-        android:layout_marginStart="324dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
-        app:layout_constraintVertical_bias="0.271"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -203,9 +197,7 @@
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="316dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/player1Name"
+        android:layout_marginEnd="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintHorizontal_bias="0.0"
