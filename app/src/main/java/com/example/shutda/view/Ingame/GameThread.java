@@ -30,9 +30,6 @@ public class GameThread extends Thread {
     private LiveData<Boolean> player3Turn;
     private MainActivity mainActivity;
 
-    private User player1;
-    private User player2;
-    private User player3;
 
     public GameThread(gameViewModel viewModel, MainActivity mainActivity) {
 
