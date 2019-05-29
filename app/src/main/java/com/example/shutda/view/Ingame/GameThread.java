@@ -25,8 +25,6 @@ public class GameThread extends Thread {
     private static final String TAG = "GameThread";
 
     private gameViewModel inGame;
-    private LiveData<Boolean> gameStatus;
-
     private LiveData<Boolean> player2Turn;
     private LiveData<Boolean> player3Turn;
 
@@ -41,8 +39,6 @@ public class GameThread extends Thread {
 
         player2Turn = inGame.getPlayer2Turn();
         player3Turn = inGame.getPlayer3Turn();
-
-        gameStatus = inGame.getIngameStatus();
 
 
     }

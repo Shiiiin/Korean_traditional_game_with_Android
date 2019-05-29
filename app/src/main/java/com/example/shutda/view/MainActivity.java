@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     Animation animTransRight;
     Animation animTransLeft;
     Animation animTransAlpha;
+    GameThread gameThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,9 +223,9 @@ public class MainActivity extends AppCompatActivity {
 
         mainLoop();
 
-//        gameThread = new GameThread(inGame , MainActivity.this);
-//        gameThread.setDaemon(true);
-//        gameThread.start();
+        gameThread = new GameThread(inGame , MainActivity.this);
+        gameThread.setDaemon(true);
+        gameThread.start();
 
 
         //TODO START 부분 구현 나중에 클릭위치 바꿔야함 (유아이도)
@@ -328,7 +330,6 @@ public class MainActivity extends AppCompatActivity {
 
                 inGame.setStatus(Boolean.FALSE);
 
-
                 System.out.println("Leave Button Click");
             }
         });
@@ -343,7 +344,6 @@ public class MainActivity extends AppCompatActivity {
                     cardImageChecker(user1Card1, player1card1);
 
                     user1Card1.setEnabled(false);
-
 
                 }
             }
@@ -680,7 +680,6 @@ public class MainActivity extends AppCompatActivity {
         PopUpMessage.show();
 
 
-
         inGame.initialize();
         System.out.println("Dummy");
 
@@ -690,11 +689,10 @@ public class MainActivity extends AppCompatActivity {
 
             inGame.setStatus(Boolean.TRUE);
 
-            Handler handler = new Handler();
             //애니메이션 시작
             cardDummy1.startAnimation(animTransLeft);
 
-            handler.postDelayed(new Runnable() {
+            mhandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     cardDummy1.startAnimation(animTransRight);
@@ -704,7 +702,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             },500);
 
-            handler.postDelayed(new Runnable() {
+            mhandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     cardDummy1.startAnimation(animTransAlpha);
@@ -713,7 +711,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             },1000);
 
-            handler.postDelayed(new Runnable() {
+            mhandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     cardDummy1.startAnimation(animTransLeft);
@@ -724,7 +722,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             },1500);
 
-            handler.postDelayed(new Runnable() {
+            mhandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     cardDummy1.startAnimation(animTransRight);
@@ -735,7 +733,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             },2000);
 
-            handler.postDelayed(new Runnable() {
+            mhandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     cardDummy1.startAnimation(animTransAlpha);
@@ -744,7 +742,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             },2500);
 
-            handler.postDelayed(new Runnable() {
+            mhandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     user1Card2.setVisibility(View.VISIBLE);
@@ -752,7 +750,6 @@ public class MainActivity extends AppCompatActivity {
                     //지연시키길 원하는 밀리초 뒤에 동작
                 }
             },3000);
-
 
         }
     }

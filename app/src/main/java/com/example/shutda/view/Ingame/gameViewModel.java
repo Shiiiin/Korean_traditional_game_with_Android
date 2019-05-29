@@ -278,8 +278,6 @@ public class gameViewModel extends ViewModel{
     }
 
     public void HalfButtonExecute(Activity view, String player) {
-//        LockArray = new String[] {"true", player};
-//        Locked.postValue(LockArray);
 //        FirstTurn.postValue(false);
 
 
