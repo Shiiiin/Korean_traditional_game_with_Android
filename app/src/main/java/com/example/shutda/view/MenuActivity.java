@@ -25,11 +25,11 @@ import java.util.Map;
 public class MenuActivity extends AppCompatActivity{
 
     private long backKeyClickTime = 0;
-    private ImageButton gameStartButton;
-    private ImageButton scoreboardButton;
-    private ImageButton ruleButton;
-    private ImageButton leaveButton;
-    private ImageButton jogboButton;
+    private Button gameStartButton;
+    private Button scoreboardButton;
+    private Button ruleButton;
+    private Button leaveButton;
+    private Button jogboButton;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore mFirestore;
     private String mUserId;

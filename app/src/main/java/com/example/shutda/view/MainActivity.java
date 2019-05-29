@@ -614,6 +614,7 @@ public class MainActivity extends AppCompatActivity {
                             if(Arrays.binarySearch(rematch, Winner) <= 0) {
                                 cardDummy1.setEnabled(true);
                                 buttonSetting(onlyLeaveEnable);
+
                             }
 
                             //
