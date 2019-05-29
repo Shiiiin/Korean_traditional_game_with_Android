@@ -614,7 +614,7 @@ public class MainActivity extends AppCompatActivity {
 
         cardVisibleInitialize();
 
-        gameThread.interrupte();
+        gameThread.interrupt();
         Winner = inGame.finish();
 
         System.out.println(Winner);
