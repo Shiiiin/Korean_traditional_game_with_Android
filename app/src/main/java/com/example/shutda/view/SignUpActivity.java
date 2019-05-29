@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,8 +35,8 @@ import java.util.Map;
 public class SignUpActivity extends AppCompatActivity {
 
     private View mSignupLayout;
-    private EditText mEmailField;
-    private EditText mPasswordField;
+    private TextInputEditText mEmailField;
+    private TextInputEditText mPasswordField;
     private EditText mNameField;
     private Button mSignupButton;
     private Button mMoveToBackward;
@@ -43,7 +44,6 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDB;
     private ProgressBar mProgressBar;
-    private Context mContext;
     private InputMethodManager hiddenkeybord;
 
 
@@ -59,14 +59,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         decorView.setSystemUiVisibility(uiOptions);
 
-        mContext = this;
-
         mAuth = FirebaseAuth.getInstance();
         mDB=FirebaseFirestore.getInstance();
 
-        mSignupLayout = (ConstraintLayout) findViewById(R.id.sign_up_layout);
-        mEmailField = (EditText) findViewById(R.id.emailEditView);
-        mPasswordField= (EditText) findViewById(R.id.passwordEditView);
+        mSignupLayout =  findViewById(R.id.sign_up_layout);
+        mEmailField =  findViewById(R.id.emailEditView);
+        mPasswordField=  findViewById(R.id.passwordEditView);
         mNameField = (EditText) findViewById(R.id.nameEditView);
         mSignupButton= (Button) findViewById(R.id.confirmButton);
         mMoveToBackward = (Button) findViewById(R.id.backwardButton);
@@ -86,12 +84,9 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 name = mNameField.getText().toString();
                 email = mEmailField.getText().toString();
                 password = mPasswordField.getText().toString();
-
 
                 if(TextUtils.isEmpty(email)){
                     mEmailField.setError("이메일을 입력하세요.");
