@@ -435,7 +435,54 @@
         app:layout_constraintVertical_bias="0.019" />
 
 
+    <ImageView
+        android:id="@+id/user1call"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/call"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toStartOf="@+id/turnView"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toEndOf="@+id/jokbo"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.605" />
 
+    <ImageView
+        android:id="@+id/user1die"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/die"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toStartOf="@+id/turnView"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toEndOf="@+id/jokbo"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.605" />
+
+
+    <ImageView
+        android:id="@+id/user1half"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/half"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toStartOf="@+id/turnView"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toEndOf="@+id/jokbo"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.605" />
 
 
 </android.support.constraint.ConstraintLayout>
