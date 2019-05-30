@@ -126,36 +126,36 @@
 
         <ImageButton
             android:id="@+id/checkbutton"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
             android:layout_weight="1"
-            android:clickable="false"
-            app:srcCompat="@color/profile" />
+            android:background="@drawable/checkbuttons"
+            android:clickable="false" />
 
         <ImageButton
             android:id="@+id/callbutton"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="false"
-            app:srcCompat="@color/profile" />
+            android:background="@drawable/callbutton"
+            android:clickable="false" />
 
         <ImageButton
             android:id="@+id/halfbutton"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="false"
-            app:srcCompat="@color/profile" />
+            android:background="@drawable/halfbuttons"
+            android:clickable="false" />
 
         <ImageButton
             android:id="@+id/diebutton"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="false"
-            app:srcCompat="@color/profile" />
+            android:background="@drawable/diebuttons"
+            android:clickable="false" />
 
     </LinearLayout>
 
@@ -170,8 +170,10 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHorizontal_bias="0.076"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
+        app:layout_constraintVertical_bias="0.513"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -185,9 +187,10 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toEndOf="@+id/user1Card1"
         app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
+        app:layout_constraintVertical_bias="0.341"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -201,10 +204,10 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintHorizontal_bias="0.099"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.063"
+        app:layout_constraintVertical_bias="0.095"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -253,10 +256,10 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.923"
+        app:layout_constraintHorizontal_bias="0.922"
         app:layout_constraintStart_toStartOf="@+id/cardDummy2"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.017"
+        app:layout_constraintVertical_bias="0.026"
         app:srcCompat="@drawable/card_back_view" />
 
     <TextView
@@ -409,7 +412,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/turnView"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.02" />
 
     <ImageView
         android:id="@+id/user1call"
