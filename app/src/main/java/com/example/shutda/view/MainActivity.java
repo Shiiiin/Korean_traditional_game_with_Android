@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
     private LiveData<Integer> CallNumber;
     private LiveData<Integer> DieNumber;
     private LiveData<Integer> HalfNumber;
-    private LiveData<String[]> Locked;
-//    private LiveData<Boolean> FirstTurn;
 
     //View
     private ImageView cardDummy1;
@@ -121,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView currentBettingMoney;
     private CardView jokbo;
-    private String Winner;
     private String[] rematch = {"rematch", "rematch12", "rematch31", "rematch23"};
     private GameThread gameThread;
 
@@ -208,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
         HalfNumber = inGame.getHalfNumber();
-        Winner = "player1";
+        inGame.setFirstPlayer("player1");
 
         decorView = getWindow().getDecorView();
         uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -402,6 +399,8 @@ public class MainActivity extends AppCompatActivity {
 
                     System.out.println(name + "//" + score + "///" + token_id);
 
+                    inGame.setFirstPlayer("player1");
+
                     //Edit Players
                     Me = new User(name, score, true);
                     Ai = new User("AI", 100000, true);
@@ -469,7 +468,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Boolean aBoolean) {
 
-                        System.out.println(6);
                         if(aBoolean){
 
                             if(inGame.getUsers().getValue().get("player1").isAlive()) {
@@ -481,7 +479,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-                        System.out.println(aBoolean);
                     }
                 });
 
@@ -494,13 +491,32 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         System.out.println(inGame.getFirstTurn().getValue());
-                        if(!inGame.getFirstTurn().getValue()) {
-                            if (DieNumber.getValue() != null && inGame.checkEnd()) {
-                                inGame.getUsers().getValue().get("player1").setAlive(false);
-                                inGame.getUsers().getValue().get("player2").setAlive(false);
-                                inGame.getUsers().getValue().get("player3").setAlive(false);
-                                inGame.setStatus(false);
-                                System.out.println(1);
+                        if(inGame.getCallNumber().getValue() != 0) {
+                            if (inGame.getFirstTurn().getValue()) {
+                                if (DieNumber.getValue() != null && inGame.checkEnd()) {
+                                    if (DieNumber.getValue() == 2) {
+                                        inGame.getUsers().getValue().get("player1").setAlive(false);
+                                        inGame.getUsers().getValue().get("player2").setAlive(false);
+                                        inGame.getUsers().getValue().get("player3").setAlive(false);
+                                        inGame.setStatus(false);
+                                        System.out.println("Callnum 1");
+                                    } else {
+                                        inGame.getUsers().getValue().get("player1").setEnableClickCheckButton(true);
+                                        inGame.setHalfNumber(0);
+                                        inGame.setCallNumber(0);
+                                        inGame.setFirstTurn(false);
+                                        inGame.setEnableCheck(true);
+                                        System.out.println("Callnum 2");
+                                    }
+                                }
+                            } else {
+                                if (DieNumber.getValue() != null && inGame.checkEnd()) {
+                                    inGame.getUsers().getValue().get("player1").setAlive(false);
+                                    inGame.getUsers().getValue().get("player2").setAlive(false);
+                                    inGame.getUsers().getValue().get("player3").setAlive(false);
+                                    inGame.setStatus(false);
+                                    System.out.println("Callnum 3");
+                                }
                             }
                         }
                     }
@@ -508,13 +524,33 @@ public class MainActivity extends AppCompatActivity {
                 DieNumber.observe(MainActivity.this, new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
-                        if(!inGame.getFirstTurn().getValue()) {
-                            if (CallNumber.getValue() != null && inGame.checkEnd()) {
-                                inGame.getUsers().getValue().get("player1").setAlive(false);
-                                inGame.getUsers().getValue().get("player2").setAlive(false);
-                                inGame.getUsers().getValue().get("player3").setAlive(false);
-                                inGame.setStatus(false);
-                                System.out.println(2);
+                        System.out.println(inGame.getFirstTurn().getValue());
+                        if(inGame.getDieNumber().getValue() != 0) {
+                            if (inGame.getFirstTurn().getValue()) {
+                                if (CallNumber.getValue() != null && inGame.checkEnd()) {
+                                    if (DieNumber.getValue() == 2) {
+                                        inGame.getUsers().getValue().get("player1").setAlive(false);
+                                        inGame.getUsers().getValue().get("player2").setAlive(false);
+                                        inGame.getUsers().getValue().get("player3").setAlive(false);
+                                        inGame.setStatus(false);
+                                        System.out.println("Dienum 1");
+                                    } else {
+                                        inGame.getUsers().getValue().get("player1").setEnableClickCheckButton(true);
+                                        inGame.setHalfNumber(0);
+                                        inGame.setCallNumber(0);
+                                        inGame.setFirstTurn(false);
+                                        inGame.setEnableCheck(true);
+                                        System.out.println("Dienum 2");
+                                    }
+                                }
+                            } else {
+                                if (DieNumber.getValue() != null && inGame.checkEnd()) {
+                                    inGame.getUsers().getValue().get("player1").setAlive(false);
+                                    inGame.getUsers().getValue().get("player2").setAlive(false);
+                                    inGame.getUsers().getValue().get("player3").setAlive(false);
+                                    inGame.setStatus(false);
+                                    System.out.println("Dienum 3");
+                                }
                             }
                         }
                     }
@@ -523,7 +559,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         inGame.setCallNumber(0);
-                        inGame.setFirstTurn(false);
                     }
                 });
 
@@ -538,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
                             //시작버튼 꺼주고
                             cardDummy1.setEnabled(false);
 
-                            inGame.execute(MainActivity.this, Winner);
+                            inGame.execute(MainActivity.this);
                             System.out.println("gamestatus true");
 
                         }
@@ -599,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
         DieButton.setEnabled(diebutton);
         Checkbutton.setEnabled(checkbutton);
 
-        System.out.println("Check "+ callbutton +" , CALL "+ callbutton +" , HALF "+ halfbutton +", DIE "+ diebutton);
+        System.out.println("CHECK "+ checkbutton +" , CALL "+ callbutton +" , HALF "+ halfbutton +", DIE "+ diebutton);
     }
 
 
@@ -615,13 +650,13 @@ public class MainActivity extends AppCompatActivity {
         cardVisibleInitialize();
 
         gameThread.interrupte();
-        Winner = inGame.finish();
+        inGame.setFirstPlayer(inGame.finish());
 
-        System.out.println(Winner);
+        System.out.println(inGame.getFirstPlayer().getValue());
 
-        if(Arrays.binarySearch(rematch, Winner) <= 0) {
+        if(Arrays.binarySearch(rematch, inGame.getFirstPlayer().getValue()) <= 0) {
             cardDummy1.setEnabled(true);
-            buttonSetting(onlyLeaveEnable);
+            buttonSetting(AllbuttonOFF);
         }
 
         retry.setOnClickListener(new View.OnClickListener(){

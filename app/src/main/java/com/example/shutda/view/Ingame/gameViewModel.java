@@ -43,7 +43,8 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
     private MutableLiveData<Boolean> FirstTurn = new MutableLiveData<>();
-    private MutableLiveData<String[]> Locked = new MutableLiveData<>();
+    private MutableLiveData<String> FirstPlayer = new MutableLiveData<>();
+    private MutableLiveData<Boolean> EnableCheck = new MutableLiveData<>();
 
     public LiveData<HashMap<String, User>> getUsers(){ return users;}
     public LiveData<Boolean> getIngameStatus(){ return statement; }
@@ -59,11 +60,12 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getDieNumber() { return DieNumber;  }
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
     public MutableLiveData<Boolean> getFirstTurn() { return FirstTurn; }
+    public MutableLiveData<String> getFirstPlayer() { return FirstPlayer; }
+    public MutableLiveData<Boolean> getEnableCheck() { return EnableCheck; }
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
     private WinnerChecker winnerChecker;
-    private Boolean EnableCheck;
     private int CheckNumber;
 
     public void setUsers(HashMap<String, User> user){
@@ -82,11 +84,19 @@ public class gameViewModel extends ViewModel{
 
     public void setCallNumber(int callNumber) { CallNumber.postValue(callNumber); }
 
+    public void setDieNumber(int dieNumber) { DieNumber.postValue(dieNumber); }
+
+    public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
+
     public void setFirstTurn(Boolean firstTurn) { FirstTurn.postValue(firstTurn); }
 
-    public void execute(Context context, String Winner) {
+    public void setFirstPlayer(String firstPlayer) { FirstPlayer.postValue(firstPlayer); }
 
-        switch (Winner){
+    public void setEnableCheck(Boolean enableCheck) { EnableCheck.postValue(enableCheck); }
+
+    public void execute(Context context) {
+
+        switch (FirstPlayer.getValue()){
             case "player1":
                 UserTurn.postValue(true);
                 break;
@@ -102,7 +112,6 @@ public class gameViewModel extends ViewModel{
      public String finish() {
 
          System.out.println("finish");
-         CheckNumber = 0;
 
          UserTurn.postValue(false);
          player2Turn.postValue(false);
@@ -122,7 +131,8 @@ public class gameViewModel extends ViewModel{
 
          CardShuffling();
          System.out.println("카드시작");
-         EnableCheck = true;
+         EnableCheck.postValue(true);
+         CheckNumber = 0;
 
          for (int i = 1; i <= users.getValue().size(); i++) {
              String key = "player" + i;
@@ -165,7 +175,8 @@ public class gameViewModel extends ViewModel{
         user3Card2.setVisibility(View.INVISIBLE);
         user2call.setVisibility(View.GONE);
         user2die.setVisibility(View.GONE);
-        user2half.setVisibility(View.GONE);
+        user2half.setVisibility(View.G         CallNumber.postValue(0);
+ONE);
         user3call.setVisibility(View.GONE);
         user3die.setVisibility(View.GONE);
         user3half.setVisibility(View.GONE);
@@ -237,7 +248,8 @@ public class gameViewModel extends ViewModel{
     }
 
     public void HalfButtonExecute(Activity view, String player) {
-        EnableCheck = false;
+        EnableCheck.postValue(false);
+        FirstPlayer.postValue(player);
 
         User currentplayer = users.getValue().get(player);
 
@@ -292,7 +304,7 @@ public class gameViewModel extends ViewModel{
     }
 
     public void DieButtonExecute(Activity view, String player) {
-        EnableCheck = false;
+        EnableCheck.postValue(false);
 
         User currentplayer = users.getValue().get(player);
 
@@ -377,7 +389,7 @@ public class gameViewModel extends ViewModel{
     }
 
     public void CheckButtonExecute(Activity view, String player) {
-        EnableCheck = false;
+        EnableCheck.postValue(false);
         CheckNumber = 1;
 
         User currentplayer = users.getValue().get(player);
@@ -398,9 +410,9 @@ public class gameViewModel extends ViewModel{
 
         //Ai Decision Making
     public void AiDecisionMakingExecute(String player){
-        if(EnableCheck) {
+        if(EnableCheck.getValue()) {
             users.getValue().get("player1").setEnableClickCheckButton(false);
-            users.getValue().get("player1").setEnableClickCheckButton(false);
+            users.getValue().get("player1").setEnableClickCallButton(true);
         }
 
         User currentplayer = users.getValue().get(player);
@@ -420,7 +432,7 @@ public class gameViewModel extends ViewModel{
                 AiHalfExecute(player);
             }
             else if(RandomNum >= 0.6 && RandomNum < 0.85) { //25%
-                if(EnableCheck){
+                if(EnableCheck.getValue()){
                     AiCheckExecute(player);
                 }
                 else {
@@ -436,8 +448,8 @@ public class gameViewModel extends ViewModel{
             if(RandomNum >= 0 && RandomNum < 0.4) { //40%
                 AiHalfExecute(player);
             }
-            else if(EnableCheck) { //30%
-                if(FirstTurn.getValue()){
+            else if(RandomNum >= 0.4 && RandomNum < 0.7) { //30%
+                if(EnableCheck.getValue()){
                     AiCheckExecute(player);
                 }
                 else {
@@ -453,8 +465,8 @@ public class gameViewModel extends ViewModel{
             if(RandomNum >= 0 && RandomNum < 0.2) { //20%
                 AiHalfExecute(player);
             }
-            else if(EnableCheck) { //35%
-                if(FirstTurn.getValue()){
+            else if(RandomNum >= 0.2 && RandomNum < 0.55) { //35%
+                if(EnableCheck.getValue()){
                     AiCheckExecute(player);
                 }
                 else {
@@ -490,10 +502,11 @@ public class gameViewModel extends ViewModel{
             }
         }
 
-        EnableCheck = false;
+        EnableCheck.postValue(false);
     }
 
     public void AiHalfExecute(String player) {
+        FirstPlayer.postValue(player);
 
         System.out.println("@@@@ Thread  " + player + "  Half 실행 @@@@");
 
@@ -773,8 +786,8 @@ public class gameViewModel extends ViewModel{
         }
 
         FirstTurn.postValue(true);
-        CallNumber.postValue(0);
         HalfNumber.postValue(0);
+        CallNumber.postValue(0);
 
 
         if(users.getValue().get("player1").isAlive())

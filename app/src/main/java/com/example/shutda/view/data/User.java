@@ -71,6 +71,10 @@ public class User {
         EnableClickCheckButton = checkButton;
     }
 
+    public void setEnableClickCallButton(boolean callButton) {
+        EnableClickCallButton = callButton;
+    }
+
     public void setButtonClickEnable(boolean checkbutton, boolean callbutton, boolean halfbutton, boolean diebutton){
 
         this.EnableClickCheckButton = checkbutton;
