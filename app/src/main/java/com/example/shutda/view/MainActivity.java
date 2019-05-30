@@ -45,7 +45,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Timer;
 
 import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.*;
@@ -205,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
         HalfNumber = inGame.getHalfNumber();
-        inGame.setFirstPlayer("player1");
+//        inGame.setFirstPlayer("player1");
 
         decorView = getWindow().getDecorView();
         uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -399,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
                     System.out.println(name + "//" + score + "///" + token_id);
 
-                    inGame.setFirstPlayer("player1");
+                    inGame.setWinner("player1");
 
                     //Edit Players
                     Me = new User(name, score, true);
@@ -650,12 +649,9 @@ public class MainActivity extends AppCompatActivity {
         cardVisibleInitialize();
 
         gameThread.interrupte();
-        inGame.setFirstPlayer(inGame.finish());
+        inGame.finish();
 
-        System.out.println(inGame.getFirstPlayer().getValue());
-
-        if(Arrays.binarySearch(rematch, inGame.getFirstPlayer().getValue()) <= 0) {
-            cardDummy1.setEnabled(true);
+        if(Arrays.binarySearch(rematch, inGame.getWinner().getValue()) <= 0) {
             buttonSetting(AllbuttonOFF);
         }
 

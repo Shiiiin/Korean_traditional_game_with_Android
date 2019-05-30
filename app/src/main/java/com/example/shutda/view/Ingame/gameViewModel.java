@@ -43,7 +43,7 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
     private MutableLiveData<Boolean> FirstTurn = new MutableLiveData<>();
-    private MutableLiveData<String> FirstPlayer = new MutableLiveData<>();
+    private MutableLiveData<String> Winner = new MutableLiveData<>();
     private MutableLiveData<Boolean> EnableCheck = new MutableLiveData<>();
 
     public LiveData<HashMap<String, User>> getUsers(){ return users;}
@@ -60,8 +60,7 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getDieNumber() { return DieNumber;  }
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
     public MutableLiveData<Boolean> getFirstTurn() { return FirstTurn; }
-    public MutableLiveData<String> getFirstPlayer() { return FirstPlayer; }
-    public MutableLiveData<Boolean> getEnableCheck() { return EnableCheck; }
+    public MutableLiveData<String> getWinner() { return Winner; }
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
@@ -84,19 +83,17 @@ public class gameViewModel extends ViewModel{
 
     public void setCallNumber(int callNumber) { CallNumber.postValue(callNumber); }
 
-    public void setDieNumber(int dieNumber) { DieNumber.postValue(dieNumber); }
-
     public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
 
     public void setFirstTurn(Boolean firstTurn) { FirstTurn.postValue(firstTurn); }
 
-    public void setFirstPlayer(String firstPlayer) { FirstPlayer.postValue(firstPlayer); }
+    public void setWinner(String winner) { Winner.postValue(winner); }
 
     public void setEnableCheck(Boolean enableCheck) { EnableCheck.postValue(enableCheck); }
 
     public void execute(Context context) {
 
-        switch (FirstPlayer.getValue()){
+        switch (Winner.getValue()){
             case "player1":
                 UserTurn.postValue(true);
                 break;
@@ -109,7 +106,7 @@ public class gameViewModel extends ViewModel{
         }
     }
 
-     public String finish() {
+     public void finish() {
 
          System.out.println("finish");
 
@@ -121,9 +118,8 @@ public class gameViewModel extends ViewModel{
          System.out.println(player3Turn.getValue());
 
          //Reset All Data apart from Name & Score
-         String winner = checkWinner(); //돈가산
+         checkWinner(); //돈가산
 
-         return winner;
      }
 
 
@@ -164,9 +160,9 @@ public class gameViewModel extends ViewModel{
          }
 
          MaxPlayerBattingScore = 0;
-         CallNumber.postValue(0);
-         DieNumber.postValue(0);
+//         CallNumber.postValue(0);
          HalfNumber.postValue(0);
+         DieNumber.postValue(0);
 
          //TODO 시작 할 때 모든 이미지 제거 (이런식으로)
          /*user2Card1.setVisibility(View.INVISIBLE);
@@ -249,7 +245,6 @@ ONE);
 
     public void HalfButtonExecute(Activity view, String player) {
         EnableCheck.postValue(false);
-        FirstPlayer.postValue(player);
 
         User currentplayer = users.getValue().get(player);
 
@@ -506,7 +501,6 @@ ONE);
     }
 
     public void AiHalfExecute(String player) {
-        FirstPlayer.postValue(player);
 
         System.out.println("@@@@ Thread  " + player + "  Half 실행 @@@@");
 
@@ -669,11 +663,12 @@ ONE);
     }
 
 
-        public String checkWinner() {
+        public void checkWinner() {
 
         System.out.println("checkwinner");
 
         String Winner = winnerChecker.WinnerClassifier();
+        setWinner(Winner);
         System.out.println(Winner);
 
         switch(Winner) {
@@ -719,7 +714,6 @@ ONE);
                 break;
         }
 
-        return Winner;
     }
 
     public void uploadScoreToFirestore(DocumentReference database){
@@ -787,7 +781,7 @@ ONE);
 
         FirstTurn.postValue(true);
         HalfNumber.postValue(0);
-        CallNumber.postValue(0);
+//        CallNumber.postValue(0);
 
 
         if(users.getValue().get("player1").isAlive())
