@@ -1,7 +1,10 @@
 package com.example.shutda.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +32,22 @@ public class MenuActivity extends AppCompatActivity{
 
     private View decorView;
     private int uiOptions;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+
+        if(firebaseAuth.getCurrentUser() != null & isNetworkConnected() == false){
+
+            firebaseAuth.signOut();
+//            Snackbar.make(MenuActivity,"네트워크에 연결되어있지 않습니다..ㅋㅋ;",Snackbar.LENGTH_INDEFINITE).show();
+            sendBack();
+        }
+
+
+    }
 
     @Override
     protected void onResume() {
@@ -141,8 +160,6 @@ public class MenuActivity extends AppCompatActivity{
 
   public void BackPressed2Login() {
 
-
-
         if (System.currentTimeMillis() > backKeyClickTime + 2000) { backKeyClickTime = System.currentTimeMillis();
             Toast.makeText(MenuActivity.this, "뒤로가기 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
             return; }
@@ -165,6 +182,13 @@ public class MenuActivity extends AppCompatActivity{
             });
 
         }
+    }
+
+    private boolean isNetworkConnected(){
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
 }

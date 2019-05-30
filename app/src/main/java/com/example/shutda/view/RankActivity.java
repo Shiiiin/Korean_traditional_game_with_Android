@@ -32,6 +32,11 @@ public class RankActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private BackPressCloseHandler backPressCloseHandler;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateRankList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -421,6 +421,7 @@ public class WinnerChecker {
         }
 
         System.out.print(player +"패 계산끝...!!!");
+
         return rank;
 
     }
