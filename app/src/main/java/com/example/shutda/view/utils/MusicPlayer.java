@@ -75,6 +75,7 @@ public class MusicPlayer {
 
         public void MusicTurnOff(){
             soundPool.release();
+            soundPool.autoPause();
             soundPool = null;
         }
 

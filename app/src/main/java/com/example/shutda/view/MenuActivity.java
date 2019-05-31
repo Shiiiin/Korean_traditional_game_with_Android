@@ -38,7 +38,7 @@ public class MenuActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MusicPlayer.getInstance(MenuActivity.this).MusicTurnOff();
+
         firebaseAuth.signOut();
     }
 
@@ -47,7 +47,6 @@ public class MenuActivity extends AppCompatActivity{
         super.onStart();
 
         if(firebaseAuth.getCurrentUser() != null & isNetworkConnected() == false){
-
             firebaseAuth.signOut();
             sendBack();
         }
@@ -155,6 +154,8 @@ public class MenuActivity extends AppCompatActivity{
     }
 
     private void sendBack() {
+
+        MusicPlayer.getInstance(MenuActivity.this).MusicTurnOff();
         Intent loginIntent = new Intent(MenuActivity.this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
@@ -176,11 +177,10 @@ public class MenuActivity extends AppCompatActivity{
             return; }
         if (System.currentTimeMillis() <= backKeyClickTime + 2000) {
 
-            mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
+                mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
                 public void onSuccess(Void aVoid) {
                         firebaseAuth.signOut();
-//                        MusicPlayer.getInstance(MenuActivity.this).MusicTurnOff();
                         sendBack();
                 }
             }).addOnFailureListener(new OnFailureListener() {
