@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -26,15 +27,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
 import com.example.shutda.view.Ingame.GameThread;
+import com.example.shutda.view.Ingame.TaskQueue;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
+import com.example.shutda.view.utils.MusicPlayer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +45,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.example.shutda.view.data.DummyCards.*;
@@ -53,6 +54,7 @@ import static com.example.shutda.view.data.constantsField.*;
  * status bar and navigation/system bar) with user interaction.
  */
 public class MainActivity extends AppCompatActivity {
+
 
     private View mainframe;
 
@@ -92,18 +94,16 @@ public class MainActivity extends AppCompatActivity {
     private ImageView user3Card1;
     private ImageView user3Card2;
 
+    private ImageView user1half;
+    private ImageView user1call;
+    private ImageView user1die;
+    private ImageView user2call;
+    private ImageView user2die;
+    private ImageView user2half;
+    private ImageView user3call;
+    private ImageView user3die;
+    private ImageView user3half;
 
-    public ImageView user1call;
-    public ImageView user1die;
-    public ImageView user1half;
-    public ImageView user2call;
-    public ImageView user2die;
-    public ImageView user2half;
-    public ImageView user3call;
-    public ImageView user3die;
-    public ImageView user3half;
-
-    private LinearLayout buttonLayout;
     private ImageButton HalfButton;
     private ImageButton CallButton;
     private ImageButton DieButton;
@@ -117,25 +117,200 @@ public class MainActivity extends AppCompatActivity {
     private TextView player3ScoreTextView;
 
     private TextView currentBettingMoney;
+
     private CardView jokbo;
-    private String[] rematch = {"rematch", "rematch12", "rematch31", "rematch23"};
+
     private GameThread gameThread;
 
     private View decorView;
     private int uiOptions;
 
     //애니메이션 이름 설정
-    final Handler mhandler = new Handler();
+
     Animation animTransRight;
     Animation animTransLeft;
     Animation animTransAlpha;
+    Animation blink;
 
+    public static Handler mhandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         inGame = ViewModelProviders.of(this).get(gameViewModel.class);
+
+        MusicPlayer mp = MusicPlayer.getInstance(this);
+
+        mhandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+
+                if(msg.what == 1){
+
+                    cardDummy1.startAnimation(animTransAlpha);
+
+                    System.out.println("!!!!!!!!!1");
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransAlpha);
+                            user1Card1.setVisibility(View.VISIBLE);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user1Card2.setVisibility(View.VISIBLE);
+                            TaskQueue.TaskFinishCallback();
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);
+                }
+                if(msg.what == 2){
+                    System.out.println("!!!!!!!!!2");
+                    cardDummy1.startAnimation(animTransLeft);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransLeft);
+                            user2Card1.setVisibility(View.VISIBLE);
+
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user2Card2.setVisibility(View.VISIBLE);
+                            TaskQueue.TaskFinishCallback();
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);
+
+
+                }
+                if(msg.what == 3){
+                    System.out.println("!!!!!!!!!3");
+                    cardDummy1.startAnimation(animTransRight);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cardDummy1.startAnimation(animTransRight);
+                            user3Card1.setVisibility(View.VISIBLE);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+
+
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user3Card2.setVisibility(View.VISIBLE);
+                            TaskQueue.TaskFinishCallback();
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);
+                }
+                if(msg.what == 21){
+                    //check
+                    mp.checksound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    },ReactionSpeed);
+                }
+                if(msg.what == 22){
+                    //Call
+                    mp.callsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user2call);
+                        }
+                    },ReactionSpeed);
+
+
+                }
+                if(msg.what == 23){
+                    //Half
+                    mp.halfsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user2half);
+                        }
+                    },ReactionSpeed);
+
+
+                }
+                if(msg.what == 24){
+                    //Die
+                    mp.diesound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user2die);
+                        }
+                    },ReactionSpeed);
+
+
+                }
+                if(msg.what == 31){
+                    //check
+                    mp.checksound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    },ReactionSpeed);
+                }
+                if(msg.what == 32){
+                    //Call
+                    mp.callsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user3call);
+                        }
+                    },ReactionSpeed);
+
+                }
+                if(msg.what == 33){
+                    //Half
+                    mp.halfsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user3half);
+                        }
+                    },ReactionSpeed);
+
+                }
+                if(msg.what == 34){
+                    //Die
+                    mp.diesound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user3die);
+                        }
+                    },ReactionSpeed);
+
+                }
+            }
+        };
 
         mainframe = findViewById(R.id.main_frame);
 
@@ -147,9 +322,11 @@ public class MainActivity extends AppCompatActivity {
         user2Card2 = findViewById(R.id.user2Card2);
         user3Card1 = findViewById(R.id.user3Card1);
         user3Card2 = findViewById(R.id.user3Card2);
-        user1call  = findViewById(R.id.user1call);
-        user1die   = findViewById(R.id.user1die);
-        user1half  = findViewById(R.id.user1half);
+
+        user1half = findViewById(R.id.user1half);
+        user1call = findViewById(R.id.user1call);
+        user1die  = findViewById(R.id.user1die);
+
         user2call  = findViewById(R.id.user2call);
         user2die   = findViewById(R.id.user2die);
         user2half  = findViewById(R.id.user2half);
@@ -159,15 +336,14 @@ public class MainActivity extends AppCompatActivity {
 
         cardVisibleInitialize();
 
-
         animTransRight = AnimationUtils.loadAnimation(
                 this,R.anim.giveright);
         animTransLeft = AnimationUtils.loadAnimation(
                 this,R.anim.giveleft);
         animTransAlpha = AnimationUtils.loadAnimation(
                 this,R.anim.giveme);
+        blink = AnimationUtils.loadAnimation(this, R.anim.blink);
 
-        buttonLayout = findViewById(R.id.button_layout);
         HalfButton = findViewById(R.id.halfbutton);
         CallButton = findViewById(R.id.callbutton);
         DieButton = findViewById(R.id.diebutton);
@@ -181,7 +357,6 @@ public class MainActivity extends AppCompatActivity {
         player3ScoreTextView = findViewById(R.id.player3Score);
 
         currentBettingMoney = findViewById(R.id.currentBettingMoneyText);
-        jokbo = findViewById(R.id.jokbo);
 
         mDB = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -204,13 +379,11 @@ public class MainActivity extends AppCompatActivity {
         CallNumber = inGame.getCallNumber();
         DieNumber = inGame.getDieNumber();
         HalfNumber = inGame.getHalfNumber();
-//        inGame.setFirstPlayer("player1");
 
         decorView = getWindow().getDecorView();
         uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
-
 
         decorView.setSystemUiVisibility(uiOptions);
 
@@ -246,7 +419,14 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.HalfButtonExecute(MainActivity.this, "player1");
 
-                    ReactDecision(user2half);
+
+                    mp.halfsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user1half);
+                        }
+                    },ReactionSpeed);
 
                     buttonSetting(AllbuttonOFF);
 
@@ -267,7 +447,14 @@ public class MainActivity extends AppCompatActivity {
                inGame.CallButtonExecute(MainActivity.this, "player1");
                 System.out.println("Call Button Click");
 
-                ReactDecision(user2call);
+                mp.callsound();
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ReactDecision(user1call);
+                    }
+                },ReactionSpeed);
+
 
                 buttonSetting(AllbuttonOFF);
 
@@ -283,7 +470,14 @@ public class MainActivity extends AppCompatActivity {
 
                 System.out.println("Die Button Click");
 
-                ReactDecision(user2die);
+                mp.diesound();
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ReactDecision(user1die);
+                    }
+                },ReactionSpeed);
+
 
                 //죽었으니까 패 뒤집어주기
                 user1Card1.setImageResource(R.drawable.card_back_view);
@@ -296,10 +490,19 @@ public class MainActivity extends AppCompatActivity {
         Checkbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inGame.CheckButtonExecute(MainActivity.this, "player1");
+
+                mp.checksound();
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        inGame.CheckButtonExecute(MainActivity.this, "player1");
+                    }
+                },ReactionSpeed);
+
                 System.out.println("Check Button Click");
                 buttonSetting(AllbuttonOFF);
             }
+
         });
 
         user1Card1.setOnClickListener(new View.OnClickListener() {
@@ -335,21 +538,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
-    private void ReactDecision(ImageView image) {
+    public void ReactDecision(ImageView image) {
 
         image.setVisibility(View.VISIBLE);
+        image.startAnimation(blink);
 
-        mhandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        if(image != user1die & image != user2die & image != user3die){
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-                image.setVisibility(View.GONE);
+                        image.setVisibility(View.GONE);
 
-            }
-        },1100);
+                    }
+                },1100);
+        }
+
     }
 
 
@@ -368,7 +574,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        backPressCloseHandler.onBackPressed();
+        if(gameStatus.getValue()){
+            Toast.makeText(MainActivity.this, "게임도중에 나갈수 없어요!", Toast.LENGTH_LONG).show();
+        }
+        if(!gameStatus.getValue()){
+            backPressCloseHandler.onBackPressed();
+        }
+
     }
 
     private void sendBack() {
@@ -471,6 +683,8 @@ public class MainActivity extends AppCompatActivity {
 
                             if(inGame.getUsers().getValue().get("player1").isAlive()) {
                                 if (inGame.getUsers().getValue().get("player2").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
+                                    user1Card1.setEnabled(true);
+                                    user1Card2.setEnabled(true);
                                     Boolean[] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
                                     buttonSetting(buttons);
                                 }
@@ -579,14 +793,54 @@ public class MainActivity extends AppCompatActivity {
 
                         if (!aBoolean) {
 
+                            boolean player1die = inGame.getUsers().getValue().get("player1").getCardValues() == -2;
+                            boolean player2die = inGame.getUsers().getValue().get("player2").getCardValues() == -2;
+                            boolean player3die = inGame.getUsers().getValue().get("player3").getCardValues() == -2;
+
+                            System.out.println("@@@1@@@"+player1die);
+                            System.out.println("@@@2@@@"+player2die);
+                            System.out.println("@@@3@@@"+player3die);
+
+                            //Dialog에서 처리 관할
+
+                            mhandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(!player1die){
+                                        int player1card1 = inGame.getUsers().getValue().get("player1").getCard1();
+                                        int player1card2 = inGame.getUsers().getValue().get("player1").getCard2();
+                                        cardImageChecker(user1Card1, player1card1);
+                                        cardImageChecker(user1Card2, player1card2);
+                                    }
+                                    if(!player2die){
+                                        int player2card1 = inGame.getUsers().getValue().get("player2").getCard1();
+                                        int player2card2 = inGame.getUsers().getValue().get("player2").getCard2();
+                                        cardImageChecker(user2Card1, player2card1);
+                                        cardImageChecker(user2Card2, player2card2);
+                                    }
+                                    if(!player3die){
+                                        int player3card1 = inGame.getUsers().getValue().get("player3").getCard1();
+                                        int player3card2 = inGame.getUsers().getValue().get("player3").getCard2();
+                                        cardImageChecker(user3Card1, player3card1);
+                                        cardImageChecker(user3Card2, player3card2);
+                                    }
+                                }
+                            },1000);
+
+
+
                             System.out.println("Statement 종료");
 
                             //Update player score on Firestore
                             inGame.uploadScoreToFirestore(currentUser);
 
-                            //Dialog에서 처리 관할
-                            GameEnd(MainActivity.this);
-
+                            //사용자가 결과 확인할수 있게 기다려줌
+                            mhandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    GameEnd(MainActivity.this);
+                                }
+                            },5000);
                         }
                     }
                 });
@@ -608,7 +862,6 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(mainframe, "사용자 정보를 불러올수 없습니다.", BaseTransientBottomBar.LENGTH_INDEFINITE);
             }
         });
-
     }
 
     @Override
@@ -618,7 +871,6 @@ public class MainActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
-    //TESTSETESTSET
     public void buttonSetting(Boolean [] buttonset) {
 
         System.out.println("활성화 버튼 변경!");
@@ -628,54 +880,60 @@ public class MainActivity extends AppCompatActivity {
         boolean halfbutton = buttonset[2];
         boolean diebutton = buttonset[3];
 
+        Checkbutton.setEnabled(checkbutton);
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
         DieButton.setEnabled(diebutton);
-        Checkbutton.setEnabled(checkbutton);
+
 
         System.out.println("CHECK "+ checkbutton +" , CALL "+ callbutton +" , HALF "+ halfbutton +", DIE "+ diebutton);
     }
 
 
     public void GameEnd(Activity view){
+
         Button retry;
         Button quitGame;
-
         retry = PopUpMessage.findViewById(R.id.retryGame);
         quitGame = PopUpMessage.findViewById(R.id.quitGame);
 
-        PopUpMessage.show();
-
         cardVisibleInitialize();
 
-        gameThread.interrupte();
+        gameThread.interrupt();
+
         inGame.finish();
 
-        if(Arrays.binarySearch(rematch, inGame.getWinner().getValue()) <= 0) {
-            buttonSetting(AllbuttonOFF);
-        }
+        System.out.println(inGame.getWinner().getValue());
 
-        retry.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
+        System.out.println(inGame.getWinner().getValue().contains("rematch") + "+++++++" + inGame.getWinner().getValue());
+
+        if(!inGame.getWinner().getValue().contains("rematch")) {
+
+            PopUpMessage.show();
+
+            retry.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
 
                     PopUpMessage.dismiss();
 
                     decorView.setSystemUiVisibility(uiOptions);
                     start();
 
-            }
-        });
+                }
+            });
 
-        quitGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            quitGame.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
                     PopUpMessage.dismiss();
                     finish();
 
-            }
-        });
+                }
+            });
+        }
+
     }
 
     public void start(){
@@ -683,6 +941,7 @@ public class MainActivity extends AppCompatActivity {
         inGame.setFirstTurn(true);
 
         inGame.initialize();
+
         System.out.println("Dummy");
 
         if (inGame.BaseBettingExecute(MainActivity.this, basedBettingMoney)) {
@@ -752,7 +1011,6 @@ public class MainActivity extends AppCompatActivity {
                     //지연시키길 원하는 밀리초 뒤에 동작
                 }
             },3000);
-
 
         }
     }
@@ -834,10 +1092,14 @@ public class MainActivity extends AppCompatActivity {
         user1Card2.setEnabled(false);
         user1Card2.setVisibility(View.GONE);
 
+        user2Card1.setImageResource(R.drawable.card_back_view);
         user2Card1.setVisibility(View.INVISIBLE);
+        user2Card2.setImageResource(R.drawable.card_back_view);
         user2Card2.setVisibility(View.GONE);
 
+        user3Card1.setImageResource(R.drawable.card_back_view);
         user3Card1.setVisibility(View.GONE);
+        user3Card2.setImageResource(R.drawable.card_back_view);
         user3Card2.setVisibility(View.INVISIBLE);
 
         user1call.setVisibility(View.GONE);
