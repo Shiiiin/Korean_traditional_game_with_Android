@@ -107,10 +107,8 @@
 
     <LinearLayout
         android:id="@+id/button_layout"
-        android:layout_width="450dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@id/main_frame"
@@ -121,8 +119,7 @@
         <ImageButton
             android:id="@+id/checkbutton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="false"
             app:srcCompat="@drawable/checkbuttons" />
