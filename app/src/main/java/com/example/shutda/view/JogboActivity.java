@@ -19,13 +19,11 @@ public class JogboActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<JogboData> jogboDataset;
-    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jogbo);
-        backPressCloseHandler = new BackPressCloseHandler(JogboActivity.this);
 
         final View decorView = getWindow().getDecorView();
         final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -40,7 +38,6 @@ public class JogboActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
 
         jogboDataset = new ArrayList<>();
         mAdapter = new JogboAdapter(jogboDataset);
@@ -60,8 +57,4 @@ public class JogboActivity extends AppCompatActivity {
         jogboDataset.add(new JogboData("12. 멍텅구리", R.drawable.meongteong));
     }
 
-    @Override
-    public void onBackPressed() {
-        backPressCloseHandler.onBackPressed();
-    }
 }

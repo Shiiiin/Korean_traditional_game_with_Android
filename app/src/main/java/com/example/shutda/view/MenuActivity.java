@@ -49,7 +49,6 @@ public class MenuActivity extends AppCompatActivity{
         if(firebaseAuth.getCurrentUser() != null & isNetworkConnected() == false){
 
             firebaseAuth.signOut();
-//            Snackbar.make(MenuActivity,"네트워크에 연결되어있지 않습니다..ㅋㅋ;",Snackbar.LENGTH_INDEFINITE).show();
             sendBack();
         }
 
@@ -139,9 +138,10 @@ public class MenuActivity extends AppCompatActivity{
                 mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
+
                         firebaseAuth.signOut();
-                        startActivity(quit);
+                        sendBack();
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -179,10 +179,9 @@ public class MenuActivity extends AppCompatActivity{
             mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
-                    firebaseAuth.signOut();
-                    startActivity(quit);
-                    finish();
+                        firebaseAuth.signOut();
+//                        MusicPlayer.getInstance(MenuActivity.this).MusicTurnOff();
+                        sendBack();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

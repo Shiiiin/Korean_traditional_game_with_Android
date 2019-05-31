@@ -30,7 +30,6 @@ public class RankActivity extends AppCompatActivity {
     private ArrayList<UserForRank> userArrayList;
     private RecyclerView mRecyclerview;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onResume() {
@@ -52,7 +51,6 @@ public class RankActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         mSwipeRefreshLayout = findViewById(R.id.rank_swipe_layout);
-        backPressCloseHandler = new BackPressCloseHandler(RankActivity.this);
         userArrayList = new ArrayList<>();
         rankAdapter = new RankAdapter(userArrayList);
 
@@ -115,12 +113,6 @@ public class RankActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public void onBackPressed() {
-        backPressCloseHandler.onBackPressed();
-    }
-
     private void setUpRecyclerView() {
         mRecyclerview = findViewById(R.id.rank_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(RankActivity.this);

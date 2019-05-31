@@ -571,7 +571,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        backPressCloseHandler.onBackPressed();
+        if(gameStatus.getValue()){
+            Toast.makeText(MainActivity.this, "게임도중에 나갈수 없어요!", Toast.LENGTH_LONG).show();
+        }
+        if(!gameStatus.getValue()){
+            backPressCloseHandler.onBackPressed();
+        }
+
     }
 
     private void sendBack() {
@@ -856,7 +862,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(Winner);
 
         System.out.println(Winner.contains("rematch") + "+++++++" + Winner);
-
 
         if(!Winner.contains("rematch")) {
 
