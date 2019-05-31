@@ -7,34 +7,26 @@
     android:layout_gravity="center"
     android:id="@+id/gameEndDialog"
     android:background="@drawable/dialogbutton"
-    android:backgroundTint="@color/purple"
+    android:backgroundTint="#F0F8FF"
     >
 
-    <Button
+    <ImageButton
         android:id="@+id/retryGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button"
-        android:text="한판더!"
-        android:textColor="#ffffff"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/retrybuttons" />
 
-    <Button
+    <ImageButton
         android:id="@+id/quitGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button"
-        android:text="나가기"
-        android:textColor="#ffffff"
         android:textSize="20sp"
+        android:background="@drawable/exitbuttons"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
         android:id="@+id/imageView"
