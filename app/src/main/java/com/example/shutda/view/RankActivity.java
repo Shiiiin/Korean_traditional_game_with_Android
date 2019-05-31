@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.shutda.R;
 import com.example.shutda.view.utils.BackPressCloseHandler;
-import com.example.shutda.view.background.RankAdapter;
+import com.example.shutda.view.utils.RankAdapter;
 import com.example.shutda.view.data.UserForRank;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

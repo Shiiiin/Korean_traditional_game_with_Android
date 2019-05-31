@@ -37,8 +37,6 @@ public class MenuActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
 
-
-
         if(firebaseAuth.getCurrentUser() != null & isNetworkConnected() == false){
 
             firebaseAuth.signOut();

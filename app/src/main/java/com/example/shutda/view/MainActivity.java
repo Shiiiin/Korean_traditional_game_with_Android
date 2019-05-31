@@ -19,7 +19,6 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.View;
 
 import android.view.animation.Animation;
@@ -27,17 +26,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.Ingame.AnimationHandler;
 import com.example.shutda.view.Ingame.GameThread;
+import com.example.shutda.view.Ingame.TaskQueue;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -46,9 +47,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.concurrent.ArrayBlockingQueue;
 
+import static com.example.shutda.view.Ingame.TaskQueue.TaskFinishCallback;
 import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.*;
 /**
@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView currentBettingMoney;
     private String Winner;
-    private String[] rematch = {"rematch", "rematch12", "rematch31", "rematch23"};
 
     private View decorView;
     private int uiOptions;
@@ -142,9 +141,12 @@ public class MainActivity extends AppCompatActivity {
         mhandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+
                 if(msg.what == 1){
+
                     cardDummy1.startAnimation(animTransAlpha);
 
+                    System.out.println("!!!!!!!!!1");
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -155,43 +157,67 @@ public class MainActivity extends AppCompatActivity {
                         }
                     },500);
 
-                    user1Card2.setVisibility(View.VISIBLE);
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user1Card2.setVisibility(View.VISIBLE);
+                            TaskQueue.TaskFinishCallback();
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);
                 }
                 if(msg.what == 2){
-
-                    cardDummy1.startAnimation(animTransAlpha);
+                    System.out.println("!!!!!!!!!2");
+                    cardDummy1.startAnimation(animTransLeft);
 
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            cardDummy1.startAnimation(animTransAlpha);
+                            cardDummy1.startAnimation(animTransLeft);
                             user2Card1.setVisibility(View.VISIBLE);
 
-                            //지연시키길 원하는 밀리초 뒤에 동작
+//                            지연시키길 원하는 밀리초 뒤에 동작
                         }
                     },500);
 
-                    user2Card2.setVisibility(View.VISIBLE);
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user2Card2.setVisibility(View.VISIBLE);
+                            TaskQueue.TaskFinishCallback();
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);
+
 
                 }
                 if(msg.what == 3){
-
-                    cardDummy1.startAnimation(animTransAlpha);
+                    System.out.println("!!!!!!!!!3");
+                    cardDummy1.startAnimation(animTransRight);
 
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            cardDummy1.startAnimation(animTransAlpha);
+                            cardDummy1.startAnimation(animTransRight);
                             user3Card1.setVisibility(View.VISIBLE);
 
                             //지연시키길 원하는 밀리초 뒤에 동작
                         }
                     },500);
 
-                    user3Card2.setVisibility(View.VISIBLE);
 
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user3Card2.setVisibility(View.VISIBLE);
+                            TaskQueue.TaskFinishCallback();
+//                            지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },1000);
                 }
                 if(msg.what == 21){
+                    //check
 
                 }
                 if(msg.what == 22){
@@ -207,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                     ReactDecision(user2die);
                 }
                 if(msg.what == 31){
-
+                    //check
                 }
                 if(msg.what == 32){
                     //Call
@@ -561,6 +587,8 @@ public class MainActivity extends AppCompatActivity {
 
                             if(inGame.getUsers().getValue().get("player1").isAlive()) {
                                 if (inGame.getUsers().getValue().get("player2").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
+                                    user1Card1.setEnabled(true);
+                                    user1Card2.setEnabled(true);
                                     Boolean[] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
                                     buttonSetting(buttons);
                                 }
@@ -673,14 +701,13 @@ public class MainActivity extends AppCompatActivity {
                             //Update player score on Firestore
                             inGame.uploadScoreToFirestore(currentUser);
 
+                            //사용자가 결과 확인할수 있게 기다려줌
                             mhandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     GameEnd(MainActivity.this);
                                 }
-                            },6000);
-
-
+                            },5000);
                         }
                     }
                 });
@@ -742,9 +769,10 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println(Winner);
 
-        System.out.println(rematch + "+++++++" + Winner);
+        System.out.println(Winner.contains("rematch") + "+++++++" + Winner);
 
-        if(Arrays.binarySearch(rematch, Winner) <= 0) {
+
+        if(!Winner.contains("rematch")) {
 
             PopUpMessage.show();
 
@@ -769,11 +797,6 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-        }
-
-        else{
-
-
         }
 
     }

@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
 
         }
         if(currentUser != null && isNetworkConnected() == true){
-//            sendToMenu();
+            sendToMenu();
         }
 
     }

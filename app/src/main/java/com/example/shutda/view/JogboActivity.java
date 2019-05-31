@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.example.shutda.R;
 import com.example.shutda.view.utils.BackPressCloseHandler;
-import com.example.shutda.view.background.JogboAdapter;
+import com.example.shutda.view.utils.JogboAdapter;
 import com.example.shutda.view.data.JogboData;
 
 import java.util.ArrayList;
