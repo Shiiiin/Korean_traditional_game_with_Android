@@ -892,8 +892,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void GameEnd(Activity view){
 
-        Button retry;
-        Button quitGame;
+        ImageButton retry;
+        ImageButton quitGame;
         retry = PopUpMessage.findViewById(R.id.retryGame);
         quitGame = PopUpMessage.findViewById(R.id.quitGame);
 
