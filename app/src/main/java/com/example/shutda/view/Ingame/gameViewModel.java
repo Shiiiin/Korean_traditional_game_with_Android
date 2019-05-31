@@ -65,11 +65,12 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getDieNumber() { return DieNumber;  }
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
     public MutableLiveData<Boolean> getFirstTurn() { return FirstTurn; }
-    public MutableLiveData<String[]> getLocked() { return Locked; }
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
     private WinnerChecker winnerChecker;
+    private Boolean EnableCheck;
+    private int CheckNumber;
 
     public void setUsers(HashMap<String, User> user){
 
@@ -107,7 +108,7 @@ public class gameViewModel extends ViewModel{
      public String finish() {
 
          System.out.println("finish");
-
+         CheckNumber = 0;
 
          UserTurn.postValue(false);
          player2Turn.postValue(false);
@@ -127,6 +128,7 @@ public class gameViewModel extends ViewModel{
 
          CardShuffling();
          System.out.println("카드시작");
+         EnableCheck = true;
 
          for (int i = 1; i <= users.getValue().size(); i++) {
              String key = "player" + i;
@@ -228,6 +230,7 @@ public class gameViewModel extends ViewModel{
     }
 
     public void HalfButtonExecute(Activity view, String player) {
+        EnableCheck = false;
 
         User currentplayer = users.getValue().get(player);
 
@@ -282,6 +285,7 @@ public class gameViewModel extends ViewModel{
     }
 
     public void DieButtonExecute(Activity view, String player) {
+        EnableCheck = false;
 
         User currentplayer = users.getValue().get(player);
 
@@ -365,14 +369,38 @@ public class gameViewModel extends ViewModel{
 
     }
 
-    //Ai Decision Making
+    public void CheckButtonExecute(Activity view, String player) {
+        EnableCheck = false;
+        CheckNumber = 1;
+
+        User currentplayer = users.getValue().get(player);
+        currentplayer.setButtonClickEnable(false, true, true, true);
+
+        if(users.getValue().get("player2").isAlive()) {
+
+            UserTurn.postValue(false);
+            player2Turn.postValue(true);
+        }
+        else {
+
+            UserTurn.postValue(false);
+            player3Turn.postValue(true);
+        }
+    }
+
+
+        //Ai Decision Making
     public void AiDecisionMakingExecute(String player){
+        if(EnableCheck) {
+            users.getValue().get("player1").setEnableClickCheckButton(false);
+            users.getValue().get("player1").setEnableClickCheckButton(false);
+        }
 
         User currentplayer = users.getValue().get(player);
 
         System.out.println(currentplayer.getName() + "DecisionMaking 진입!!");
 
-        int judge = currentplayer.getCardValues();
+        int judge = winnerChecker.carculateCards(player);
 
         float RandomNum = random.nextFloat();
 
@@ -381,24 +409,34 @@ public class gameViewModel extends ViewModel{
         if(currentplayer.getScore() == 0)
             AiCallExecute(player);
 
-        else if(judge > 70) {
+        else if(judge > 9) {
             if(RandomNum >= 0 && RandomNum < 0.6) { //60%
                 AiHalfExecute(player);
             }
             else if(RandomNum >= 0.6 && RandomNum < 0.85) { //25%
-                AiCallExecute(player);
+                if(EnableCheck){
+                    AiCheckExecute(player);
+                }
+                else {
+                    AiCallExecute(player);
+                }
             }
             else { //15%
                 AiDieExecute(player);
             }
         }
 
-        else if(judge > 30 & judge <= 70){
+        else if(judge > 6 & judge <= 9){
             if(RandomNum >= 0 && RandomNum < 0.4) { //40%
                 AiHalfExecute(player);
             }
-            else if(RandomNum >= 0.4 && RandomNum < 0.7) { //30%
-                AiCallExecute(player);
+            else if(EnableCheck) { //30%
+                if(FirstTurn.getValue()){
+                    AiCheckExecute(player);
+                }
+                else {
+                    AiCallExecute(player);
+                }
             }
             else { //30%
                 AiDieExecute(player);
@@ -409,41 +447,44 @@ public class gameViewModel extends ViewModel{
             if(RandomNum >= 0 && RandomNum < 0.2) { //20%
                 AiHalfExecute(player);
             }
-            else if(RandomNum >= 0.2 && RandomNum < 0.55) { //35%
-                AiCallExecute(player);
-            }
+            else if(EnableCheck) { //35%
+                if(FirstTurn.getValue()){
+                    AiCheckExecute(player);
+                }
+                else {
+                    AiCallExecute(player);
+                }            }
             else { //45%
                 AiDieExecute(player);
             }
         }
 
 
-            if (player == "player2") {
+        if (player == "player2") {
 
-                if (users.getValue().get("player3").isAlive()) {
+            if (users.getValue().get("player3").isAlive()) {
 
-                    player2Turn.postValue(false);
-                    player3Turn.postValue(true);
-                } else {
+                player2Turn.postValue(false);
+                player3Turn.postValue(true);
+            } else {
 
-                    player2Turn.postValue(false);
-                    UserTurn.postValue(true);
-                }
-
-            } else if (player == "player3") {
-
-                if (users.getValue().get("player1").isAlive()) {
-
-                    player3Turn.postValue(false);
-
-                    UserTurn.postValue(true);
-                } else {
-
-                    player3Turn.postValue(false);
-
-                    player2Turn.postValue(true);
-                }
+                player2Turn.postValue(false);
+                UserTurn.postValue(true);
             }
+
+        } else if (player == "player3") {
+            if (users.getValue().get("player1").isAlive()) {
+
+                player3Turn.postValue(false);
+                UserTurn.postValue(true);
+            } else {
+                player3Turn.postValue(false);
+
+                player2Turn.postValue(true);
+            }
+        }
+
+        EnableCheck = false;
     }
 
     public void AiHalfExecute(String player) {
@@ -589,7 +630,13 @@ public class gameViewModel extends ViewModel{
 
     }
 
-    public String checkWinner() {
+    public void AiCheckExecute(String player) {
+        System.out.println("@@@@ Thread    " + player + "    Check 실행 @@@@");
+        CheckNumber = 1;
+    }
+
+
+        public String checkWinner() {
 
         System.out.println("checkwinner");
 
@@ -674,7 +721,7 @@ public class gameViewModel extends ViewModel{
                 if(2 == DieNumber.getValue()) {
                     return true;
                 }
-                else if (3 == CallNumber.getValue() + DieNumber.getValue()) {
+                else if (3 == CallNumber.getValue() + DieNumber.getValue() + CheckNumber) {
                     return true;
                 } else {
                     return false;
@@ -730,7 +777,7 @@ public class gameViewModel extends ViewModel{
 
         //버튼 초기화
         if(users.getValue().get("player1").isAlive())
-            users.getValue().get("player1").setButtonClickEnable(true, true, true, false);
+            users.getValue().get("player1").setButtonClickEnable(true, false, true, true);
 
         int player1CardValue = users.getValue().get("player1").getCardValues();
         int player2CardValue = users.getValue().get("player2").getCardValues();

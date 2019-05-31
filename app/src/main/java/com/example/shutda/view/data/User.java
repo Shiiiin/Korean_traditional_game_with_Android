@@ -6,12 +6,11 @@ public class User {
     private int Card1 = 0;
     private int Card2 = 0;
     private int SumOfBetting =0;
-//    private boolean isTurn;
     private boolean isAlive;
     private boolean EnableClickHalfButton;
     private boolean EnableClickCallButton;
     private boolean EnableClickDieButton;
-    private boolean EnableClickLeaveButton;
+    private boolean EnableClickCheckButton;
 
 
     public User (String name, long score, boolean life){
@@ -68,18 +67,22 @@ public class User {
         SumOfBetting = sumOfBetting;
     }
 
-    public void setButtonClickEnable(boolean halfbutton, boolean callbutton, boolean diebutton, boolean leavebutton){
+    public void setEnableClickCheckButton(boolean checkButton) {
+        EnableClickCheckButton = checkButton;
+    }
 
-        this.EnableClickHalfButton = halfbutton;
+    public void setButtonClickEnable(boolean checkbutton, boolean callbutton, boolean halfbutton, boolean diebutton){
+
+        this.EnableClickCheckButton = checkbutton;
         this.EnableClickCallButton = callbutton;
+        this.EnableClickHalfButton = halfbutton;
         this.EnableClickDieButton = diebutton;
-        this.EnableClickLeaveButton = leavebutton;
     }
 
     public Boolean[] getButtonClickEnable(){
 
-        Boolean groupbutton[] = {EnableClickHalfButton, EnableClickCallButton,
-                                  EnableClickDieButton, EnableClickLeaveButton};
+        Boolean groupbutton[] = {EnableClickCheckButton, EnableClickCallButton,
+                                  EnableClickHalfButton, EnableClickDieButton};
 
         return groupbutton;
     }

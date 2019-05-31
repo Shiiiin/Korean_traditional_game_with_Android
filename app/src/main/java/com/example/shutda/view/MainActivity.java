@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView currentBettingMoney;
     private String Winner;
 
+    private GameThread gameThread;
+
     private View decorView;
     private int uiOptions;
 
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         inGame = ViewModelProviders.of(this).get(gameViewModel.class);
-        GameThread gameThread;
+
         MusicPlayer mp = MusicPlayer.getInstance(this);
 
         mhandler = new Handler(){
@@ -308,8 +310,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-
         mainframe = findViewById(R.id.main_frame);
 
         cardDummy1 = findViewById(R.id.CardDummy1);
@@ -324,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
         user1half = findViewById(R.id.user1half);
         user1call = findViewById(R.id.user1call);
         user1die  = findViewById(R.id.user1die);
+
         user2call  = findViewById(R.id.user2call);
         user2die   = findViewById(R.id.user2die);
         user2half  = findViewById(R.id.user2half);
@@ -494,9 +495,12 @@ public class MainActivity extends AppCompatActivity {
                 mhandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        inGame.CheckButtonExecute(MainActivity.this, "player1");
                     }
                 },ReactionSpeed);
+
+                System.out.println("Check Button Click");
+                buttonSetting(AllbuttonOFF);
             }
 
         });
@@ -533,7 +537,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
     }
 
@@ -834,17 +837,18 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("활성화 버튼 변경!");
 
-        boolean halfbutton = buttonset[0];
+        boolean checkbutton = buttonset[0];
         boolean callbutton = buttonset[1];
-        boolean diebutton = buttonset[2];
-        boolean leavebutton = buttonset[3];
+        boolean halfbutton = buttonset[2];
+        boolean diebutton = buttonset[3];
 
+        Checkbutton.setEnabled(checkbutton);
         HalfButton.setEnabled(halfbutton);
         CallButton.setEnabled(callbutton);
         DieButton.setEnabled(diebutton);
-        Checkbutton.setEnabled(false);
 
-        System.out.println("HALF "+ halfbutton +" , CALL "+callbutton + " , DIE "+diebutton+ ", LEAVE "+leavebutton);
+
+        System.out.println("Check "+ callbutton +" , CALL "+ callbutton +" , HALF "+ halfbutton +", DIE "+ diebutton);
     }
 
 
@@ -858,6 +862,9 @@ public class MainActivity extends AppCompatActivity {
         Winner = inGame.finish();
 
         cardVisibleInitialize();
+
+        gameThread.interrupt();
+        Winner = inGame.finish();
 
         System.out.println(Winner);
 
