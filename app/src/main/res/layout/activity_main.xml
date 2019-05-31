@@ -125,7 +125,7 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@color/profile" />
+            app:srcCompat="@drawable/checkbuttons" />
 
         <ImageButton
             android:id="@+id/callbutton"
@@ -133,7 +133,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@color/profile" />
+            app:srcCompat="@drawable/callbuttons" />
 
         <ImageButton
             android:id="@+id/halfbutton"
@@ -141,7 +141,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@color/profile" />
+            app:srcCompat="@drawable/halfbuttons" />
 
         <ImageButton
             android:id="@+id/diebutton"
@@ -149,7 +149,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@color/profile" />
+            app:srcCompat="@drawable/diebuttons" />
 
     </LinearLayout>
 
