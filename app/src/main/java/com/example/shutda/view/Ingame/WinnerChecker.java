@@ -119,6 +119,8 @@ public class WinnerChecker {
         }
         else if(player3rank == player1rank & player3rank > player2rank){
             winner = "rematch31";
+        }else if(player1rank == player2rank & player2rank == player3rank){
+            winner = "rematch";
         }
         else{
 
@@ -421,6 +423,7 @@ public class WinnerChecker {
         }
 
         System.out.print(player +"패 계산끝...!!!");
+
         return rank;
 
     }

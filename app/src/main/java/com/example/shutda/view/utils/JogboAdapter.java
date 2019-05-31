@@ -1,4 +1,4 @@
-package com.example.shutda.view.background;
+package com.example.shutda.view.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

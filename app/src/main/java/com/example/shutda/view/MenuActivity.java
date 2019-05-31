@@ -1,7 +1,10 @@
 package com.example.shutda.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +14,14 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.utils.MusicPlayer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MenuActivity extends AppCompatActivity{
+
 
     private long backKeyClickTime = 0;
     private Button gameStartButton;
@@ -30,6 +35,25 @@ public class MenuActivity extends AppCompatActivity{
 
     private View decorView;
     private int uiOptions;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        firebaseAuth.signOut();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(firebaseAuth.getCurrentUser() != null & isNetworkConnected() == false){
+            firebaseAuth.signOut();
+            sendBack();
+        }
+
+
+    }
 
     @Override
     protected void onResume() {
@@ -51,6 +75,7 @@ public class MenuActivity extends AppCompatActivity{
 
         decorView.setSystemUiVisibility(uiOptions);
 
+        MusicPlayer.getInstance(this);
 
         gameStartButton = findViewById(R.id.play_button);
         scoreboardButton = findViewById(R.id.rank_button);
@@ -92,6 +117,9 @@ public class MenuActivity extends AppCompatActivity{
             public void onClick(View v) {
                 //TODO rule intent
 
+                Intent go2Ruleboard = new Intent(MenuActivity.this, RuleActivity.class);
+                startActivity(go2Ruleboard);
+
             }
         });
 
@@ -110,9 +138,10 @@ public class MenuActivity extends AppCompatActivity{
                 mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
+
                         firebaseAuth.signOut();
-                        startActivity(quit);
+                        sendBack();
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -126,6 +155,8 @@ public class MenuActivity extends AppCompatActivity{
     }
 
     private void sendBack() {
+
+        MusicPlayer.getInstance(MenuActivity.this).MusicTurnOff();
         Intent loginIntent = new Intent(MenuActivity.this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
@@ -142,20 +173,16 @@ public class MenuActivity extends AppCompatActivity{
 
   public void BackPressed2Login() {
 
-
-
         if (System.currentTimeMillis() > backKeyClickTime + 2000) { backKeyClickTime = System.currentTimeMillis();
             Toast.makeText(MenuActivity.this, "뒤로가기 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
             return; }
         if (System.currentTimeMillis() <= backKeyClickTime + 2000) {
 
-            mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
+                mFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update("token_id", "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
                 public void onSuccess(Void aVoid) {
-                    Intent quit = new Intent(MenuActivity.this, LoginActivity.class);
-                    firebaseAuth.signOut();
-                    startActivity(quit);
-                    finish();
+                        firebaseAuth.signOut();
+                        sendBack();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -166,6 +193,13 @@ public class MenuActivity extends AppCompatActivity{
             });
 
         }
+    }
+
+    private boolean isNetworkConnected(){
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
 }

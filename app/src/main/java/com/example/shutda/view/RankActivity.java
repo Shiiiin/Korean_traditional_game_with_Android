@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.shutda.R;
 import com.example.shutda.view.utils.BackPressCloseHandler;
-import com.example.shutda.view.background.RankAdapter;
+import com.example.shutda.view.utils.RankAdapter;
 import com.example.shutda.view.data.UserForRank;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,8 +30,13 @@ public class RankActivity extends AppCompatActivity {
     private ArrayList<UserForRank> userArrayList;
     private RecyclerView mRecyclerview;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private BackPressCloseHandler backPressCloseHandler;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateRankList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +51,6 @@ public class RankActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         mSwipeRefreshLayout = findViewById(R.id.rank_swipe_layout);
-        backPressCloseHandler = new BackPressCloseHandler(RankActivity.this);
         userArrayList = new ArrayList<>();
         rankAdapter = new RankAdapter(userArrayList);
 
@@ -58,8 +62,6 @@ public class RankActivity extends AppCompatActivity {
                 android.R.color.holo_blue_dark);
 
         setUpRecyclerView();
-
-        updateRankList();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -111,12 +113,6 @@ public class RankActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public void onBackPressed() {
-        backPressCloseHandler.onBackPressed();
-    }
-
     private void setUpRecyclerView() {
         mRecyclerview = findViewById(R.id.rank_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(RankActivity.this);
