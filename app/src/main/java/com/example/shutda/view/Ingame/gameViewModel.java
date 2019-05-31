@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.shutda.view.data.User;
+import com.example.shutda.view.utils.MusicPlayer;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.security.Key;
@@ -373,8 +374,8 @@ public class gameViewModel extends ViewModel{
 
         int judge = currentplayer.getCardValues();
 
-//        float RandomNum = random.nextFloat();
-        float RandomNum = 0.7f;
+        float RandomNum = random.nextFloat();
+
         System.out.println(RandomNum);
 
         if(currentplayer.getScore() == 0)

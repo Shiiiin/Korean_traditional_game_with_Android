@@ -29,10 +29,10 @@
         android:id="@+id/player1Name"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginStart="84dp"
+        android:layout_marginStart="120dp"
         android:background="#FFFFFF"
-        android:text="player1name"
         android:gravity="center"
+        android:text="player1name"
         app:layout_constraintBottom_toTopOf="@+id/player1Score"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
@@ -42,7 +42,7 @@
         android:id="@+id/player1Score"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginStart="84dp"
+        android:layout_marginStart="120dp"
         android:layout_marginBottom="32dp"
         android:background="#FFFFFF"
         android:gravity="center"
@@ -163,9 +163,9 @@
         android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintStart_toStartOf="@+id/user1half"
+        app:layout_constraintStart_toEndOf="@+id/player1Name"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.877"
+        app:layout_constraintVertical_bias="0.871"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -174,13 +174,13 @@
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintStart_toEndOf="@+id/user1Card1"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.994"
+        app:layout_constraintVertical_bias="0.872"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -211,10 +211,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/jokbo"
         app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.235"
+        app:layout_constraintHorizontal_bias="0.24"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.003"
         app:srcCompat="@drawable/card_back_view" />
 
 
@@ -229,7 +229,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/turnView"
         app:layout_constraintEnd_toEndOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintHorizontal_bias="0.74"
         app:layout_constraintStart_toStartOf="@+id/cardDummy2"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
         app:layout_constraintVertical_bias="0.0"
@@ -448,6 +448,6 @@
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.872" />
+        app:layout_constraintVertical_bias="0.877" />
 
 </android.support.constraint.ConstraintLayout>

@@ -30,25 +30,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
-import com.example.shutda.view.Ingame.AnimationHandler;
 import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.TaskQueue;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
+import com.example.shutda.view.utils.MusicPlayer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
-import static com.example.shutda.view.Ingame.TaskQueue.TaskFinishCallback;
 import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.*;
 /**
@@ -137,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        inGame = ViewModelProviders.of(this).get(gameViewModel.class);
+        GameThread gameThread;
+        MusicPlayer mp = MusicPlayer.getInstance(this);
 
         mhandler = new Handler(){
             @Override
@@ -218,40 +218,97 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(msg.what == 21){
                     //check
+                    mp.checksound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
+                        }
+                    },ReactionSpeed);
                 }
                 if(msg.what == 22){
                     //Call
-                    ReactDecision(user2call);
+                    mp.callsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user2call);
+                        }
+                    },ReactionSpeed);
+
+
                 }
                 if(msg.what == 23){
                     //Half
-                    ReactDecision(user2half);
+                    mp.halfsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user2half);
+                        }
+                    },ReactionSpeed);
+
+
                 }
                 if(msg.what == 24){
                     //Die
-                    ReactDecision(user2die);
+                    mp.diesound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user2die);
+                        }
+                    },ReactionSpeed);
+
+
                 }
                 if(msg.what == 31){
                     //check
+                    mp.checksound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    },ReactionSpeed);
                 }
                 if(msg.what == 32){
                     //Call
-                    ReactDecision(user3call);
+                    mp.callsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user3call);
+                        }
+                    },ReactionSpeed);
+
                 }
                 if(msg.what == 33){
                     //Half
-                    ReactDecision(user3half);
+                    mp.halfsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user3half);
+                        }
+                    },ReactionSpeed);
+
                 }
                 if(msg.what == 34){
                     //Die
-                    ReactDecision(user3die);
+                    mp.diesound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user3die);
+                        }
+                    },ReactionSpeed);
+
                 }
             }
         };
 
-        inGame = ViewModelProviders.of(this).get(gameViewModel.class);
-        GameThread gameThread;
+
 
         mainframe = findViewById(R.id.main_frame);
 
@@ -361,7 +418,14 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.HalfButtonExecute(MainActivity.this, "player1");
 
-                    ReactDecision(user1half);
+
+                    mp.halfsound();
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReactDecision(user1half);
+                        }
+                    },ReactionSpeed);
 
                     buttonSetting(AllbuttonOFF);
 
@@ -382,7 +446,14 @@ public class MainActivity extends AppCompatActivity {
                inGame.CallButtonExecute(MainActivity.this, "player1");
                 System.out.println("Call Button Click");
 
-                ReactDecision(user1call);
+                mp.callsound();
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ReactDecision(user1call);
+                    }
+                },ReactionSpeed);
+
 
                 buttonSetting(AllbuttonOFF);
 
@@ -398,7 +469,14 @@ public class MainActivity extends AppCompatActivity {
 
                 System.out.println("Die Button Click");
 
-                ReactDecision(user1die);
+                mp.diesound();
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ReactDecision(user1die);
+                    }
+                },ReactionSpeed);
+
 
                 //죽었으니까 패 뒤집어주기
                 user1Card1.setImageResource(R.drawable.card_back_view);
@@ -412,7 +490,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                mp.checksound();
+                mhandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                },ReactionSpeed);
             }
+
         });
 
         user1Card1.setOnClickListener(new View.OnClickListener() {

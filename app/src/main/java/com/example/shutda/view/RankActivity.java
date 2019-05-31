@@ -35,6 +35,7 @@ public class RankActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         updateRankList();
     }
 
@@ -63,8 +64,6 @@ public class RankActivity extends AppCompatActivity {
                 android.R.color.holo_blue_dark);
 
         setUpRecyclerView();
-
-        updateRankList();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

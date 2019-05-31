@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.utils.MusicPlayer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MenuActivity extends AppCompatActivity{
+
 
     private long backKeyClickTime = 0;
     private Button gameStartButton;
@@ -32,6 +34,13 @@ public class MenuActivity extends AppCompatActivity{
 
     private View decorView;
     private int uiOptions;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MusicPlayer.getInstance(MenuActivity.this).MusicTurnOff();
+        firebaseAuth.signOut();
+    }
 
     @Override
     protected void onStart() {
@@ -67,6 +76,7 @@ public class MenuActivity extends AppCompatActivity{
 
         decorView.setSystemUiVisibility(uiOptions);
 
+        MusicPlayer.getInstance(this);
 
         gameStartButton = findViewById(R.id.play_button);
         scoreboardButton = findViewById(R.id.rank_button);
@@ -107,6 +117,9 @@ public class MenuActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //TODO rule intent
+
+                Intent go2Ruleboard = new Intent(MenuActivity.this, RuleActivity.class);
+                startActivity(go2Ruleboard);
 
             }
         });
