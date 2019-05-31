@@ -45,21 +45,23 @@ public class WinnerChecker {
 
         if (player1rank == DDangCatcher) {
 
-            if ((player2rank >= oneDDang & player2rank <= jangDDang) | (player3rank >= oneDDang & player3rank <= jangDDang)) {
+            if ((player2rank >= oneDDang & player2rank <= jangDDang) || (player3rank >= oneDDang & player3rank <= jangDDang)) {
                 winner = "player1";
+                return winner;
             }else{
                 player1rank = mangtong;
             }
-
         }else if (player1rank == rematch) {
             if ((player2rank <= jangDDang) & (player3rank <= jangDDang)) {
                 winner = "rematch";
+                return winner;
             }else{
                 player1rank = onegguk;
             }
         }else if (player1rank == rematchDumbful) {
             if ((player2rank <= gwangDDAng18) & (player3rank <= gwangDDAng18)) {
                 winner = "rematch";
+                return winner;
             }else{
                 player1rank = onegguk;
             }
@@ -68,8 +70,9 @@ public class WinnerChecker {
 
         if (player2rank == DDangCatcher) {
 
-            if ((player1rank >= oneDDang & player1rank <= jangDDang) | (player3rank >= oneDDang & player3rank <= jangDDang)) {
+            if ((player1rank >= oneDDang & player1rank <= jangDDang) || (player3rank >= oneDDang & player3rank <= jangDDang)) {
                 winner = "player2";
+                return winner;
             }else{
                 player2rank = mangtong;
             }
@@ -77,12 +80,14 @@ public class WinnerChecker {
         }else if (player2rank == rematch) {
             if ((player1rank <= jangDDang) & (player3rank <= jangDDang)) {
                 winner = "rematch";
+                return winner;
             }else{
                 player2rank = onegguk;
             }
         }else if (player2rank == rematchDumbful) {
             if ((player1rank <= gwangDDAng18) & (player3rank <= gwangDDAng18)) {
                 winner = "rematch";
+                return winner;
             }else{
                 player2rank = onegguk;
             }
@@ -90,20 +95,23 @@ public class WinnerChecker {
 
         if (player3rank == DDangCatcher) {
 
-            if ((player2rank >= oneDDang & player2rank <= jangDDang) | (player1rank >= oneDDang & player1rank <= jangDDang)) {
+            if ((player2rank >= oneDDang & player2rank <= jangDDang) || (player1rank >= oneDDang & player1rank <= jangDDang)) {
                 winner = "player3";
+                return winner;
             }else{
                 player3rank = mangtong;
             }
         }else if (player3rank == rematch) {
             if ((player2rank <= oneDDang) & (player1rank <= oneDDang)) {
                 winner = "rematch";
+                return winner;
             }else{
                 player3rank = onegguk;
             }
         }else if (player3rank == rematchDumbful) {
             if ((player2rank <= gwangDDAng18) & (player1rank <= gwangDDAng18)) {
                 winner = "rematch";
+                return winner;
             }else{
                 player3rank = onegguk;
             }
@@ -112,14 +120,18 @@ public class WinnerChecker {
 
         if( player1rank == player2rank & player1rank > player3rank){
             winner = "rematch12";
+            return winner;
         }
         else if(player2rank == player3rank & player2rank > player1rank){
             winner = "rematch23";
+            return winner;
         }
         else if(player3rank == player1rank & player3rank > player2rank){
             winner = "rematch31";
+            return winner;
         }else if(player1rank == player2rank & player2rank == player3rank){
             winner = "rematch";
+            return winner;
         }
         else{
 
@@ -138,9 +150,10 @@ public class WinnerChecker {
 
             }
 
+            return winner;
         }
 
-        return winner;
+
     }
 
 
@@ -292,7 +305,7 @@ public class WinnerChecker {
                 (sumOfCards == (January2+February1)) | (sumOfCards == (January2+February1))){
 
             rank = alli;
-            System.out.println("독사");
+            System.out.println("알리");
 
         }
 
@@ -317,7 +330,7 @@ public class WinnerChecker {
         }
 
         //땡잡이
-        else if(sumOfCards == (July1+March1) | sumOfCards == (July1+March2) | sumOfCards == (July2+March1) | sumOfCards == (July2+March2) ){
+        else if(sumOfCards == (July1+March1) ){
 
             rank = DDangCatcher;
             System.out.println("땡잡이");
