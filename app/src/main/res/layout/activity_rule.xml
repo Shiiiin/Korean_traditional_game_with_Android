@@ -4,73 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:background="@drawable/background"
+    android:background="@drawable/menu"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ruleimg" />
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="섯다 게임은 화투패 2장으로 높은 족보를 만들어서 점수를 비교하는 게임이다."
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="전체화투패는 20장 으로 게임이 진행됩니다."
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="화투패 2장을 모두 받은 다음 베팅을 시작합니다. "
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="체크 : 첫번쨰 차례에만 적용되며 현재베팅금액을 유지한채 차례를 넘깁니다."
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="콜 : 현재 최고베팅금액에 맞춰 베팅합니다."
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="하프 : 전체 베팅금액의 1/2 를 베팅합니다."
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="657dp"
-        android:layout_height="38dp"
-        android:background="#FFFFFF"
-        android:text="다이 : 현재까지의 베팅금액을 잃고 베팅을 포기합니다.."
-        android:textSize="10dp"
-        />
+        android:layout_width="785dp"
+        android:layout_height="331dp"
+        android:text="\n 섯다 게임은 화투패 2장으로 높은 족보를 만들어서 점수를 비교하는 게임입니다.
+        \n\n 전체화투패는 20장 으로 게임이 진행됩니다.
+        \n\n 화투패 2장을 모두 받은 다음 베팅을 시작합니다.
+        \n\n 체크 : 첫번째 차례에만 적용되며 현재금액을 유지합니다.
+         \n\n 콜 : 현재 최고베팅금액에 맞춰 베팅합니다.
+         \n\n 하프 : 전체 베팅금액의 1/2 를 베팅합니다.
+         \n\n 다이 : 현재까지의 베팅금액을 잃고 베팅을 포기합니다."
+        android:textColor="#FFFFFF"
+        android:textSize="17dp"
+        android:textStyle="bold" />
 
 
 </LinearLayout>
