@@ -1,14 +1,10 @@
 package com.example.shutda;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.shutda.view.Ingame.WinnerChecker;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -59,7 +55,9 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testCarculateCardsGDA() {
+
         winnerChecker = new WinnerChecker(September1+January2, April1+January2, February1+January1);
+
 
         int Player1 = winnerChecker.carculateCards("player1");
         int Player2 = winnerChecker.carculateCards("player2");
@@ -67,6 +65,7 @@ public class ExampleInstrumentedTest {
         String Winner = winnerChecker.WinnerClassifier();
 
         assertThat(Player1, is(guping));
+
         assertThat(Player2, is(doksa));
         assertThat(Player3, is(alli));
         assertThat(Winner, is("player3"));
@@ -74,7 +73,9 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testCarculateCards38GDD() {
+
         winnerChecker = new WinnerChecker(August1+March1, January1+March1, September1+April1);
+
 
         int Player1 = winnerChecker.carculateCards("player1");
         int Player2 = winnerChecker.carculateCards("player2");
@@ -126,7 +127,7 @@ public class ExampleInstrumentedTest {
         int Player3 = winnerChecker.carculateCards("player3");
         String Winner = winnerChecker.WinnerClassifier();
 
-        assertThat(Player1, is());
+        assertThat(Player1, is(GwangCatcher));
         assertThat(Player2, is(eightDDang));
         assertThat(Player3, is(jangping));
         assertThat(Winner, is("player2"));
@@ -141,7 +142,7 @@ public class ExampleInstrumentedTest {
         int Player3 = winnerChecker.carculateCards("player3");
         String Winner = winnerChecker.WinnerClassifier();
 
-        assertThat(Player1, is());
+        assertThat(Player1, is(GwangCatcher));
         assertThat(Player2, is(gwangDDAng18));
         assertThat(Player3, is(jangping));
         assertThat(Winner, is("player2"));

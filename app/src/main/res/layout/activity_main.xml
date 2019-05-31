@@ -107,10 +107,8 @@
 
     <LinearLayout
         android:id="@+id/button_layout"
-        android:layout_width="450dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@id/main_frame"
@@ -121,11 +119,10 @@
         <ImageButton
             android:id="@+id/checkbutton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@drawable/checkbuttons" />
+            android:background="@drawable/checkbuttons" />
 
         <ImageButton
             android:id="@+id/callbutton"
@@ -133,7 +130,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@drawable/callbuttons" />
+            android:background="@drawable/callbuttons" />
 
         <ImageButton
             android:id="@+id/halfbutton"
@@ -141,7 +138,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@drawable/halfbuttons" />
+            android:background="@drawable/halfbuttons" />
 
         <ImageButton
             android:id="@+id/diebutton"
@@ -149,7 +146,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="false"
-            app:srcCompat="@drawable/diebuttons" />
+            android:background="@drawable/diebuttons" />
 
     </LinearLayout>
 

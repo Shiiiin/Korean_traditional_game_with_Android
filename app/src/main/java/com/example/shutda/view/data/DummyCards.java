@@ -72,5 +72,6 @@ public class DummyCards {
     public final static int DDangCatcher = 17;
     public final static int rematch = 18;
     public final static int rematchDumbful = 19;
+    public final static int GwangCatcher = 16;
 
 }
