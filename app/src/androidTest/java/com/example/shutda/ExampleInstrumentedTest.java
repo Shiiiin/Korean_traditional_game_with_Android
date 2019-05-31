@@ -1,17 +1,14 @@
 package com.example.shutda;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.shutda.view.Ingame.WinnerChecker;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.example.shutda.view.data.DummyCards.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -58,46 +55,46 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testCarculateCardsGDA() {
-        winnerChecker = new WinnerChecker(100000002, 1001, 10);
+        winnerChecker = new WinnerChecker(August2+January2, January1+April2, January1+February2);
 
         int Player1 = winnerChecker.carculateCards("player1");
         int Player2 = winnerChecker.carculateCards("player2");
         int Player3 = winnerChecker.carculateCards("player3");
         String Winner = winnerChecker.WinnerClassifier();
 
-        assertThat(Player1, is(13));
-        assertThat(Player2, is(14));
-        assertThat(Player3, is(15));
+        assertThat(Player1, is(gapou));
+        assertThat(Player2, is(doksa));
+        assertThat(Player3, is(alli));
         assertThat(Winner, is("player3"));
     }
 
     @Test
     public void testCarculateCards38GDD() {
-        winnerChecker = new WinnerChecker(10000100, 1000100, 100001001);
+        winnerChecker = new WinnerChecker(March1+August1, March1+July1, April1+September1);
 
         int Player1 = winnerChecker.carculateCards("player1");
         int Player2 = winnerChecker.carculateCards("player2");
         int Player3 = winnerChecker.carculateCards("player3");
         String Winner = winnerChecker.WinnerClassifier();
 
-        assertThat(Player1, is(200));
-        assertThat(Player2, is(3737));
-        assertThat(Player3, is(4949));
+        assertThat(Player1, is(gwangDDAng38));
+        assertThat(Player2, is(DDangCatcher));
+        assertThat(Player3, is(rematchDumbful));
         assertThat(Winner, is("player1"));
     }
 
     @Test
     public void testCarculateCardsDDjab() {
-        winnerChecker = new WinnerChecker(100000002, 200000001, 1000101);
+        winnerChecker = new WinnerChecker(September1+January2, September1+September2, March1+July1);
 
         int Player1 = winnerChecker.carculateCards("player1");
         int Player2 = winnerChecker.carculateCards("player2");
         int Player3 = winnerChecker.carculateCards("player3");
         String Winner = winnerChecker.WinnerClassifier();
 
-        assertThat(Player1, is(13));
-        assertThat(Player2, is(100));
-        assertThat(Player3, is(3737));
+        assertThat(Player1, is(guping));
+        assertThat(Player2, is(nineDDang));
+        assertThat(Player3, is(DDangCatcher));
         assertThat(Winner, is("player3"));
     }
 }
