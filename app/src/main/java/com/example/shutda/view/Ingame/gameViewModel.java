@@ -6,12 +6,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
+import android.os.Message;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.shutda.view.data.User;
+import com.example.shutda.view.utils.MusicPlayer;
 import com.google.firebase.firestore.DocumentReference;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,8 +22,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
+import static com.example.shutda.view.MainActivity.mhandler;
 import static com.example.shutda.view.data.DummyCards.*;
 
 public class gameViewModel extends ViewModel{
@@ -163,20 +169,6 @@ public class gameViewModel extends ViewModel{
 //         CallNumber.postValue(0);
          HalfNumber.postValue(0);
          DieNumber.postValue(0);
-
-         //TODO 시작 할 때 모든 이미지 제거 (이런식으로)
-         /*user2Card1.setVisibility(View.INVISIBLE);
-        user3Card1.setVisibility(View.GONE);
-        user2Card2.setVisibility(View.GONE);
-        user3Card2.setVisibility(View.INVISIBLE);
-        user2call.setVisibility(View.GONE);
-        user2die.setVisibility(View.GONE);
-        user2half.setVisibility(View.G         CallNumber.postValue(0);
-ONE);
-        user3call.setVisibility(View.GONE);
-        user3die.setVisibility(View.GONE);
-        user3half.setVisibility(View.GONE);
-        */
 
      }
 
@@ -417,6 +409,7 @@ ONE);
         int judge = winnerChecker.carculateCards(player);
 
         float RandomNum = random.nextFloat();
+
         System.out.println(RandomNum);
 
         if(currentplayer.getScore() == 0)
@@ -524,9 +517,11 @@ ONE);
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
+                mhandler.sendEmptyMessage(23);
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
+                mhandler.sendEmptyMessage(33);
             }
 
         }
@@ -541,23 +536,13 @@ ONE);
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
-                //TODO user2half animation - blink 실행 및 다른 이미지들 제거
-                /*
-                        user2call.setVisibility(View.GONE);
-                        user2die.setVisibility(View.GONE);
-                        user2half.setVisibility(View.VISIBLE);
-                        user2half.startAnimation(blink);
-                */
+                mhandler.sendEmptyMessage(23);
+
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
-                //TODO user2half animation - blink 실행 및 다른 이미지들 제거
-                /*
-                        user3call.setVisibility(View.GONE);
-                        user3die.setVisibility(View.GONE);
-                        user3half.setVisibility(View.VISIBLE);
-                        user3half.startAnimation(blink);
-                */
+                mhandler.sendEmptyMessage(33);
+
             }
         }
 
@@ -580,20 +565,12 @@ ONE);
         currentplayer.setCard2(-1);
         winnerChecker.setPlayer(player, -2);
 
-        //TODO user2die, user3die animation - blink 실행 및 다른 이미지들 제거
-                /*
-
-                        user2call.setVisibility(View.GONE);
-                        user2die.setVisibility(View.VISIBLE);
-                        user2half.setVisibility(View.GONE);
-                        user2die.startAnimation(blink);
-
-                        user3call.setVisibility(View.GONE);
-                        user3die.setVisibility(View.VISIBLE);
-                        user3half.setVisibility(View.GONE);
-                        user3die.startAnimation(blink);
-                */
-
+        if(player == "player2"){
+            mhandler.sendEmptyMessage(24);
+        }
+        if(player == "player3"){
+            mhandler.sendEmptyMessage(34);
+        }
     }
 
     public void AiCallExecute(String player) {
@@ -622,19 +599,15 @@ ONE);
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
-                //TODO 이미지
-                /*user2call.setVisibility(View.VISIBLE);
-                user2die.setVisibility(View.GONE);
-                user2half.setVisibility(View.GONE);
-                user2call.startAnimation(call);*/
+                if(player == "player2"){
+                    mhandler.sendEmptyMessage(22);
+                }
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
-                //TODO 이미지
-                /*user3call.setVisibility(View.VISIBLE);
-                user3die.setVisibility(View.GONE);
-                user3half.setVisibility(View.GONE);
-                user3call.startAnimation(call);*/
+                if(player == "player3") {
+                    mhandler.sendEmptyMessage(32);
+                }
 
             }
 
@@ -648,9 +621,15 @@ ONE);
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
+                if(player == "player2"){
+                    mhandler.sendEmptyMessage(22);
+                }
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
+                if(player == "player3"){
+                    mhandler.sendEmptyMessage(32);
+                }
             }
 
         }
@@ -695,22 +674,35 @@ ONE);
 
             case "rematch":
                 System.out.println("*******rematch*************");
-                rematchPlayers(new String[] {"player1", "player2", "player3"});
+                ArrayList<Integer> list = new ArrayList<>();
+                list.add(1);
+                list.add(2);
+                list.add(3);
+                rematchPlayers(list);
                 break;
 
             case "rematch12":
                 System.out.println("*******rematch12*************");
-                rematchPlayers(new String[] {"player1", "player2"});
+                ArrayList<Integer> list1 = new ArrayList<>();
+                list1.add(1);
+                list1.add(2);
+                rematchPlayers(list1);
                 break;
 
             case "rematch31":
                 System.out.println("*******rematch31*************");
-                rematchPlayers(new String[] {"player1", "player3"});
+                ArrayList<Integer> list2 = new ArrayList<>();
+                list2.add(1);
+                list2.add(3);
+                rematchPlayers(list2);
                 break;
 
             case "rematch23":
                 System.out.println("*******rematch23*************");
-                rematchPlayers(new String[] {"player2", "player3"});
+                ArrayList<Integer> list3 = new ArrayList<>();
+                list3.add(2);
+                list3.add(3);
+                rematchPlayers(list3);
                 break;
         }
 
@@ -747,22 +739,46 @@ ONE);
         }
     }
 
-    public void rematchPlayers(String[] Keys) {
+    public void rematchPlayers(ArrayList<Integer> Keys) {
+
         CardShuffling();
+
         System.out.println("카드시작");
 
-        for (int i = 0; i < Keys.length; i++) {
-            User player = users.getValue().get(Keys[i]);
+        for (int i = 0; i < Keys.size(); i++) {
+
+            String playername = "player" + Keys.get(i);
+            User player = users.getValue().get(playername);
             player.setSumOfBetting(0);
             player.setAlive(true);
 
             player.setCard1(CardsMachine.poll());
             player.setCard2(CardsMachine.poll());
 
-            System.out.println(Keys[i] +"'s Card1 : "+player.getCard1());
-            System.out.println(Keys[i] +"'s Card2 : "+player.getCard2());
-        }
+            System.out.println(playername + "'s Card1 : " + player.getCard1());
+            System.out.println(playername + "'s Card2 : " + player.getCard2());
 
+            //sendEmptyMessage 1,2,3 은 첫번째 패 주기, 4,5,6은 두번째 패 주기
+
+            if (Keys.get(i) == 1) {
+                System.out.println("&&&&&&&&&&&&&&1");
+                Message m = new Message();
+                m.what = 1;
+                new AnimationHandler(m).addTask();
+            }
+            if (Keys.get(i) == 2) {
+                System.out.println("&&&&&&&&&&&&&&2");
+                Message m = new Message();
+                m.what = 2;
+                new AnimationHandler(m).addTask();
+            }
+            if (Keys.get(i) == 3) {
+                System.out.println("&&&&&&&&&&&&&&3");
+                Message m = new Message();
+                m.what = 3;
+                new AnimationHandler(m).addTask();
+            }
+        }
         System.out.println("카드끝!!!!");
 
         //버튼 초기화
