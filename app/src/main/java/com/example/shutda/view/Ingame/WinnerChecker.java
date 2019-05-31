@@ -7,7 +7,7 @@ import static com.example.shutda.view.data.DummyCards.*;
 public class WinnerChecker {
 
     private HashMap<String, Integer> playersMap;
-    
+
     public WinnerChecker(int player1Cards, int player2Cards, int player3Cards) {
 
         this.playersMap = new HashMap<>();
