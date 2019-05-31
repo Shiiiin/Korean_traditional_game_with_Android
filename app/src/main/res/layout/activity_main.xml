@@ -29,34 +29,27 @@
         android:id="@+id/player1Name"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="120dp"
         android:background="#FFFFFF"
+        android:gravity="center"
         android:text="player1name"
-        app:layout_constraintEnd_toStartOf="@+id/turnView"
+        app:layout_constraintBottom_toTopOf="@+id/player1Score"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
-        app:layout_constraintTop_toBottomOf="@+id/user1Card1"
         app:layout_constraintWidth_percent="0.5" />
 
     <TextView
         android:id="@+id/player1Score"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="32dp"
         android:background="#FFFFFF"
+        android:gravity="center"
         android:text="0"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toStartOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
-        app:layout_constraintTop_toBottomOf="@+id/player1Name"
-        app:layout_constraintVertical_bias="0.529"
         app:layout_constraintWidth_percent="0.5" />
 
     <TextView
@@ -64,10 +57,11 @@
         android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:background="#FFFFFF"
         android:text="player2name"
+        android:gravity="center"
         app:layout_constraintEnd_toStartOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintHorizontal_bias="0.0"
@@ -80,10 +74,10 @@
         android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:background="#FFFFFF"
         android:text="0"
+        android:gravity="center"
         app:layout_constraintEnd_toStartOf="@+id/currentBettingMoneyText"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintHorizontal_bias="0.0"
@@ -94,7 +88,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/jokbo"
         android:layout_width="120dp"
-        android:layout_height="170dp"
+        android:layout_height="135dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="30dp"
@@ -104,7 +98,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/turnView"
         android:layout_width="120dp"
-        android:layout_height="170dp"
+        android:layout_height="135dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="30dp"
@@ -114,7 +108,7 @@
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_width="450dp"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
@@ -126,36 +120,36 @@
 
         <ImageButton
             android:id="@+id/checkbutton"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
             android:layout_weight="1"
-            android:background="@drawable/checkbuttons"
-            android:clickable="false" />
+            android:clickable="false"
+            app:srcCompat="@color/profile" />
 
         <ImageButton
             android:id="@+id/callbutton"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/callbutton"
-            android:clickable="false" />
+            android:clickable="false"
+            app:srcCompat="@color/profile" />
 
         <ImageButton
             android:id="@+id/halfbutton"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/halfbuttons"
-            android:clickable="false" />
+            android:clickable="false"
+            app:srcCompat="@color/profile" />
 
         <ImageButton
             android:id="@+id/diebutton"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/diebuttons"
-            android:clickable="false" />
+            android:clickable="false"
+            app:srcCompat="@color/profile" />
 
     </LinearLayout>
 
@@ -163,17 +157,15 @@
         android:id="@+id/user1Card1"
         android:layout_width="40dp"
         android:layout_height="60dp"
-        android:layout_marginStart="324dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.076"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
-        app:layout_constraintVertical_bias="0.513"
+        app:layout_constraintStart_toEndOf="@+id/player1Name"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.871"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -181,16 +173,14 @@
         android:layout_width="40dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="316dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toEndOf="@+id/user1Card1"
-        app:layout_constraintTop_toBottomOf="@+id/currentBettingMoneyText"
-        app:layout_constraintVertical_bias="0.341"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.872"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -204,10 +194,10 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintHorizontal_bias="0.116"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.095"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -221,10 +211,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/jokbo"
         app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.236"
+        app:layout_constraintHorizontal_bias="0.24"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019"
+        app:layout_constraintVertical_bias="0.003"
         app:srcCompat="@drawable/card_back_view" />
 
 
@@ -239,10 +229,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/turnView"
         app:layout_constraintEnd_toEndOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintHorizontal_bias="0.74"
         app:layout_constraintStart_toStartOf="@+id/cardDummy2"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/card_back_view" />
 
     <ImageView
@@ -256,25 +246,23 @@
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="@+id/turnView"
         app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintHorizontal_bias="0.922"
+        app:layout_constraintHorizontal_bias="0.881"
         app:layout_constraintStart_toStartOf="@+id/cardDummy2"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.026"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/card_back_view" />
 
     <TextView
         android:id="@+id/player3Name"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="48dp"
+        android:gravity="center"
         android:background="#FFFFFF"
         android:text="player3Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cardDummy2"
         app:layout_constraintTop_toBottomOf="@+id/user3Card2"
         app:layout_constraintWidth_percent="0.5" />
 
@@ -282,14 +270,12 @@
         android:id="@+id/player3Score"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="3dp"
         android:layout_marginEnd="48dp"
+        android:gravity="center"
         android:background="#FFFFFF"
         android:text="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintStart_toEndOf="@+id/currentBettingMoneyText"
         app:layout_constraintTop_toBottomOf="@+id/player3Name"
         app:layout_constraintWidth_percent="0.5" />
 
@@ -312,19 +298,20 @@
 
     <TextView
         android:id="@+id/currentBettingMoneyText"
-        android:layout_width="111dp"
-        android:layout_height="33dp"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="168dp"
+        android:gravity="center"
         android:background="#FFFFFF"
         android:text="0"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toStartOf="@+id/player3Name"
         app:layout_constraintStart_toEndOf="@+id/player2Name"
         app:layout_constraintTop_toBottomOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.133" />
 
 
     <ImageView
@@ -339,7 +326,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/user2die"
@@ -353,7 +340,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/user2half"
@@ -367,7 +354,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <ImageView
@@ -382,7 +369,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/turnView"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/user3die"
@@ -396,7 +383,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/turnView"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <ImageView
@@ -412,7 +399,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/turnView"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/user1call"
@@ -425,10 +412,10 @@
         android:src="@drawable/call"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toStartOf="@+id/turnView"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.605" />
+        app:layout_constraintVertical_bias="0.872" />
 
     <ImageView
         android:id="@+id/user1die"
@@ -441,10 +428,11 @@
         android:src="@drawable/die"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toStartOf="@+id/turnView"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.605" />
+        app:layout_constraintVertical_bias="0.872" />
+
 
     <ImageView
         android:id="@+id/user1half"
@@ -457,10 +445,9 @@
         android:src="@drawable/half"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toStartOf="@+id/turnView"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toEndOf="@+id/jokbo"
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
-        app:layout_constraintVertical_bias="0.605" />
-
+        app:layout_constraintVertical_bias="0.877" />
 
 </android.support.constraint.ConstraintLayout>
