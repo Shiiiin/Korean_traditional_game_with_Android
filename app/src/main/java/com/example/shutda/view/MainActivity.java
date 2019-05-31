@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
+import com.example.shutda.view.Ingame.AnimationHandler;
 import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.TaskQueue;
 import com.example.shutda.view.Ingame.gameViewModel;
@@ -220,6 +221,51 @@ public class MainActivity extends AppCompatActivity {
                         }
                     },1000);
                 }
+
+                //두번째 패 나눠주는 부분
+                if(msg.what == 4){
+                    System.out.println("!!!!!!!!!4");
+                    cardDummy1.startAnimation(animTransAlpha);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user1Card2.setVisibility(View.VISIBLE);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+
+                }
+                if(msg.what == 5){
+                    System.out.println("!!!!!!!!!5");
+                    cardDummy1.startAnimation(animTransLeft);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user2Card2.setVisibility(View.VISIBLE);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+
+                }
+                if(msg.what == 6){
+                    System.out.println("!!!!!!!!!6");
+                    cardDummy1.startAnimation(animTransRight);
+
+                    mhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            user3Card2.setVisibility(View.VISIBLE);
+
+                            //지연시키길 원하는 밀리초 뒤에 동작
+                        }
+                    },500);
+
+                }
+
                 if(msg.what == 21){
                     //check
                     mp.checksound();
@@ -720,6 +766,8 @@ public class MainActivity extends AppCompatActivity {
                                         inGame.setFirstTurn(false);
                                         inGame.setEnableCheck(true);
                                         System.out.println("Callnum 2");
+
+                                        SecondCardspolling();
                                     }
                                 }
                             } else {
@@ -754,6 +802,9 @@ public class MainActivity extends AppCompatActivity {
                                         inGame.setFirstTurn(false);
                                         inGame.setEnableCheck(true);
                                         System.out.println("Dienum 2");
+
+                                        SecondCardspolling();
+
                                     }
                                 }
                             } else {
@@ -864,6 +915,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -950,68 +1003,66 @@ public class MainActivity extends AppCompatActivity {
 
             inGame.setStatus(Boolean.TRUE);
 
-            //애니메이션 시작
-            cardDummy1.startAnimation(animTransLeft);
+            FirstCardsPolling();
+        }
+    }
 
-            mhandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cardDummy1.startAnimation(animTransRight);
-                    user2Card1.setVisibility(View.VISIBLE);
+    private void FirstCardsPolling() {
 
-                    //지연시키길 원하는 밀리초 뒤에 동작
-                }
-            },500);
+        //애니메이션 시작
+        cardDummy1.startAnimation(animTransLeft);
 
-            mhandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cardDummy1.startAnimation(animTransAlpha);
-                    user3Card1.setVisibility(View.VISIBLE);
-                    //지연시키길 원하는 밀리초 뒤에 동작
-                }
-            },1000);
+        mhandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cardDummy1.startAnimation(animTransRight);
+                user2Card1.setVisibility(View.VISIBLE);
 
-            mhandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cardDummy1.startAnimation(animTransLeft);
-                    user1Card1.setVisibility(View.VISIBLE);
-                    user1Card1.setEnabled(true);
+                //지연시키길 원하는 밀리초 뒤에 동작
+            }
+        },500);
 
-                    //지연시키길 원하는 밀리초 뒤에 동작
-                }
-            },1500);
+        mhandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cardDummy1.startAnimation(animTransAlpha);
+                user3Card1.setVisibility(View.VISIBLE);
+                //지연시키길 원하는 밀리초 뒤에 동작
+            }
+        },1000);
 
-            mhandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cardDummy1.startAnimation(animTransRight);
-                    user2Card2.setVisibility(View.VISIBLE);
+        mhandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                user1Card1.setVisibility(View.VISIBLE);
+                user1Card1.setEnabled(true);
 
+                //지연시키길 원하는 밀리초 뒤에 동작
+            }
+        },1500);
+    }
 
-                    //지연시키길 원하는 밀리초 뒤에 동작
-                }
-            },2000);
+    private void SecondCardspolling() {
 
-            mhandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cardDummy1.startAnimation(animTransAlpha);
-                    user3Card2.setVisibility(View.VISIBLE);
-                    //지연시키길 원하는 밀리초 뒤에 동작
-                }
-            },2500);
+        if(inGame.getUsers().getValue().get("player1").isAlive()){
 
-            mhandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    user1Card2.setVisibility(View.VISIBLE);
-                    user1Card2.setEnabled(true);
-                    //지연시키길 원하는 밀리초 뒤에 동작
-                }
-            },3000);
+            Message msg = new Message();
+            msg.what = 4;
+            new AnimationHandler(msg).addTask();
+        }
 
+        if(inGame.getUsers().getValue().get("player2").isAlive()){
+
+            Message msg = new Message();
+            msg.what = 5;
+            new AnimationHandler(msg).addTask();
+        }
+
+        if(inGame.getUsers().getValue().get("player3").isAlive()){
+
+            Message msg = new Message();
+            msg.what = 6;
+            new AnimationHandler(msg).addTask();
         }
     }
 

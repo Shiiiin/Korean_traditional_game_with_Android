@@ -51,19 +51,29 @@ public class WinnerChecker {
             }else{
                 player1rank = mangtong;
             }
+
+        }else if (player1rank == GwangCatcher) {
+
+            if ((player2rank >= gwangDDang13 & player2rank <= gwangDDAng18) || (player3rank >= gwangDDang13 & player3rank <= gwangDDAng18)) {
+                winner = "player1";
+                return winner;
+            }else{
+                player1rank = onegguk;
+            }
+
         }else if (player1rank == rematch) {
             if ((player2rank <= jangDDang) & (player3rank <= jangDDang)) {
                 winner = "rematch";
                 return winner;
             }else{
-                player1rank = onegguk;
+                player1rank = threegguk;
             }
         }else if (player1rank == rematchDumbful) {
             if ((player2rank <= gwangDDAng18) & (player3rank <= gwangDDAng18)) {
                 winner = "rematch";
                 return winner;
             }else{
-                player1rank = onegguk;
+                player1rank = threegguk;
             }
         }
 
@@ -77,19 +87,28 @@ public class WinnerChecker {
                 player2rank = mangtong;
             }
 
+        }else if (player2rank == GwangCatcher) {
+
+            if ((player1rank >= gwangDDang13 & player1rank <= gwangDDAng18) || (player3rank >= gwangDDang13 & player3rank <= gwangDDAng18)) {
+                winner = "player2";
+                return winner;
+            }else{
+                player2rank = onegguk;
+            }
+
         }else if (player2rank == rematch) {
             if ((player1rank <= jangDDang) & (player3rank <= jangDDang)) {
                 winner = "rematch";
                 return winner;
             }else{
-                player2rank = onegguk;
+                player2rank = threegguk;
             }
         }else if (player2rank == rematchDumbful) {
             if ((player1rank <= gwangDDAng18) & (player3rank <= gwangDDAng18)) {
                 winner = "rematch";
                 return winner;
             }else{
-                player2rank = onegguk;
+                player2rank = threegguk;
             }
         }
 
@@ -101,21 +120,32 @@ public class WinnerChecker {
             }else{
                 player3rank = mangtong;
             }
-        }else if (player3rank == rematch) {
+        }else if (player3rank == GwangCatcher) {
+
+            if ((player2rank >= gwangDDang13 & player2rank <= gwangDDAng18) || (player1rank >= gwangDDang13 & player1rank <= gwangDDAng18)) {
+                winner = "player3";
+                return winner;
+            }else{
+                player3rank = onegguk;
+            }
+
+        } else if (player3rank == rematch) {
             if ((player2rank <= oneDDang) & (player1rank <= oneDDang)) {
                 winner = "rematch";
                 return winner;
             }else{
-                player3rank = onegguk;
+                player3rank = threegguk;
             }
         }else if (player3rank == rematchDumbful) {
             if ((player2rank <= gwangDDAng18) & (player1rank <= gwangDDAng18)) {
                 winner = "rematch";
                 return winner;
             }else{
-                player3rank = onegguk;
+                player3rank = threegguk;
             }
         }
+
+
 
 
         if( player1rank == player2rank & player1rank > player3rank){
@@ -191,9 +221,10 @@ public class WinnerChecker {
 //     38광땡: 200점
 
 //     특수패
-//     땡잡이: 3737점
-//     94 : 4949점
-//     멍텅구리94: 9494점
+//     땡잡이: 17점
+//     94 : 18점
+//     멍텅구리94: 19점
+    // 암행어사 : 16점
 
     public int carculateCards(String player){
 
@@ -335,6 +366,11 @@ public class WinnerChecker {
             rank = DDangCatcher;
             System.out.println("땡잡이");
 
+        }
+        else if(sumOfCards == (April1 + July1)){
+
+            rank = GwangCatcher;
+            System.out.println("암행어사");
         }
         //구사
         else if(sumOfCards == (September1+April2) | sumOfCards == (September2+April1) | sumOfCards == (September2+April2)){
