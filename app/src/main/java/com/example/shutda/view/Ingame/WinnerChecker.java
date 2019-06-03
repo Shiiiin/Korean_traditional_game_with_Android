@@ -45,81 +45,121 @@ public class WinnerChecker {
 
         if (player1rank == DDangCatcher) {
 
-            if ((player2rank >= oneDDang & player2rank <= jangDDang) | (player3rank >= oneDDang & player3rank <= jangDDang)) {
+            if ((player2rank >= oneDDang & player2rank <= jangDDang) || (player3rank >= oneDDang & player3rank <= jangDDang)) {
                 winner = "player1";
+                return winner;
             }else{
                 player1rank = mangtong;
+            }
+
+        }else if (player1rank == GwangCatcher) {
+
+            if ((player2rank >= gwangDDang13 & player2rank <= gwangDDAng18) || (player3rank >= gwangDDang13 & player3rank <= gwangDDAng18)) {
+                winner = "player1";
+                return winner;
+            }else{
+                player1rank = onegguk;
             }
 
         }else if (player1rank == rematch) {
             if ((player2rank <= jangDDang) & (player3rank <= jangDDang)) {
                 winner = "rematch";
+                return winner;
             }else{
-                player1rank = onegguk;
+                player1rank = threegguk;
             }
         }else if (player1rank == rematchDumbful) {
             if ((player2rank <= gwangDDAng18) & (player3rank <= gwangDDAng18)) {
                 winner = "rematch";
+                return winner;
             }else{
-                player1rank = onegguk;
+                player1rank = threegguk;
             }
         }
 
 
         if (player2rank == DDangCatcher) {
 
-            if ((player1rank >= oneDDang & player1rank <= jangDDang) | (player3rank >= oneDDang & player3rank <= jangDDang)) {
+            if ((player1rank >= oneDDang & player1rank <= jangDDang) || (player3rank >= oneDDang & player3rank <= jangDDang)) {
                 winner = "player2";
+                return winner;
             }else{
                 player2rank = mangtong;
+            }
+
+        }else if (player2rank == GwangCatcher) {
+
+            if ((player1rank >= gwangDDang13 & player1rank <= gwangDDAng18) || (player3rank >= gwangDDang13 & player3rank <= gwangDDAng18)) {
+                winner = "player2";
+                return winner;
+            }else{
+                player2rank = onegguk;
             }
 
         }else if (player2rank == rematch) {
             if ((player1rank <= jangDDang) & (player3rank <= jangDDang)) {
                 winner = "rematch";
+                return winner;
             }else{
-                player2rank = onegguk;
+                player2rank = threegguk;
             }
         }else if (player2rank == rematchDumbful) {
             if ((player1rank <= gwangDDAng18) & (player3rank <= gwangDDAng18)) {
                 winner = "rematch";
+                return winner;
             }else{
-                player2rank = onegguk;
+                player2rank = threegguk;
             }
         }
 
         if (player3rank == DDangCatcher) {
 
-            if ((player2rank >= oneDDang & player2rank <= jangDDang) | (player1rank >= oneDDang & player1rank <= jangDDang)) {
+            if ((player2rank >= oneDDang & player2rank <= jangDDang) || (player1rank >= oneDDang & player1rank <= jangDDang)) {
                 winner = "player3";
+                return winner;
             }else{
                 player3rank = mangtong;
             }
-        }else if (player3rank == rematch) {
-            if ((player2rank <= oneDDang) & (player1rank <= oneDDang)) {
-                winner = "rematch";
+        }else if (player3rank == GwangCatcher) {
+
+            if ((player2rank >= gwangDDang13 & player2rank <= gwangDDAng18) || (player1rank >= gwangDDang13 & player1rank <= gwangDDAng18)) {
+                winner = "player3";
+                return winner;
             }else{
                 player3rank = onegguk;
+            }
+
+        } else if (player3rank == rematch) {
+            if ((player2rank <= oneDDang) & (player1rank <= oneDDang)) {
+                winner = "rematch";
+                return winner;
+            }else{
+                player3rank = threegguk;
             }
         }else if (player3rank == rematchDumbful) {
             if ((player2rank <= gwangDDAng18) & (player1rank <= gwangDDAng18)) {
                 winner = "rematch";
+                return winner;
             }else{
-                player3rank = onegguk;
+                player3rank = threegguk;
             }
         }
 
 
         if( player1rank == player2rank & player1rank > player3rank){
             winner = "rematch12";
+            return winner;
         }
         else if(player2rank == player3rank & player2rank > player1rank){
             winner = "rematch23";
+            return winner;
         }
         else if(player3rank == player1rank & player3rank > player2rank){
             winner = "rematch31";
+            return winner;
         }else if(player1rank == player2rank & player2rank == player3rank){
             winner = "rematch";
+            return winner;
         }
         else{
 
@@ -131,16 +171,18 @@ public class WinnerChecker {
             if(Compare1n2 == "player1"){
 
                 winner = (player1rank > player3rank) ? "player1" : "player3";
+                return winner;
 
             }else if(Compare1n2 == "player2"){
 
                 winner = (player2rank > player3rank) ? "player2" : "player3";
-
+                return winner;
             }
 
+            return winner;
         }
 
-        return winner;
+
     }
 
 
@@ -178,9 +220,10 @@ public class WinnerChecker {
 //     38광땡: 200점
 
 //     특수패
-//     땡잡이: 3737점
-//     94 : 4949점
-//     멍텅구리94: 9494점
+//     땡잡이: 17점
+//     94 : 18점
+//     멍텅구리94: 19점
+    // 암행어사 : 16점
 
     public int carculateCards(String player){
 
@@ -292,7 +335,7 @@ public class WinnerChecker {
                 (sumOfCards == (January2+February1)) | (sumOfCards == (January2+February1))){
 
             rank = alli;
-            System.out.println("독사");
+            System.out.println("알리");
 
         }
 
@@ -317,11 +360,16 @@ public class WinnerChecker {
         }
 
         //땡잡이
-        else if(sumOfCards == (July1+March1) | sumOfCards == (July1+March2) | sumOfCards == (July2+March1) | sumOfCards == (July2+March2) ){
+        else if(sumOfCards == (July1+March1) ){
 
             rank = DDangCatcher;
             System.out.println("땡잡이");
 
+        }
+        else if(sumOfCards == (April1 + July1)){
+
+            rank = GwangCatcher;
+            System.out.println("암행어사");
         }
         //구사
         else if(sumOfCards == (September1+April2) | sumOfCards == (September2+April1) | sumOfCards == (September2+April2)){
@@ -336,7 +384,6 @@ public class WinnerChecker {
 
         //끗 판별
         else{
-
             int theNumberOfZero = 1;
             int firstOneLocation = 0;
             int secondOneLocation = 0;
@@ -386,7 +433,6 @@ public class WinnerChecker {
             }
             System.out.println("value1///"+value1);
             System.out.println("value2///"+value2);
-
 
             if(0 == (value1 + value2) %10 ){
                 rank = mangtong;

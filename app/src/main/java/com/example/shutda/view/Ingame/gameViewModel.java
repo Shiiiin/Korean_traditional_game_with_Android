@@ -7,14 +7,11 @@ import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
 import android.os.Message;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.shutda.view.data.User;
-import com.example.shutda.view.utils.MusicPlayer;
 import com.google.firebase.firestore.DocumentReference;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,8 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 import static com.example.shutda.view.MainActivity.mhandler;
@@ -49,6 +44,7 @@ public class gameViewModel extends ViewModel{
     private MutableLiveData<Integer> DieNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> HalfNumber = new MutableLiveData<>();
     private MutableLiveData<Boolean> FirstTurn = new MutableLiveData<>();
+    private MutableLiveData<Boolean> SecondsCardsPollingTrigger = new MutableLiveData<>();
     private MutableLiveData<String> Winner = new MutableLiveData<>();
     private MutableLiveData<Boolean> EnableCheck = new MutableLiveData<>();
 
@@ -67,6 +63,7 @@ public class gameViewModel extends ViewModel{
     public MutableLiveData<Integer> getHalfNumber() { return HalfNumber;  }
     public MutableLiveData<Boolean> getFirstTurn() { return FirstTurn; }
     public MutableLiveData<String> getWinner() { return Winner; }
+    public MutableLiveData<Boolean> getSecondsCardsPollingTrigger() { return SecondsCardsPollingTrigger; }
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
@@ -92,6 +89,8 @@ public class gameViewModel extends ViewModel{
     public void setHalfNumber(int halfNumber) { HalfNumber.postValue(halfNumber); }
 
     public void setFirstTurn(Boolean firstTurn) { FirstTurn.postValue(firstTurn); }
+
+    public void setSecondsCardsPollingTrigger(Boolean trigger) { SecondsCardsPollingTrigger.postValue(trigger);}
 
     public void setWinner(String winner) { Winner.postValue(winner); }
 
@@ -517,11 +516,15 @@ public class gameViewModel extends ViewModel{
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
-                mhandler.sendEmptyMessage(23);
+                Message msg = new Message();
+                msg.what = 23;
+                new EventHandler(msg).addTask();
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
-                mhandler.sendEmptyMessage(33);
+                Message msg = new Message();
+                msg.what = 33;
+                new EventHandler(msg).addTask();
             }
 
         }
@@ -536,12 +539,16 @@ public class gameViewModel extends ViewModel{
 
             if(player == "player2"){
                 player2Score.postValue(users.getValue().get("player2").getScore());
-                mhandler.sendEmptyMessage(23);
+                Message msg = new Message();
+                msg.what = 23;
+                new EventHandler(msg).addTask();
 
             }
             if(player == "player3"){
                 player3Score.postValue(users.getValue().get("player3").getScore());
-                mhandler.sendEmptyMessage(33);
+                Message msg = new Message();
+                msg.what = 33;
+                new EventHandler(msg).addTask();
 
             }
         }
@@ -566,10 +573,16 @@ public class gameViewModel extends ViewModel{
         winnerChecker.setPlayer(player, -2);
 
         if(player == "player2"){
-            mhandler.sendEmptyMessage(24);
+            Message msg = new Message();
+            msg.what = 24;
+            new EventHandler(msg).addTask();
+//            mhandler.sendEmptyMessage(24);
         }
         if(player == "player3"){
-            mhandler.sendEmptyMessage(34);
+            Message msg = new Message();
+            msg.what = 34;
+            new EventHandler(msg).addTask();
+//            mhandler.sendEmptyMessage(34);
         }
     }
 
@@ -598,38 +611,46 @@ public class gameViewModel extends ViewModel{
             this.TotalBettingMoney.postValue(bettingMoney + money);
 
             if(player == "player2"){
-                player2Score.postValue(users.getValue().get("player2").getScore());
-                if(player == "player2"){
-                    mhandler.sendEmptyMessage(22);
-                }
+
+                    player2Score.postValue(users.getValue().get("player2").getScore());
+                    Message msg = new Message();
+                    msg.what = 22;
+                    new EventHandler(msg).addTask();
+//                      mhandler.sendEmptyMessage(22);
+
             }
             if(player == "player3"){
-                player3Score.postValue(users.getValue().get("player3").getScore());
-                if(player == "player3") {
-                    mhandler.sendEmptyMessage(32);
-                }
+
+                    player3Score.postValue(users.getValue().get("player3").getScore());
+                    Message msg = new Message();
+                    msg.what = 32;
+                    new EventHandler(msg).addTask();
+//                      mhandler.sendEmptyMessage(32);
 
             }
 
         }
         if(a == false){
-
             int All_in = currentplayer.All_in();
 
             this.TotalBettingMoney.postValue(bettingMoney + All_in);
             System.out.println("All_in");
 
             if(player == "player2"){
-                player2Score.postValue(users.getValue().get("player2").getScore());
-                if(player == "player2"){
-                    mhandler.sendEmptyMessage(22);
-                }
+                    player2Score.postValue(users.getValue().get("player2").getScore());
+                    Message msg = new Message();
+                    msg.what = 22;
+                    new EventHandler(msg).addTask();
+//                      mhandler.sendEmptyMessage(22);
             }
             if(player == "player3"){
-                player3Score.postValue(users.getValue().get("player3").getScore());
-                if(player == "player3"){
-                    mhandler.sendEmptyMessage(32);
-                }
+
+                    player3Score.postValue(users.getValue().get("player3").getScore());
+                    Message msg = new Message();
+                    msg.what = 32;
+                    new EventHandler(msg).addTask();
+//                mhandler.sendEmptyMessage(32);
+
             }
 
         }
@@ -646,8 +667,8 @@ public class gameViewModel extends ViewModel{
 
         System.out.println("checkwinner");
 
-        String Winner = winnerChecker.WinnerClassifier();
-        setWinner(Winner);
+        getWinner().postValue(winnerChecker.WinnerClassifier());
+        String Winner = getWinner().getValue();
         System.out.println(Winner);
 
         switch(Winner) {
@@ -758,25 +779,23 @@ public class gameViewModel extends ViewModel{
             System.out.println(playername + "'s Card1 : " + player.getCard1());
             System.out.println(playername + "'s Card2 : " + player.getCard2());
 
-            //sendEmptyMessage 1,2,3 은 첫번째 패 주기, 4,5,6은 두번째 패 주기
-
             if (Keys.get(i) == 1) {
                 System.out.println("&&&&&&&&&&&&&&1");
                 Message m = new Message();
                 m.what = 1;
-                new AnimationHandler(m).addTask();
+                new EventHandler(m).addTask();
             }
             if (Keys.get(i) == 2) {
                 System.out.println("&&&&&&&&&&&&&&2");
                 Message m = new Message();
                 m.what = 2;
-                new AnimationHandler(m).addTask();
+                new EventHandler(m).addTask();
             }
             if (Keys.get(i) == 3) {
                 System.out.println("&&&&&&&&&&&&&&3");
                 Message m = new Message();
                 m.what = 3;
-                new AnimationHandler(m).addTask();
+                new EventHandler(m).addTask();
             }
         }
         System.out.println("카드끝!!!!");
@@ -797,7 +816,6 @@ public class gameViewModel extends ViewModel{
 
         FirstTurn.postValue(true);
         HalfNumber.postValue(0);
-//        CallNumber.postValue(0);
 
 
         if(users.getValue().get("player1").isAlive())

@@ -46,7 +46,7 @@ public class GameThread extends Thread {
 
     }
 
-    public void interrupte(){
+    public void interrupt(){
         super.interrupt();
     }
 

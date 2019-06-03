@@ -12,26 +12,14 @@ public abstract class TaskQueue {
 
     static Queue<TaskQueue> messageQueue = new LinkedList<>();
     static boolean isTurnOn = true;
-//    private static TaskQueue ourInstance = null;
-
-//    private TaskQueue() {
-//
-//    }
-
-//    public synchronized static TaskQueue getInstance() {
-//        if(ourInstance == null){
-//            ourInstance = new TaskQueue();
-//        }
-//        return ourInstance;
-//    }
 
     public void addTask(){
         messageQueue.add(this);
 
         //처음 들어오면 풀링하는거 막아줌
         if(isTurnOn == true){
-            polling();
             isTurnOn = false;
+            polling();
         }
     }
 

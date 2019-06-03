@@ -5,10 +5,10 @@ import android.os.Message;
 
 import static com.example.shutda.view.MainActivity.mhandler;
 
-public class AnimationHandler extends TaskQueue {
+public class EventHandler extends TaskQueue {
     private Message msg;
 
-    public AnimationHandler(Message msg) {
+    public EventHandler(Message msg) {
         this.msg = msg;
     }
 

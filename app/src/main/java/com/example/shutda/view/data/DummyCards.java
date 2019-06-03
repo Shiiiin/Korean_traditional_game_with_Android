@@ -15,7 +15,7 @@ public class DummyCards {
     public final static int May2 = 10001;
     public final static int June1 = 100000;
     public final static int June2 = 100001;
-    public final static int July1= 1000000;
+    public final static int July1 = 1000000;
     public final static int July2 = 1000001;
     public final static int August1 = 10000000;
     public final static int August2 = 10000001;
@@ -34,7 +34,6 @@ public class DummyCards {
             August1,August2,
             September1, September2,
             October1, October2 };
-
 
     public final static int mangtong = 0;
     public final static int onegguk = 1;
@@ -69,8 +68,10 @@ public class DummyCards {
     public final static int gwangDDAng18 = 140;
     public final static int gwangDDAng38 = 200;
 
+    public final static int GwangCatcher = 16;
     public final static int DDangCatcher = 17;
     public final static int rematch = 18;
     public final static int rematchDumbful = 19;
+
 
 }
