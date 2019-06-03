@@ -146,8 +146,6 @@ public class WinnerChecker {
         }
 
 
-
-
         if( player1rank == player2rank & player1rank > player3rank){
             winner = "rematch12";
             return winner;
@@ -173,11 +171,12 @@ public class WinnerChecker {
             if(Compare1n2 == "player1"){
 
                 winner = (player1rank > player3rank) ? "player1" : "player3";
+                return winner;
 
             }else if(Compare1n2 == "player2"){
 
                 winner = (player2rank > player3rank) ? "player2" : "player3";
-
+                return winner;
             }
 
             return winner;
@@ -385,7 +384,6 @@ public class WinnerChecker {
 
         //끗 판별
         else{
-
             int theNumberOfZero = 1;
             int firstOneLocation = 0;
             int secondOneLocation = 0;
@@ -435,7 +433,6 @@ public class WinnerChecker {
             }
             System.out.println("value1///"+value1);
             System.out.println("value2///"+value2);
-
 
             if(0 == (value1 + value2) %10 ){
                 rank = mangtong;

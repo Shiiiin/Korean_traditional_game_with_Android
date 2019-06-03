@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
-import com.example.shutda.view.Ingame.AnimationHandler;
+import com.example.shutda.view.Ingame.EventHandler;
 import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.TaskQueue;
 import com.example.shutda.view.Ingame.gameViewModel;
@@ -47,6 +47,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Timer;
 
 import static com.example.shutda.view.data.DummyCards.*;
 import static com.example.shutda.view.data.constantsField.*;
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             user1Card2.setVisibility(View.VISIBLE);
-
+                            TaskQueue.TaskFinishCallback();
                             //지연시키길 원하는 밀리초 뒤에 동작
                         }
                     },500);
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             user2Card2.setVisibility(View.VISIBLE);
-
+                            TaskQueue.TaskFinishCallback();
                             //지연시키길 원하는 밀리초 뒤에 동작
                         }
                     },500);
@@ -259,12 +260,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             user3Card2.setVisibility(View.VISIBLE);
-
+                            TaskQueue.TaskFinishCallback();
                             //지연시키길 원하는 밀리초 뒤에 동작
                         }
                     },500);
 
                 }
+
+
 
                 if(msg.what == 21){
                     //check
@@ -275,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     },ReactionSpeed);
+                    TaskQueue.TaskFinishCallback();
                 }
                 if(msg.what == 22){
                     //Call
@@ -282,11 +286,12 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("player2 get Call Ani Message");
                             ReactDecision(user2call);
                         }
                     },ReactionSpeed);
 
-
+                    TaskQueue.TaskFinishCallback();
                 }
                 if(msg.what == 23){
                     //Half
@@ -294,10 +299,11 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("player2 get Half Ani Message");
                             ReactDecision(user2half);
                         }
                     },ReactionSpeed);
-
+                    TaskQueue.TaskFinishCallback();
 
                 }
                 if(msg.what == 24){
@@ -306,11 +312,11 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("player2 get Die Ani Message");
                             ReactDecision(user2die);
                         }
                     },ReactionSpeed);
-
-
+                    TaskQueue.TaskFinishCallback();
                 }
                 if(msg.what == 31){
                     //check
@@ -321,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     },ReactionSpeed);
+                    TaskQueue.TaskFinishCallback();
                 }
                 if(msg.what == 32){
                     //Call
@@ -328,9 +335,12 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("player3 get Call Ani Message");
                             ReactDecision(user3call);
+
                         }
                     },ReactionSpeed);
+                    TaskQueue.TaskFinishCallback();
 
                 }
                 if(msg.what == 33){
@@ -339,9 +349,11 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("player3 get Half Ani Message");
                             ReactDecision(user3half);
                         }
                     },ReactionSpeed);
+                    TaskQueue.TaskFinishCallback();
 
                 }
                 if(msg.what == 34){
@@ -350,9 +362,11 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("player3 get Die Ani Message");
                             ReactDecision(user3die);
                         }
                     },ReactionSpeed);
+                    TaskQueue.TaskFinishCallback();
 
                 }
             }
@@ -465,7 +479,6 @@ public class MainActivity extends AppCompatActivity {
 
                     inGame.HalfButtonExecute(MainActivity.this, "player1");
 
-
                     mp.halfsound();
                     mhandler.postDelayed(new Runnable() {
                         @Override
@@ -562,7 +575,6 @@ public class MainActivity extends AppCompatActivity {
 
                     user1Card1.setEnabled(false);
 
-
                 }
             }
         });
@@ -596,6 +608,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
+                        System.out.println(image +" get Ani Message");
                         image.setVisibility(View.GONE);
 
                     }
@@ -750,8 +763,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Integer integer) {
                         System.out.println(inGame.getFirstTurn().getValue());
+                        System.out.println("두번째 카드 반응 트리거"+ inGame.getSecondsCardsPollingTrigger().getValue());
                         if(inGame.getCallNumber().getValue() != 0) {
+
                             if (inGame.getFirstTurn().getValue()) {
+
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                //여기가 마지막 call 애니메이션보다 먼저 반응함
+
+
                                 if (DieNumber.getValue() != null && inGame.checkEnd()) {
                                     if (DieNumber.getValue() == 2) {
                                         inGame.getUsers().getValue().get("player1").setAlive(false);
@@ -788,6 +812,11 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println(inGame.getFirstTurn().getValue());
                         if(inGame.getDieNumber().getValue() != 0) {
                             if (inGame.getFirstTurn().getValue()) {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 if (CallNumber.getValue() != null && inGame.checkEnd()) {
                                     if (DieNumber.getValue() == 2) {
                                         inGame.getUsers().getValue().get("player1").setAlive(false);
@@ -904,8 +933,6 @@ public class MainActivity extends AppCompatActivity {
                             buttonSetting(booleans);
                     }
                 });
-
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -914,8 +941,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     @Override
     protected void onResume() {
@@ -993,6 +1018,8 @@ public class MainActivity extends AppCompatActivity {
 
         inGame.setFirstTurn(true);
 
+        inGame.setSecondsCardsPollingTrigger(false);
+
         inGame.initialize();
 
         System.out.println("Dummy");
@@ -1036,33 +1063,32 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 user1Card1.setVisibility(View.VISIBLE);
                 user1Card1.setEnabled(true);
-
                 //지연시키길 원하는 밀리초 뒤에 동작
             }
         },1500);
     }
 
-    private void SecondCardspolling() {
+    private void SecondCardspolling(){
 
         if(inGame.getUsers().getValue().get("player1").isAlive()){
 
             Message msg = new Message();
             msg.what = 4;
-            new AnimationHandler(msg).addTask();
+            new EventHandler(msg).addTask();
         }
 
         if(inGame.getUsers().getValue().get("player2").isAlive()){
 
             Message msg = new Message();
             msg.what = 5;
-            new AnimationHandler(msg).addTask();
+            new EventHandler(msg).addTask();
         }
 
         if(inGame.getUsers().getValue().get("player3").isAlive()){
 
             Message msg = new Message();
             msg.what = 6;
-            new AnimationHandler(msg).addTask();
+            new EventHandler(msg).addTask();
         }
     }
 

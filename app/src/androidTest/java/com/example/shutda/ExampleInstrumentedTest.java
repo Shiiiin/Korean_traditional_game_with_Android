@@ -70,7 +70,7 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testCarculateCards38GDD() {
-        winnerChecker = new WinnerChecker(March1+August1, March1+July1, April1+September1);
+        winnerChecker = new WinnerChecker(March1 + August1, March1 + July1, April1 + September1);
 
         int Player1 = winnerChecker.carculateCards("player1");
         int Player2 = winnerChecker.carculateCards("player2");
@@ -82,6 +82,21 @@ public class ExampleInstrumentedTest {
         assertThat(Player3, is(rematchDumbful));
         assertThat(Winner, is("player1"));
     }
+
+    @Test
+    public void testCarculateCardsShin() {
+        winnerChecker = new WinnerChecker(August1+September1, April1+April2, -2);
+
+        int Player1 = winnerChecker.carculateCards("player1");
+        int Player2 = winnerChecker.carculateCards("player2");
+        int Player3 = winnerChecker.carculateCards("player3");
+        String Winner = winnerChecker.WinnerClassifier();
+
+        assertThat(Player1, is(sevengguk));
+        assertThat(Player2, is(fourDDang));
+        assertThat(Winner, is("player2"));
+    }
+
 
     @Test
     public void testCarculateCardsDDjab() {

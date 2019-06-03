@@ -18,8 +18,8 @@ public abstract class TaskQueue {
 
         //처음 들어오면 풀링하는거 막아줌
         if(isTurnOn == true){
-            polling();
             isTurnOn = false;
+            polling();
         }
     }
 
