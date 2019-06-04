@@ -1014,9 +1014,12 @@ public class MainActivity extends AppCompatActivity {
 
         String winner = inGame.winnerChecker.WinnerClassifier();
         System.out.println(inGame.winnerChecker.WinnerClassifier());
-        System.out.println(winner.contains("rematch") + "+++++++" + inGame.getWinner().getValue());
+        System.out.println(winner.matches("^rematch") + "+++++++" + inGame.getWinner().getValue());
 
-        if(!winner.contains("rematch")) {
+
+        //TODO rematch일때 dialog 생성됨
+
+        if(!winner.matches("^rematch")) {
 
             if(winner.equals("player1")){
                 winlose.setImageResource(R.drawable.win);

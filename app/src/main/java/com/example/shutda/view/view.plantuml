@@ -1,0 +1,242 @@
+@startuml
+
+title __VIEW's Class Diagram__\n
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class JogboActivity {
+          - mRecyclerView : RecyclerView
+          - mAdapter : Adapter
+          - mLayoutManager : LayoutManager
+          - jogboDataset : ArrayList<JogboData>
+          # onCreate()
+      }
+    }
+  }
+  
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class LoginActivity {
+          {static} - RC_SIGN_IN : int
+          - mAuth : FirebaseAuth
+          - mGoogleSignInClient : GoogleSignInClient
+          - gso : GoogleSignInOptions
+          - mDB : FirebaseFirestore
+          - textInputLayout1 : TextInputLayout
+          - textInputLayout2 : TextInputLayout
+          - mEmailView : TextInputEditText
+          - mPasswordView : TextInputEditText
+          - mProgressView : View
+          - mLoginFormView : View
+          - mLayoutView : View
+          - hiddenkeybord : InputMethodManager
+          - SiginButtonwithEmail : Button
+          - SigninButtonwithGoogle : SignInButton
+          - SignUpButton : Button
+          # onCreate()
+          # onStart()
+          - isNetworkConnected()
+          - sendToMenu()
+          - newUserRegisteration()
+          - attemptLogin()
+          - isEmailValid()
+          - isPasswordValid()
+          - showProgress()
+          + onActivityResult()
+          - firebaseAuthWithGoogle()
+          - signIn()
+      }
+    }
+  }
+  
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class MainActivity {
+          - mainframe : View
+          - mAuth : FirebaseAuth
+          - mDB : FirebaseFirestore
+          - mUserId : String
+          - currentUser : DocumentReference
+          - userMap : HashMap<String, User>
+          - PopUpMessage : Dialog
+          - gameStatus : LiveData<Boolean>
+          - userlist : LiveData<HashMap<String, User>>
+          - TotalBettingMoney : LiveData<Integer>
+          - player1Score : LiveData<Long>
+          - player2Score : LiveData<Long>
+          - player3Score : LiveData<Long>
+          - buttonSet : LiveData<Boolean[]>
+          - userTurn : LiveData<Boolean>
+          - CallNumber : LiveData<Integer>
+          - DieNumber : LiveData<Integer>
+          - HalfNumber : LiveData<Integer>
+          - cardDummy1 : ImageView
+          - cardDummy2 : ImageView
+          - user1Card1 : ImageView
+          - user1Card2 : ImageView
+          - user2Card1 : ImageView
+          - user2Card2 : ImageView
+          - user3Card1 : ImageView
+          - user3Card2 : ImageView
+          - user1half : ImageView
+          - user1call : ImageView
+          - user1die : ImageView
+          - user1check : ImageView
+          - user2call : ImageView
+          - user2die : ImageView
+          - user2half : ImageView
+          - user2check : ImageView
+          - user3call : ImageView
+          - user3die : ImageView
+          - user3half : ImageView
+          - user3check : ImageView
+          - HalfButton : ImageButton
+          - CallButton : ImageButton
+          - DieButton : ImageButton
+          - Checkbutton : ImageButton
+          - player1NameTextView : TextView
+          - player1ScoreTextView : TextView
+          - player2NameTextView : TextView
+          - player3NameTextView : TextView
+          - player2ScoreTextView : TextView
+          - player3ScoreTextView : TextView
+          - currentBettingMoney : TextView
+          - jokboTextView : TextView
+          + turnTextView : TextView
+          - decorView : View
+          - uiOptions : int
+          ~ animTransRight : Animation
+          ~ animTransLeft : Animation
+          ~ animTransAlpha : Animation
+          ~ blink : Animation
+          {static} + mhandler : Handler
+          # onCreate()
+          + ReactDecision()
+          # onStart()
+          + onBackPressed()
+          - sendBack()
+          + mainLoop()
+          # onResume()
+          + buttonSetting()
+          + GameEnd()
+          + start()
+          - FirstCardsPolling()
+          - SecondCardspolling()
+          - cardImageChecker()
+          - jokbofinder()
+          - cardVisibleInitialize()
+      }
+    }
+  }
+  
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class MenuActivity {
+          - backKeyClickTime : long
+          - gameStartButton : Button
+          - scoreboardButton : Button
+          - ruleButton : Button
+          - leaveButton : Button
+          - jogboButton : Button
+          - firebaseAuth : FirebaseAuth
+          - mFirestore : FirebaseFirestore
+          - mUserId : String
+          - decorView : View
+          - uiOptions : int
+          # onDestroy()
+          # onStart()
+          # onResume()
+          # onCreate()
+          - sendBack()
+          + onBackPressed()
+          + BackPressed2Login()
+          - isNetworkConnected()
+      }
+    }
+  }
+  
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class RankActivity {
+          - mDB : FirebaseFirestore
+          - userArrayList : ArrayList<UserForRank>
+          - mlistview : ListView
+          - mSwipeRefreshLayout : SwipeRefreshLayout
+          # onResume()
+          # onCreate()
+          - updateRankList()
+          - setUpRecyclerView()
+      }
+    }
+  }
+  
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class RuleActivity {
+          # onCreate()
+      }
+    }
+  }
+  
+
+  package com.example.shutda {
+    package com.example.shutda.view {
+      class SignUpActivity {
+          - mSignupLayout : View
+          - mEmailField : TextInputEditText
+          - mPasswordField : TextInputEditText
+          - mNameField : EditText
+          - mSignupButton : Button
+          - mMoveToBackward : Button
+          - name : String
+          - email : String
+          - password : String
+          - mAuth : FirebaseAuth
+          - mDB : FirebaseFirestore
+          - mProgressBar : ProgressBar
+          - hiddenkeybord : InputMethodManager
+          # onCreate()
+          - sendBack()
+          - isEmailValid()
+          - isPasswordValid()
+      }
+    }
+  }
+  
+
+  JogboActivity -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  LoginActivity -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  MainActivity -up-|> AppCompatActivity
+  MainActivity o-- BackPressCloseHandler : backPressCloseHandler
+  MainActivity o-- User : Me
+  MainActivity o-- User : Ai
+  MainActivity o-- User : Ai2
+  MainActivity o-- gameViewModel : inGame
+  MainActivity o-- GameThread : gameThread
+  HostCallbacks -up-|> FragmentHostCallback
+  MenuActivity -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  RankActivity -up-|> AppCompatActivity
+  RankActivity o-- RankAdapter : rankAdapter
+  HostCallbacks -up-|> FragmentHostCallback
+  RuleActivity -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+  SignUpActivity -up-|> AppCompatActivity
+  HostCallbacks -up-|> FragmentHostCallback
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

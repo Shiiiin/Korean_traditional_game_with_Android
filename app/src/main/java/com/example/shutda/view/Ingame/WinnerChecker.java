@@ -273,7 +273,7 @@ public class WinnerChecker {
             System.out.println("4땡");
 
         }
-        else if(sumOfCards == (March1+March2)){
+        else if(sumOfCards == (May1+May2)){
 
             rank = fiveDDang;
             System.out.println("5땡");
