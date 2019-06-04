@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D500F9</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="colorPrimaryLight">#45AA05</color>
     <color name="colorPrimaryBackground">#FFFFFF</color>
     <color name="tertiary_text_light">@android:color/tertiary_text_light</color>
@@ -14,5 +14,6 @@
     <color name="black_overlay">#66000000</color>
     <color name="purple">#D500F9</color>
     <color name="purpleClicked">#CE93D8</color>
+    <color name="white">#ffffff</color>
 
 </resources>

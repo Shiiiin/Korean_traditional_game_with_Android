@@ -69,10 +69,13 @@ public class GameThread extends Thread {
                                 @Override
                                 public void run() {
                                     System.out.println("@@@@ Thread player2 실행 @@@@");
+                                    mainActivity.turnTextView.setText("Ai 1 차례 입니다.");
                                     inGame.AiDecisionMakingExecute("player2");
                                 }
                             }, AITurnPeriod);
                         }
+                    }else{
+                        mainActivity.turnTextView.setText("");
                     }
                 }
             }
@@ -90,12 +93,15 @@ public class GameThread extends Thread {
                                     @Override
                                     public void run() {
                                     System.out.println("@@@@ Thread player3 실행 @@@@");
+                                    mainActivity.turnTextView.setText("Ai 2 차례 입니다.");
                                     inGame.AiDecisionMakingExecute("player3");
                                     }
                                 }, AITurnPeriod);
                             }
                         }
-                    }
+                    }else{
+                    mainActivity.turnTextView.setText("");
+                }
                 }
             });
 

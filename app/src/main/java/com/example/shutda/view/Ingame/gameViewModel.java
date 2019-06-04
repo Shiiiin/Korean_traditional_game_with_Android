@@ -67,7 +67,7 @@ public class gameViewModel extends ViewModel{
 
     private Random random = new Random();
     private int MaxPlayerBattingScore = 0;
-    private WinnerChecker winnerChecker;
+    public WinnerChecker winnerChecker;
     private int CheckNumber;
 
     public void setUsers(HashMap<String, User> user){
@@ -660,6 +660,21 @@ public class gameViewModel extends ViewModel{
     public void AiCheckExecute(String player) {
         System.out.println("@@@@ Thread    " + player + "    Check 실행 @@@@");
         CheckNumber = 1;
+
+        if(player == "player2"){
+            Message msg = new Message();
+            msg.what = 21;
+            new EventHandler(msg).addTask();
+//
+        }
+        if(player == "player3"){
+
+            Message msg = new Message();
+            msg.what = 31;
+            new EventHandler(msg).addTask();
+//
+
+        }
     }
 
 
@@ -667,11 +682,13 @@ public class gameViewModel extends ViewModel{
 
         System.out.println("checkwinner");
 
-        getWinner().postValue(winnerChecker.WinnerClassifier());
-        String Winner = getWinner().getValue();
-        System.out.println(Winner);
+        Winner.setValue(winnerChecker.WinnerClassifier());
 
-        switch(Winner) {
+        getWinner().setValue(winnerChecker.WinnerClassifier());
+
+        String winner = winnerChecker.WinnerClassifier();
+
+        switch(winner) {
             case "player1":
                 System.out.println("*******player1 이겼따*************");
                 users.getValue().get("player1").setScore(users.getValue().get("player1").getScore() + TotalBettingMoney.getValue());

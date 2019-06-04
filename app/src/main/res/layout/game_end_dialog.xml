@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/winlose"
         android:layout_width="129dp"
         android:layout_height="83dp"
         android:layout_marginStart="8dp"

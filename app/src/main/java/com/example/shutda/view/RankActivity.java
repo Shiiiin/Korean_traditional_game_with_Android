@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shutda.R;
@@ -28,7 +32,7 @@ public class RankActivity extends AppCompatActivity {
     private FirebaseFirestore mDB;
     private RankAdapter rankAdapter;
     private ArrayList<UserForRank> userArrayList;
-    private RecyclerView mRecyclerview;
+    private ListView mlistview;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -52,7 +56,6 @@ public class RankActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout = findViewById(R.id.rank_swipe_layout);
         userArrayList = new ArrayList<>();
-        rankAdapter = new RankAdapter(userArrayList);
 
         mDB = FirebaseFirestore.getInstance();
 
@@ -73,8 +76,6 @@ public class RankActivity extends AppCompatActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-
-
     }
 
     private void updateRankList() {
@@ -101,9 +102,9 @@ public class RankActivity extends AppCompatActivity {
 
                         userArrayList.add(user);
 
-                        rankAdapter = new RankAdapter(userArrayList);
+                        rankAdapter = new RankAdapter(RankActivity.this, R.layout.user_list_item, userArrayList);
 
-                        mRecyclerview.setAdapter(rankAdapter);
+                        mlistview.setAdapter(rankAdapter);
                     }
 
                 } else {
@@ -114,10 +115,8 @@ public class RankActivity extends AppCompatActivity {
         });
     }
     private void setUpRecyclerView() {
-        mRecyclerview = findViewById(R.id.rank_list);
+        mlistview = findViewById(R.id.rank_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(RankActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerview.setLayoutManager(layoutManager);
-        mRecyclerview.setHasFixedSize(true);
     }
 }

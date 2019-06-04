@@ -46,6 +46,7 @@ public class WinnerChecker {
         if (player1rank == DDangCatcher) {
 
             if ((player2rank >= oneDDang & player2rank <= jangDDang) || (player3rank >= oneDDang & player3rank <= jangDDang)) {
+                System.out.println("여긴가1");
                 winner = "player1";
                 return winner;
             }else{
@@ -55,6 +56,7 @@ public class WinnerChecker {
         }else if (player1rank == GwangCatcher) {
 
             if ((player2rank >= gwangDDang13 & player2rank <= gwangDDAng18) || (player3rank >= gwangDDang13 & player3rank <= gwangDDAng18)) {
+                System.out.println("여긴가2");
                 winner = "player1";
                 return winner;
             }else{
@@ -162,23 +164,35 @@ public class WinnerChecker {
             return winner;
         }
         else{
-
             //우선 player1이랑 player2랑 비교
             String Compare1n2 = (player1rank > player2rank) ? "player1" : "player2";
 
-
             //player1이랑 player2랑 비교승자랑 player3이랑 비교
-            if(Compare1n2 == "player1"){
+            if(Compare1n2.equals("player1")){
 
-                winner = (player1rank > player3rank) ? "player1" : "player3";
+                System.out.println("player1 compare");
+                if( player1rank > player3rank){
+                    winner = "player1";
+                }else{
+                    winner = "player3";
+                }
+
                 return winner;
 
-            }else if(Compare1n2 == "player2"){
-
-                winner = (player2rank > player3rank) ? "player2" : "player3";
+            }
+            if(Compare1n2.equals("player2")){
+                System.out.println("player2 compare");
+                if( player2rank > player3rank){
+                    winner = "player2";
+                }else{
+                    winner = "player3";
+                }
                 return winner;
             }
 
+            System.out.println("여긴가3");
+            winner = "player3";
+            System.out.println(winner);
             return winner;
         }
 

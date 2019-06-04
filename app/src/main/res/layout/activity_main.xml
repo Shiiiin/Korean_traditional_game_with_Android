@@ -124,7 +124,17 @@
         android:alpha="0.25"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" >
+
+        <TextView
+            android:id="@+id/jokboTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#000000" />
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:id="@+id/turnView"
@@ -135,7 +145,17 @@
         android:alpha="0.25"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <TextView
+            android:id="@+id/turnTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#000000" />
+    </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:id="@+id/button_layout"
@@ -390,6 +410,20 @@
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageView
+        android:id="@+id/user2check"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/check"
+        app:layout_constraintBottom_toBottomOf="@+id/jokbo"
+        app:layout_constraintEnd_toEndOf="@+id/cardDummy2"
+        app:layout_constraintHorizontal_bias="0.036"
+        app:layout_constraintStart_toStartOf="@+id/jokbo"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/user3call"
@@ -430,6 +464,22 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/half"
+        app:layout_constraintBottom_toBottomOf="@+id/turnView"
+        app:layout_constraintEnd_toEndOf="@+id/turnView"
+        app:layout_constraintHorizontal_bias="0.913"
+        app:layout_constraintStart_toStartOf="@+id/cardDummy2"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <ImageView
+        android:id="@+id/user3check"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/check"
         app:layout_constraintBottom_toBottomOf="@+id/turnView"
         app:layout_constraintEnd_toEndOf="@+id/turnView"
         app:layout_constraintHorizontal_bias="0.913"
@@ -486,4 +536,19 @@
         app:layout_constraintTop_toTopOf="@+id/cardDummy2"
         app:layout_constraintVertical_bias="0.897" />
 
+    <ImageView
+        android:id="@+id/user1check"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/check"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toStartOf="@+id/turnView"
+        app:layout_constraintHorizontal_bias="0.731"
+        app:layout_constraintStart_toEndOf="@+id/jokbo"
+        app:layout_constraintTop_toTopOf="@+id/cardDummy2"
+        app:layout_constraintVertical_bias="0.897" />
 </android.support.constraint.ConstraintLayout>

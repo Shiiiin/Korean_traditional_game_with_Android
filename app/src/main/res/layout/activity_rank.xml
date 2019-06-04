@@ -4,20 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rankback"
     tools:context=".view.RankActivity">
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rank_swipe_layout"
+            android:cacheColorHint="#00000000"
             >
-            <android.support.v7.widget.RecyclerView
+            <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:divider="#ffcc22"
+                android:dividerHeight="1.5dp"
+                android:choiceMode="singleChoice"
+                android:cacheColorHint="#00000000"
                 android:id="@+id/rank_list"
                 tools:context=".view.RankActivity"
+                android:background="@drawable/rankback"
                 >
-            </android.support.v7.widget.RecyclerView>
+            </ListView>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

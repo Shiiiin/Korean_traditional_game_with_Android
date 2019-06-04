@@ -20,6 +20,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.telecom.Call;
 import android.view.View;
 
 import android.view.animation.Animation;
@@ -34,6 +35,7 @@ import com.example.shutda.R;
 import com.example.shutda.view.Ingame.EventHandler;
 import com.example.shutda.view.Ingame.GameThread;
 import com.example.shutda.view.Ingame.TaskQueue;
+import com.example.shutda.view.Ingame.WinnerChecker;
 import com.example.shutda.view.Ingame.gameViewModel;
 import com.example.shutda.view.utils.BackPressCloseHandler;
 import com.example.shutda.view.data.User;
@@ -99,12 +101,15 @@ public class MainActivity extends AppCompatActivity {
     private ImageView user1half;
     private ImageView user1call;
     private ImageView user1die;
+    private ImageView user1check;
     private ImageView user2call;
     private ImageView user2die;
     private ImageView user2half;
+    private ImageView user2check;
     private ImageView user3call;
     private ImageView user3die;
     private ImageView user3half;
+    private ImageView user3check;
 
     private ImageButton HalfButton;
     private ImageButton CallButton;
@@ -120,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView currentBettingMoney;
 
-    private CardView jokbo;
+    private TextView jokboTextView;
+    public TextView turnTextView;
 
     private GameThread gameThread;
 
@@ -275,7 +281,8 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
+                            System.out.println("player2 get Check Ani Message");
+                            ReactDecision(user2check);
                         }
                     },ReactionSpeed);
                     TaskQueue.TaskFinishCallback();
@@ -324,7 +331,8 @@ public class MainActivity extends AppCompatActivity {
                     mhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
+                            System.out.println("player3 get Check Ani Message");
+                            ReactDecision(user3check);
                         }
                     },ReactionSpeed);
                     TaskQueue.TaskFinishCallback();
@@ -386,13 +394,25 @@ public class MainActivity extends AppCompatActivity {
         user1half = findViewById(R.id.user1half);
         user1call = findViewById(R.id.user1call);
         user1die  = findViewById(R.id.user1die);
+        user1check = findViewById(R.id.user1check);
 
         user2call  = findViewById(R.id.user2call);
         user2die   = findViewById(R.id.user2die);
         user2half  = findViewById(R.id.user2half);
+        user2check = findViewById(R.id.user2check);
+
         user3call  = findViewById(R.id.user3call);
         user3die   = findViewById(R.id.user3die);
         user3half  = findViewById(R.id.user3half);
+        user3check = findViewById(R.id.user3check);
+
+        HalfButton = findViewById(R.id.halfbutton);
+        CallButton = findViewById(R.id.callbutton);
+        DieButton = findViewById(R.id.diebutton);
+        Checkbutton = findViewById(R.id.checkbutton);
+
+        jokboTextView = findViewById(R.id.jokboTextView);
+        turnTextView = findViewById(R.id.turnTextView);
 
         cardVisibleInitialize();
 
@@ -403,11 +423,6 @@ public class MainActivity extends AppCompatActivity {
         animTransAlpha = AnimationUtils.loadAnimation(
                 this,R.anim.giveme);
         blink = AnimationUtils.loadAnimation(this, R.anim.blink);
-
-        HalfButton = findViewById(R.id.halfbutton);
-        CallButton = findViewById(R.id.callbutton);
-        DieButton = findViewById(R.id.diebutton);
-        Checkbutton = findViewById(R.id.checkbutton);
 
         player1NameTextView = findViewById(R.id.player1Name);
         player1ScoreTextView = findViewById(R.id.player1Score);
@@ -550,11 +565,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                inGame.CheckButtonExecute(MainActivity.this, "player1");
+
+                System.out.println("Check Button Click");
                 mp.checksound();
                 mhandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        inGame.CheckButtonExecute(MainActivity.this, "player1");
+                        ReactDecision(user1check);
                     }
                 },ReactionSpeed);
 
@@ -585,9 +603,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(user1Card2.getVisibility() == View.VISIBLE){
 
+                    int player1card1 = inGame.getUsers().getValue().get("player1").getCard1();
                     int player1card2 = inGame.getUsers().getValue().get("player1").getCard2();
 
                     cardImageChecker(user1Card2, player1card2);
+
+                    //TODO 족보 보일거 여기다가하기~!~!
+                    jokbofinder();
 
                     user1Card2.setEnabled(false);
 
@@ -597,6 +619,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     public void ReactDecision(ImageView image) {
 
@@ -744,11 +768,14 @@ public class MainActivity extends AppCompatActivity {
                                 if (inGame.getUsers().getValue().get("player2").isAlive() || inGame.getUsers().getValue().get("player3").isAlive()) {
                                     user1Card1.setEnabled(true);
                                     user1Card2.setEnabled(true);
+                                    turnTextView.setText("당신 차례 입니다.");
                                     Boolean[] buttons = inGame.getUsers().getValue().get("player1").getButtonClickEnable();
                                     buttonSetting(buttons);
                                 }
                             }
 
+                        }else{
+                            turnTextView.setText("");
                         }
 
                     }
@@ -970,10 +997,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void GameEnd(Activity view){
 
+        ImageView winlose;
         ImageButton retry;
         ImageButton quitGame;
         retry = PopUpMessage.findViewById(R.id.retryGame);
         quitGame = PopUpMessage.findViewById(R.id.quitGame);
+        winlose = PopUpMessage.findViewById(R.id.winlose);
 
         cardVisibleInitialize();
 
@@ -983,9 +1012,18 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println(inGame.getWinner().getValue());
 
-        System.out.println(inGame.getWinner().getValue().contains("rematch") + "+++++++" + inGame.getWinner().getValue());
+        String winner = inGame.winnerChecker.WinnerClassifier();
+        System.out.println(inGame.winnerChecker.WinnerClassifier());
+        System.out.println(winner.contains("rematch") + "+++++++" + inGame.getWinner().getValue());
 
-        if(!inGame.getWinner().getValue().contains("rematch")) {
+        if(!winner.contains("rematch")) {
+
+            if(winner.equals("player1")){
+                winlose.setImageResource(R.drawable.win);
+            }
+            else{
+                winlose.setImageResource(R.drawable.lose);
+            }
 
             PopUpMessage.show();
 
@@ -1156,9 +1194,118 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void jokbofinder() {
+
+        int rank = inGame.winnerChecker.carculateCards("player1");
+
+        //TODO 여기 할차례
+        if(rank == mangtong){
+            jokboTextView.setText("망통");
+        }
+        if(rank == onegguk){
+            jokboTextView.setText("한끗");
+        }
+        if(rank == twogguk){
+            jokboTextView.setText("두끗");
+        }
+        if(rank == threegguk){
+            jokboTextView.setText("세끗");
+        }
+        if(rank == fourgguk){
+            jokboTextView.setText("네끗");
+        }
+        if(rank == fivegguk){
+            jokboTextView.setText("다섯끗");
+        }
+        if(rank == sixgguk){
+            jokboTextView.setText("여섯끗");
+        }
+        if(rank == sevengguk){
+            jokboTextView.setText("일곱끗");
+        }
+        if(rank == eightgguk){
+            jokboTextView.setText("여덟끗");
+        }
+        if(rank == gapou){
+            jokboTextView.setText("갑오");
+        }
+        if(rank == seryuk){
+            jokboTextView.setText("세륙");
+        }
+        if(rank == jangsa){
+            jokboTextView.setText("장사");
+        }
+        if(rank == jangping){
+            jokboTextView.setText("장삥");
+        }
+        if(rank == guping){
+            jokboTextView.setText("구삥");
+        }
+        if(rank == doksa){
+            jokboTextView.setText("독사");
+        }
+        if(rank == alli){
+            jokboTextView.setText("알리");
+        }
+        if(rank == oneDDang){
+            jokboTextView.setText("1땡");
+        }
+        if(rank == twoDDang){
+            jokboTextView.setText("2땡");
+        }
+        if(rank == threeDDang){
+            jokboTextView.setText("3땡");
+        }
+        if(rank == fourDDang){
+            jokboTextView.setText("4땡");
+        }
+        if(rank == fiveDDang){
+            jokboTextView.setText("5땡");
+        }
+        if(rank == sixDDang){
+            jokboTextView.setText("6땡");
+        }
+        if(rank == sevenDDang){
+            jokboTextView.setText("7땡");
+        }
+        if(rank == eightDDang){
+            jokboTextView.setText("8땡");
+        }
+        if(rank == nineDDang){
+            jokboTextView.setText("9땡");
+        }
+        if(rank == jangDDang){
+            jokboTextView.setText("장땡");
+        }
+        if(rank == gwangDDang13){
+            jokboTextView.setText("13광땡");
+        }
+        if(rank == gwangDDAng18){
+            jokboTextView.setText("18광땡");
+        }
+        if(rank == gwangDDAng38){
+            jokboTextView.setText("38광땡");
+        }
+        if(rank == DDangCatcher){
+            jokboTextView.setText("땡잡이 (1땡부터 장땡까지 잡을 수 있습니다.)");
+        }
+        if(rank == GwangCatcher){
+            jokboTextView.setText("암행어사 (13, 18광땡 잡을 수 있습니다.");
+        }
+        if(rank == rematch){
+            jokboTextView.setText("사구 (광땡 없을경우 재경기)");
+        }
+        if(rank == rematchDumbful){
+            jokboTextView.setText("멍텅구리사구 (38광땡 없을 경우 재경기)");
+        }
+    }
+
     private void cardVisibleInitialize() {
 
         cardDummy1.setEnabled(false);
+
+        jokboTextView.setText(" ");
+        turnTextView.setText(" ");
 
         //처음에 카드 안보이는 용도
         user1Card1.setImageResource(R.drawable.card_back_view);
@@ -1182,14 +1329,22 @@ public class MainActivity extends AppCompatActivity {
         user1call.setVisibility(View.GONE);
         user1die.setVisibility(View.GONE);
         user1half.setVisibility(View.GONE);
+        user1check.setVisibility(View.GONE);
 
         user2call.setVisibility(View.GONE);
         user2die.setVisibility(View.GONE);
         user2half.setVisibility(View.GONE);
+        user2check.setVisibility(View.GONE);
 
         user3call.setVisibility(View.GONE);
         user3die.setVisibility(View.GONE);
         user3half.setVisibility(View.GONE);
+        user3check.setVisibility(View.GONE);
+
+        Checkbutton.setEnabled(false);
+        HalfButton.setEnabled(false);
+        DieButton.setEnabled(false);
+        CallButton.setEnabled(false);
     }
 
 
