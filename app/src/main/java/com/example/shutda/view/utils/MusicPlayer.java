@@ -18,7 +18,7 @@ public class MusicPlayer {
         private static MediaPlayer mp;
 
 
-        private SoundPool soundPool; //소리 효과음 코드^^
+        private static SoundPool soundPool; //소리 효과음 코드^^
         private int die,half,check,call; // 소리 효과음 코드^^
 
 
@@ -73,10 +73,10 @@ public class MusicPlayer {
             soundPool.play(check,1,1,0,0,1);
         }
 
-        public void MusicTurnOff(){
-            soundPool.release();
-            soundPool.autoPause();
-            soundPool = null;
+        public static void MusicTurnOff(){
+//            soundPool.release();
+//            soundPool.autoPause();
+//            soundPool = null;
         }
 
         public void MusicTurnOn(){

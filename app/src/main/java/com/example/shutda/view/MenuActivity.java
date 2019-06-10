@@ -75,8 +75,6 @@ public class MenuActivity extends AppCompatActivity{
 
         decorView.setSystemUiVisibility(uiOptions);
 
-        MusicPlayer.getInstance(this);
-
         gameStartButton = findViewById(R.id.play_button);
         scoreboardButton = findViewById(R.id.rank_button);
         ruleButton = findViewById(R.id.rule_button);
